@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>Deepcaller_Idol</defName>
+    <label>idol of the deep</label>
+    <description>A monolith raised from the crust by a Deepcaller, humming with something vast beneath. Corpses left within its shadow are slowly drawn under, feeding the deep's devotion. The greater its devotion, the mightier the tentacles that answer a Deepcaller's summons.</description>
+    <!-- Custom class: withdraws the god's state into the game component
+         when its map is discarded (nomadic campaigns / Odyssey) -->
+    <thingClass>Deepcaller.Building_DeepIdol</thingClass>
+    <graphicData>
+      <texPath>Things/Deepcaller_Idol</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.6,1.6)</drawSize>
+      <shadowData>
+        <volume>(0.5,0.9,0.35)</volume>
+      </shadowData>
+    </graphicData>
+    <size>(1,1)</size>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <Flammability>0</Flammability>
+      <Beauty>2</Beauty>
+      <!-- Anima tree is 0.28 base; the idol starts below it and overtakes
+           it through devotion (see FocusStrengthOffset_IdolDevotion) -->
+      <MeditationFocusStrength>0.20</MeditationFocusStrength>
+    </statBases>
+    <tickerType>Rare</tickerType>
+    <passability>Impassable</passability>
+    <fillPercent>0.5</fillPercent>
+    <rotatable>false</rotatable>
+    <destroyable>true</destroyable>
+    <altitudeLayer>Building</altitudeLayer>
+    <building>
+      <isInert>true</isInert>
+      <deconstructible>false</deconstructible>
+      <claimable>false</claimable>
+    </building>
+    <comps>
+      <li Class="Deepcaller.CompProperties_IdolDevotion">
+        <radius>11.9</radius>
+        <devotionThresholds>
+          <li>5</li>
+          <li>15</li>
+          <li>30</li>
+        </devotionThresholds>
+        <consumeIntervalTicks>2500</consumeIntervalTicks>
+        <devotionPerBodySize>1</devotionPerBodySize>
+        <!-- Ransom pricing: abusive when the deep is weak, fair market at
+             1000 devotion, favorable toward 2000. Plus a hunger surcharge:
+             +0.25 per day unfed beyond 3 days. -->
+        <hoardPriceFactorByDevotion>
+          <points>
+            <li>(0, 4)</li>
+            <li>(100, 2.5)</li>
+            <li>(500, 1.6)</li>
+            <li>(1000, 1.0)</li>
+            <li>(2000, 0.7)</li>
+          </points>
+        </hoardPriceFactorByDevotion>
+        <hungerGraceDays>3</hungerGraceDays>
+        <hungerPenaltyPerDay>0.25</hungerPenaltyPerDay>
+      </li>
+      <li Class="CompProperties_MeditationFocus">
+        <statDef>MeditationFocusStrength</statDef>
+        <focusTypes>
+          <li>Deepcaller_Deep</li>
+        </focusTypes>
+        <offsets>
+          <li Class="Deepcaller.FocusStrengthOffset_IdolDevotion">
+            <!-- 0.20 base + this: parity with the anima tree around 100
+                 devotion, 0.45 total at a 2000-devotion god -->
+            <offsetByDevotion>
+              <points>
+                <li>(0, 0)</li>
+                <li>(100, 0.08)</li>
+                <li>(500, 0.14)</li>
+                <li>(1000, 0.20)</li>
+                <li>(2000, 0.25)</li>
+              </points>
+            </offsetByDevotion>
+          </li>
+        </offsets>
+      </li>
+    </comps>
+  </ThingDef>
+</Defs>

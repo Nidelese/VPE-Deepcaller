@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <VanillaPsycastsExpanded.PsycasterPathDef>
+    <defName>Deepcaller_Path</defName>
+    <label>Deepcaller</label>
+    <description>Deepcallers reach down through the rimworld's crust to something old, hungry, and patient. They raise writhing limbs from the ground to guard what is theirs — and the deep grows stronger with every offering it is fed.</description>
+    <background>UI_Deepcaller/Tree/DeepcallerTree</background>
+    <altBackground>UI_Deepcaller/Tree/DeepcallerTree</altBackground>
+    <tab>Misc</tab>
+    <tooltip>Deepcallers summon evolving tentacles to control and defend territory.</tooltip>
+    <modExtensions>
+      <li Class="Deepcaller.PathCostScalingExtension">
+        <!-- Psyfocus cost factor by psylink level: prohibitive early,
+             endurance for absurdly long boss fights at mastery. Riptide
+             (base 15%): 19% at level 1, 9% at 10, 4.5% at 20, 1.5% at 30
+             (~66 casts per full bar). -->
+        <psyfocusCostFactorByLevel>
+          <points>
+            <li>(1, 1.25)</li>
+            <li>(10, 0.6)</li>
+            <li>(20, 0.3)</li>
+            <li>(30, 0.1)</li>
+          </points>
+        </psyfocusCostFactorByLevel>
+      </li>
+    </modExtensions>
+  </VanillaPsycastsExpanded.PsycasterPathDef>
+</Defs>

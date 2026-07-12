@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Never spawns as a caravan/ship: exists only so the idol's hoard can
+       drive the vanilla trade dialog. The permissive stock generator makes
+       WillTrade accept anything the deep has swallowed. -->
+  <TraderKindDef>
+    <defName>Deepcaller_DeepTrader</defName>
+    <label>god of the deep</label>
+    <commonality>0</commonality>
+    <stockGenerators>
+      <li Class="Deepcaller.StockGenerator_DeepHoard" />
+    </stockGenerators>
+  </TraderKindDef>
+</Defs>

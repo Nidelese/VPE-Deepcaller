@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Vanilla Psycasts Expanded - Deepcaller</name>
+  <author>Nidelese</author>
+  <packageId>Nidelese.VPE.Deepcaller</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>Adds the Deepcaller psycaster path to Vanilla Psycasts Expanded.
+
+Call writhing tentacles up from beneath the rimworld's crust to guard your home. Tentacles lash and grapple intruders, feed on the fallen, and evolve — from Sprout to Grasper to Crusher to Colossus. Raise an Idol of the Deep and keep it fed, and your summons will rise stronger from the very first cast.
+
+An area-defense summoner path: control the ground, choose what gets close, and make them regret it.</description>
+  <modDependencies>
+    <li>
+      <packageId>OskarPotocki.VanillaFactionsExpanded.Core</packageId>
+      <displayName>Vanilla Expanded Framework</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2023507013</steamWorkshopUrl>
+    </li>
+    <li>
+      <packageId>VanillaExpanded.VPsycastsE</packageId>
+      <displayName>Vanilla Psycasts Expanded</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2842502659</steamWorkshopUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
+    <li>VanillaExpanded.VPsycastsE</li>
+  </loadAfter>
+</ModMetaData>

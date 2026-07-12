@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Evolution stages are literal life stages; feeding advances biological age
+       (1 stage = 1 biological year, set by CompTentacleGrowth). Tentacles live
+       12 in-game hours, so they never age into a stage naturally. -->
+  <LifeStageDef>
+    <defName>Deepcaller_StageSprout</defName>
+    <label>sprout</label>
+    <bodySizeFactor>0.8</bodySizeFactor>
+    <healthScaleFactor>0.8</healthScaleFactor>
+    <meleeDamageFactor>1</meleeDamageFactor>
+  </LifeStageDef>
+
+  <LifeStageDef>
+    <defName>Deepcaller_StageGrasper</defName>
+    <label>grasper</label>
+    <bodySizeFactor>1.2</bodySizeFactor>
+    <healthScaleFactor>1.3</healthScaleFactor>
+    <meleeDamageFactor>1.4</meleeDamageFactor>
+    <statFactors>
+      <MoveSpeed>1.25</MoveSpeed>
+    </statFactors>
+  </LifeStageDef>
+
+  <LifeStageDef>
+    <defName>Deepcaller_StageCrusher</defName>
+    <label>crusher</label>
+    <bodySizeFactor>1.7</bodySizeFactor>
+    <healthScaleFactor>1.8</healthScaleFactor>
+    <meleeDamageFactor>1.9</meleeDamageFactor>
+    <statFactors>
+      <MoveSpeed>1.5</MoveSpeed>
+    </statFactors>
+  </LifeStageDef>
+
+  <LifeStageDef>
+    <defName>Deepcaller_StageColossus</defName>
+    <label>colossus</label>
+    <bodySizeFactor>2.3</bodySizeFactor>
+    <healthScaleFactor>2.5</healthScaleFactor>
+    <meleeDamageFactor>2.5</meleeDamageFactor>
+    <statFactors>
+      <MoveSpeed>1.8</MoveSpeed>
+    </statFactors>
+  </LifeStageDef>
+</Defs>

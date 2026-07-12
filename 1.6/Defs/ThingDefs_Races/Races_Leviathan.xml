@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- The Leviathan's head: lumbers after its summoner, spits poison sludge
+       via a vanilla CompTurretGun (War Queen pattern), carries the shared
+       health pool. Its own damage is absorbed into the pool by
+       CompLeviathanPart (linked to itself at summon). -->
+  <ThingDef ParentName="VPE_UndeadBase">
+    <defName>Deepcaller_LeviathanHead</defName>
+    <label>the leviathan</label>
+    <description>The deep, surfaced. A vast head crowned by eight arms, spitting abyssal sludge at everything hostile to its caller. Its flesh is one: wound any part and it is the whole that bleeds.</description>
+    <statBases>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+      <MarketValue>1000</MarketValue>
+      <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+      <!-- Ponderous but mobile: the tether pull (up to 4 cells/s) is what
+           lets the arms keep formation with this. 2.4 read as too spry. -->
+      <MoveSpeed>1.8</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>maw</label>
+        <capacities>
+          <li>Deepcaller_Grip</li>
+        </capacities>
+        <power>25</power>
+        <cooldownTime>2.2</cooldownTime>
+      </li>
+    </tools>
+    <comps>
+      <li Class="VEF.AnimalBehaviours.CompProperties_InitialHediff">
+        <hediffname>VPE_NoPain</hediffname>
+        <hediffseverity>1</hediffseverity>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DieAfterPeriod">
+        <!-- Subclass only reflavors the countdown inspect line -->
+        <compClass>Deepcaller.CompDeepReturn</compClass>
+        <timeToDieInTicks>30000</timeToDieInTicks>
+        <effect>true</effect>
+        <effectFilth>Filth_Slime</effectFilth>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DoesntFlee"/>
+      <li Class="Deepcaller.CompProperties_LeviathanCore"/>
+      <li Class="Deepcaller.CompProperties_LeviathanPart"/>
+      <li Class="CompProperties_TurretGun">
+        <turretDef>Deepcaller_SludgeSpitter</turretDef>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="Deepcaller.TentacleRaceExtension">
+        <targetPriorityFactor>3.5</targetPriorityFactor>
+      </li>
+    </modExtensions>
+    <race>
+      <thinkTreeMain>Deepcaller_LeviathanHead</thinkTreeMain>
+      <body>Deepcaller_TentacleBody</body>
+      <baseBodySize>4.0</baseBodySize>
+      <baseHealthScale>3.0</baseHealthScale>
+      <lifeStageAges>
+        <li>
+          <minAge>0</minAge>
+          <def>Deepcaller_StageColossus</def>
+        </li>
+      </lifeStageAges>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>Deepcaller_LeviathanHead</defName>
+    <label>the leviathan</label>
+    <race>Deepcaller_LeviathanHead</race>
+    <combatPower>800</combatPower>
+    <canArriveManhunter>false</canArriveManhunter>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <lifeStages>
+      <li>
+        <label>the leviathan</label>
+        <labelPlural>leviathans</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Leviathan/LeviathanHead</texPath>
+          <drawSize>4.2</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+  <!-- Sludge armament -->
+
+  <ThingDef ParentName="BaseWeaponTurret">
+    <defName>Deepcaller_SludgeSpitter</defName>
+    <label>sludge spitter</label>
+    <description>The leviathan's throat. Not a weapon anyone else could wield.</description>
+    <tradeability>None</tradeability>
+    <destroyOnDrop>true</destroyOnDrop>
+    <graphicData>
+      <texPath>Things/Deepcaller_Leviathan/SludgeGlob</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <Mass>5</Mass>
+      <AccuracyTouch>0.75</AccuracyTouch>
+      <AccuracyShort>0.75</AccuracyShort>
+      <AccuracyMedium>0.65</AccuracyMedium>
+      <AccuracyLong>0.45</AccuracyLong>
+      <RangedWeapon_Cooldown>2.6</RangedWeapon_Cooldown>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Verb_Shoot</verbClass>
+        <defaultProjectile>Deepcaller_SludgeGlob</defaultProjectile>
+        <range>26.9</range>
+        <!-- NO warmupTime: on a pawn-mounted CompTurretGun, warmup > 0 puts a
+             Stance_Warmup on the PAWN, and every job change cancels it — the
+             turret aims forever and never fires. Vanilla's charge blaster
+             turret (War Queen) also runs warmup 0; cooldown does the pacing. -->
+        <defaultCooldownTime>2.6</defaultCooldownTime>
+        <burstShotCount>1</burstShotCount>
+        <muzzleFlashScale>0</muzzleFlashScale>
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <!-- Vanilla's projectile abstract is "BaseBullet" (there is no
+       "BaseProjectile") — it supplies thingClass Bullet etc. -->
+  <ThingDef ParentName="BaseBullet">
+    <defName>Deepcaller_SludgeGlob</defName>
+    <label>sludge glob</label>
+    <graphicData>
+      <texPath>Things/Deepcaller_Leviathan/SludgeGlob</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.9</drawSize>
+    </graphicData>
+    <projectile>
+      <damageDef>Deepcaller_Sludge</damageDef>
+      <damageAmountBase>9</damageAmountBase>
+      <speed>32</speed>
+    </projectile>
+  </ThingDef>
+
+</Defs>

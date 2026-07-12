@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Organic-turret brain. Manhunter mental states are useless here: vanilla
+       JobGiver_Manhunter filters targets to intelligence >= ToolUser, so a
+       manhunter-brained guardian ignores hostile animals. JobGiver_AIFightEnemies
+       (the mechanoid combat brain) attacks anything hostile to its faction. -->
+  <ThinkTreeDef>
+    <defName>Deepcaller_Tentacle</defName>
+    <thinkRoot Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Despawned</treeDef>
+        </li>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Downed</treeDef>
+        </li>
+        <li Class="ThinkNode_QueuedJob" />
+        <li Class="ThinkNode_Subtree">
+          <treeDef>LordDuty</treeDef>
+        </li>
+        <!-- Radii here are fallbacks; JobGiver_TentacleFight widens them with
+             growth stage (CompTentacleGrowth.AcquireRadius) -->
+        <li Class="Deepcaller.JobGiver_TentacleFight">
+          <targetAcquireRadius>32</targetAcquireRadius>
+          <targetKeepRadius>40</targetKeepRadius>
+        </li>
+        <!-- Leviathan arms only (inert otherwise): path back to the head.
+             The tether teleport can't cross walls; this can walk around
+             them. -->
+        <li Class="Deepcaller.JobGiver_FollowLeviathanCore" />
+        <!-- No enemies in reach: devour the fallen to grow -->
+        <li Class="Deepcaller.JobGiver_ConsumeNearbyCorpse" />
+        <!-- No threats: hold position, swaying in unfelt currents.
+             (JobGiver_IdleForever is downed-pawn-only: it issues Wait_Downed,
+             which instantly aborts on a standing pawn and churns jobs.) -->
+        <li Class="ThinkNode_Tagger">
+          <tagToGive>Idle</tagToGive>
+          <subNodes>
+            <li Class="JobGiver_Idle" />
+          </subNodes>
+        </li>
+      </subNodes>
+    </thinkRoot>
+  </ThinkTreeDef>
+
+  <!-- The Leviathan's head: fight what's near, otherwise pad after the
+       summoner (dragging the tethered arms along), otherwise wander. The
+       sludge turret is a comp and fires independently of whatever job the
+       head is doing. -->
+  <ThinkTreeDef>
+    <defName>Deepcaller_LeviathanHead</defName>
+    <thinkRoot Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Despawned</treeDef>
+        </li>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Downed</treeDef>
+        </li>
+        <li Class="ThinkNode_QueuedJob" />
+        <li Class="ThinkNode_Subtree">
+          <treeDef>LordDuty</treeDef>
+        </li>
+        <!-- Kept well under the sludge spitter's 26.9 range: the turret
+             comp already punishes anything that comes into range, so the
+             body only closes on nearby threats. Keep radius is measured
+             from the (moving) pawn, so generous values turn into
+             cross-map pursuits. -->
+        <li Class="Deepcaller.JobGiver_TentacleFight">
+          <targetAcquireRadius>14.9</targetAcquireRadius>
+          <targetKeepRadius>18.9</targetKeepRadius>
+        </li>
+        <li Class="Deepcaller.JobGiver_FollowSummoner">
+          <followRadius>4.9</followRadius>
+        </li>
+        <li Class="ThinkNode_Tagger">
+          <tagToGive>Idle</tagToGive>
+          <subNodes>
+            <li Class="JobGiver_WanderAnywhere">
+              <maxDanger>Deadly</maxDanger>
+            </li>
+          </subNodes>
+        </li>
+      </subNodes>
+    </thinkRoot>
+  </ThinkTreeDef>
+</Defs>

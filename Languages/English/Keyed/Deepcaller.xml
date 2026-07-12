@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Deepcaller_GrowthText>the deep stirs</Deepcaller_GrowthText>
+  <Deepcaller_GraspReleased>torn free</Deepcaller_GraspReleased>
+  <Deepcaller_RiptideNeedsDevotion>the deep slumbers: requires idol devotion {0} (currently {1})</Deepcaller_RiptideNeedsDevotion>
+  <Deepcaller_ConsumeNoIdol>the deep has no mouth here: raise an idol first</Deepcaller_ConsumeNoIdol>
+  <Deepcaller_OvergrowthNoTentacles>no tentacles answer the call</Deepcaller_OvergrowthNoTentacles>
+  <Deepcaller_SymbioteTaken>the deep takes hold</Deepcaller_SymbioteTaken>
+  <Deepcaller_LeviathanPool>Deep vitality: {0} / {1}</Deepcaller_LeviathanPool>
+  <Deepcaller_SymbioteRejected>{CASTER_labelShort} asked the deep for one graft too many. The tentacle devoured its host.</Deepcaller_SymbioteRejected>
+  <Deepcaller_ConsumeInvalidTarget>The deep only accepts living flesh.</Deepcaller_ConsumeInvalidTarget>
+  <Deepcaller_CasterConsumed>{CASTER_labelShort} reached too deep. The deep reached back.</Deepcaller_CasterConsumed>
+  <Deepcaller_BargainLabel>Bargain with the deep</Deepcaller_BargainLabel>
+  <Deepcaller_BargainDesc>The deep's hoard holds what Consume has swallowed. Ransom items back for silver laid within the idol's shadow. The deep sets its own prices.</Deepcaller_BargainDesc>
+  <Deepcaller_BargainEmpty>The hoard is empty. The deep has nothing to sell you.</Deepcaller_BargainEmpty>
+  <Deepcaller_BargainNoNegotiator>No colonist is available to bargain with the deep.</Deepcaller_BargainNoNegotiator>
+  <Deepcaller_TraderName>The God of the Deep</Deepcaller_TraderName>
+  <Deepcaller_HoardInspect>The deep holds {0} item(s) in its belly.</Deepcaller_HoardInspect>
+  <Deepcaller_GodMood>The God of the Deep is {0}, and {1}.</Deepcaller_GodMood>
+  <Deepcaller_MoodDisdainful>disdainful</Deepcaller_MoodDisdainful>
+  <Deepcaller_MoodDismissive>dismissive</Deepcaller_MoodDismissive>
+  <Deepcaller_MoodBored>bored</Deepcaller_MoodBored>
+  <Deepcaller_MoodCurious>curious</Deepcaller_MoodCurious>
+  <Deepcaller_MoodPleased>pleased</Deepcaller_MoodPleased>
+  <Deepcaller_MoodProud>proud</Deepcaller_MoodProud>
+  <Deepcaller_MoodHungry>hungry</Deepcaller_MoodHungry>
+  <Deepcaller_MoodSated>sated</Deepcaller_MoodSated>
+  <Deepcaller_EatCorpsesLabel>Tentacles eat corpses</Deepcaller_EatCorpsesLabel>
+  <Deepcaller_EatCorpsesDesc>When enabled, tentacles that are not fully grown will devour nearby enemy corpses to feed their growth and heal. Corpses within an idol's shadow are always reserved as offerings — the idol wins. This toggle is shared by all tentacles.</Deepcaller_EatCorpsesDesc>
+  <Deepcaller_OfferingTaken>offering taken (+{0})</Deepcaller_OfferingTaken>
+  <Deepcaller_DevotionInspect>Devotion: {0} — level {1}</Deepcaller_DevotionInspect>
+  <Deepcaller_DevotionNext>next level at {0}</Deepcaller_DevotionNext>
+  <Deepcaller_CorpseStockpileLabel>Create offering stockpile</Deepcaller_CorpseStockpileLabel>
+  <Deepcaller_CorpseStockpileDesc>Zone the idol's shadow as a corpse stockpile so haulers deliver offerings to the deep.</Deepcaller_CorpseStockpileDesc>
+  <Deepcaller_MeditationDevotion>Devotion of the deep</Deepcaller_MeditationDevotion>
+  <Deepcaller_IdolMoved>The idol sinks beneath the crust and rises anew. The deep remembers.</Deepcaller_IdolMoved>
+  <Deepcaller_IdolReturned>The deep has followed you across the world. The idol rises, devotion unbroken.</Deepcaller_IdolReturned>
+  <Deepcaller_SymbioteOdds>Rejection chance ({0} grafts borne): {1}</Deepcaller_SymbioteOdds>
+  <Deepcaller_SymbioteCap>Manipulation per graft at current devotion: +{0} (each graft starts at {1} and adapts upward)</Deepcaller_SymbioteCap>
+  <Deepcaller_HungryGodAlert>The God of the Deep hungers</Deepcaller_HungryGodAlert>
+  <Deepcaller_HungryGodAlertDesc>The idol has not fed in {0} days. While it hungers, bargain prices carry a growing surcharge — currently {1} of market value. Offer it a corpse, or a living sacrifice via Consume.</Deepcaller_HungryGodAlertDesc>
+  <Deepcaller_ReturnsToDeep>Returns to the deep in: {0}</Deepcaller_ReturnsToDeep>
+</LanguageData>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <ToolCapacityDef>
+    <defName>Deepcaller_Grip</defName>
+    <label>grip</label>
+  </ToolCapacityDef>
+
+  <ManeuverDef>
+    <defName>Deepcaller_Grip</defName>
+    <requiredCapacity>Deepcaller_Grip</requiredCapacity>
+    <verb>
+      <verbClass>Verb_MeleeAttackDamage</verbClass>
+      <meleeDamageDef>Deepcaller_Crush</meleeDamageDef>
+    </verb>
+    <logEntryDef>MeleeAttack</logEntryDef>
+    <combatLogRulesHit>Maneuver_Smash_MeleeHit</combatLogRulesHit>
+    <combatLogRulesDeflect>Maneuver_Smash_MeleeDeflect</combatLogRulesDeflect>
+    <combatLogRulesMiss>Maneuver_Smash_MeleeMiss</combatLogRulesMiss>
+    <combatLogRulesDodge>Maneuver_Smash_MeleeDodge</combatLogRulesDodge>
+  </ManeuverDef>
+
+  <DamageDef ParentName="BluntBase">
+    <defName>Deepcaller_Crush</defName>
+    <label>crush</label>
+    <additionalHediffs>
+      <li>
+        <hediff>Deepcaller_Gripped</hediff>
+        <severityPerDamageDealt>0.045</severityPerDamageDealt>
+        <victimSeverityScalingByInvBodySize>true</victimSeverityScalingByInvBodySize>
+      </li>
+    </additionalHediffs>
+    <applyAdditionalHediffsIfHuntingForFood>false</applyAdditionalHediffsIfHuntingForFood>
+  </DamageDef>
+
+  <!-- The Leviathan's spit: modest impact, lingering poison -->
+  <DamageDef ParentName="BluntBase">
+    <defName>Deepcaller_Sludge</defName>
+    <label>abyssal sludge</label>
+    <additionalHediffs>
+      <li>
+        <hediff>ToxicBuildup</hediff>
+        <severityPerDamageDealt>0.02</severityPerDamageDealt>
+        <victimSeverityScalingByInvBodySize>true</victimSeverityScalingByInvBodySize>
+      </li>
+    </additionalHediffs>
+    <applyAdditionalHediffsIfHuntingForFood>false</applyAdditionalHediffsIfHuntingForFood>
+  </DamageDef>
+</Defs>

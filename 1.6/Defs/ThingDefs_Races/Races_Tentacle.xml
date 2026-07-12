@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Sprout stage. Grasper/Crusher/Colossus arrive with the evolution system. -->
+  <ThingDef ParentName="VPE_UndeadBase">
+    <defName>Deepcaller_Tentacle</defName>
+    <label>tentacle of the deep</label>
+    <description>A pale limb of something vast, coaxed up through the soil by a Deepcaller. It lashes at anything hostile that strays within reach, and withers back into the ground when its strength is spent.</description>
+    <statBases>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+      <MarketValue>100</MarketValue>
+      <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+      <MoveSpeed>1.2</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>lash</label>
+        <capacities>
+          <li>Deepcaller_Grip</li>
+        </capacities>
+        <power>12</power>
+        <cooldownTime>1.8</cooldownTime>
+      </li>
+    </tools>
+    <comps>
+      <li Class="VEF.AnimalBehaviours.CompProperties_InitialHediff">
+        <hediffname>VPE_NoPain</hediffname>
+        <hediffseverity>1</hediffseverity>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DieAfterPeriod">
+        <!-- Subclass only reflavors the countdown inspect line -->
+        <compClass>Deepcaller.CompDeepReturn</compClass>
+        <timeToDieInTicks>30000</timeToDieInTicks>
+        <effect>true</effect>
+        <effectFilth>Filth_Slime</effectFilth>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DoesntFlee"/>
+      <!-- Inert unless an ability links it to a Leviathan head -->
+      <li Class="Deepcaller.CompProperties_LeviathanPart"/>
+      <!-- Inert (0 max) unless the Tideguard hediff grants shield stats -->
+      <li Class="CompProperties_Shield">
+        <compClass>Deepcaller.CompShield_Deep</compClass>
+      </li>
+      <li Class="Deepcaller.CompProperties_TentacleGrowth">
+        <stageThresholds>
+          <li>1.5</li>
+          <li>4</li>
+          <li>8</li>
+        </stageThresholds>
+        <killFeedFactor>1</killFeedFactor>
+        <corpseFeedFactor>1.5</corpseFeedFactor>
+        <acquireRadiusBase>32</acquireRadiusBase>
+        <acquireRadiusPerStage>10</acquireRadiusPerStage>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="Deepcaller.TentacleRaceExtension">
+        <targetPriorityFactor>2.5</targetPriorityFactor>
+      </li>
+    </modExtensions>
+    <race>
+      <thinkTreeMain>Deepcaller_Tentacle</thinkTreeMain>
+      <body>Deepcaller_TentacleBody</body>
+      <baseBodySize>1.0</baseBodySize>
+      <baseHealthScale>1.6</baseHealthScale>
+      <lifeStageAges>
+        <li>
+          <minAge>0</minAge>
+          <def>Deepcaller_StageSprout</def>
+        </li>
+        <li>
+          <minAge>1</minAge>
+          <def>Deepcaller_StageGrasper</def>
+        </li>
+        <li>
+          <minAge>2</minAge>
+          <def>Deepcaller_StageCrusher</def>
+        </li>
+        <li>
+          <minAge>3</minAge>
+          <def>Deepcaller_StageColossus</def>
+        </li>
+      </lifeStageAges>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>Deepcaller_Tentacle</defName>
+    <label>tentacle of the deep</label>
+    <race>Deepcaller_Tentacle</race>
+    <combatPower>80</combatPower>
+    <canArriveManhunter>false</canArriveManhunter>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <!-- Per-stage labels (muffalo-calf mechanism): without them the game
+         composes "{life stage} {kind label}" — "colossus tentacle sprout" -->
+    <lifeStages>
+      <li>
+        <label>tentacle sprout</label>
+        <labelPlural>tentacle sprouts</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <drawSize>1.1</drawSize>
+        </bodyGraphicData>
+      </li>
+      <li>
+        <label>tentacle grasper</label>
+        <labelPlural>tentacle graspers</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <drawSize>1.5</drawSize>
+        </bodyGraphicData>
+      </li>
+      <li>
+        <label>tentacle crusher</label>
+        <labelPlural>tentacle crushers</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <drawSize>2.0</drawSize>
+        </bodyGraphicData>
+      </li>
+      <li>
+        <label>tentacle colossus</label>
+        <labelPlural>tentacle colossi</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <drawSize>2.6</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+</Defs>

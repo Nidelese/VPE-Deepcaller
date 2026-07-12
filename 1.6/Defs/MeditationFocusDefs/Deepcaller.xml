@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- No requirements: nothing in any def grants this type, and vanilla's
+       availability check treats a focus type with no enablers anywhere as
+       usable by everyone. The god does not care who kneels. -->
+  <MeditationFocusDef>
+    <defName>Deepcaller_Deep</defName>
+    <label>abyssal</label>
+    <description>Meditation before an idol of the deep, the mind sinking into the dark below. The greater the god's devotion, the more it has to give back.</description>
+    <modExtensions>
+      <!-- VPE reads this for the focus-type icon in its Psycasts UI and
+           warns loudly ("Please ask Nidelese to add one") if absent -->
+      <li Class="VanillaPsycastsExpanded.MeditationFocusExtension">
+        <icon>UI_Deepcaller/Foci/Abyssal</icon>
+      </li>
+    </modExtensions>
+  </MeditationFocusDef>
+</Defs>

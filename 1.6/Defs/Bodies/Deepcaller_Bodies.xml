@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- The trunk is the moving "limb" (snake pattern: MovingLimbCore on the core
+       part keeps the pawn generator from rejecting it as permanently downed). -->
+  <BodyPartDef>
+    <defName>Deepcaller_TentacleTrunk</defName>
+    <label>trunk</label>
+    <hitPoints>40</hitPoints>
+    <skinCovered>true</skinCovered>
+    <tags>
+      <li>MovingLimbCore</li>
+      <!-- Melee hit chance takes a -12 offset from missing Manipulation
+           (capacity level 0 without this tag => ~18% hit chance). A tentacle
+           is a manipulation limb anyway. -->
+      <li>ManipulationLimbCore</li>
+    </tags>
+  </BodyPartDef>
+
+  <BodyPartDef>
+    <defName>Deepcaller_NerveCluster</defName>
+    <label>nerve cluster</label>
+    <hitPoints>15</hitPoints>
+    <skinCovered>false</skinCovered>
+    <bleedRate>0.5</bleedRate>
+    <tags>
+      <li>ConsciousnessSource</li>
+      <li>SightSource</li>
+    </tags>
+  </BodyPartDef>
+
+  <BodyPartDef>
+    <defName>Deepcaller_TentacleTip</defName>
+    <label>tentacle tip</label>
+    <hitPoints>15</hitPoints>
+    <frostbiteVulnerability>3</frostbiteVulnerability>
+    <skinCovered>true</skinCovered>
+  </BodyPartDef>
+
+  <BodyDef>
+    <defName>Deepcaller_TentacleBody</defName>
+    <label>tentacle</label>
+    <corePart>
+      <def>Deepcaller_TentacleTrunk</def>
+      <height>Middle</height>
+      <depth>Outside</depth>
+      <parts>
+        <li>
+          <def>Deepcaller_NerveCluster</def>
+          <coverage>0.10</coverage>
+          <height>Middle</height>
+          <depth>Inside</depth>
+        </li>
+        <li>
+          <def>Deepcaller_TentacleTip</def>
+          <coverage>0.15</coverage>
+          <height>Top</height>
+          <depth>Outside</depth>
+        </li>
+      </parts>
+    </corePart>
+  </BodyDef>
+</Defs>

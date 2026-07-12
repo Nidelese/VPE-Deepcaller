@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <JobDef>
+    <defName>Deepcaller_ConsumeCorpse</defName>
+    <driverClass>Deepcaller.JobDriver_ConsumeCorpse</driverClass>
+    <reportString>consuming TargetA.</reportString>
+  </JobDef>
+</Defs>

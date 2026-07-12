@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- Level 1 -->
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Lash</defName>
+    <label>lash</label>
+    <description>Call a tentacle up from beneath the ground at the target location. It lashes at hostiles within reach until its strength is spent.</description>
+    <iconPath>UI_Deepcaller/Abilities/Lash</iconPath>
+    <abilityClass>Deepcaller.Ability_SummonTentacle</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <castTime>60</castTime>
+    <range>19.9</range>
+    <targetMode>Location</targetMode>
+    <targetingParameters>
+      <canTargetLocations>true</canTargetLocations>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>1</level>
+        <order>1</order>
+        <psyfocusCost>0.02</psyfocusCost>
+        <entropyGain>8</entropyGain>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_SummonPawn">
+        <kind>Deepcaller_Tentacle</kind>
+        <count>1</count>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Grasp</defName>
+    <label>grasp</label>
+    <description>A tentacle erupts from the ground beneath the target and leashes it to that spot. The victim is slowed, and if it strays it is dragged back to the eruption point. The grip holds for a short time, or until enough damage — from any source, including your own tentacles — tears the victim free.\n\nThe deep holds harder when well fed: an Idol's devotion extends the grip's duration and makes it harder to tear free.</description>
+    <iconPath>UI_Deepcaller/Abilities/Grasp</iconPath>
+    <abilityClass>Deepcaller.Ability_Grasp</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <castTime>30</castTime>
+    <range>19.9</range>
+    <durationTime>900</durationTime>
+    <targetMode>Pawn</targetMode>
+    <targetingParameters>
+      <canTargetPawns>true</canTargetPawns>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetBuildings>false</canTargetBuildings>
+      <canTargetAnimals>true</canTargetAnimals>
+      <canTargetMechs>true</canTargetMechs>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>1</level>
+        <order>2</order>
+        <psyfocusCost>0.05</psyfocusCost>
+        <entropyGain>12</entropyGain>
+      </li>
+      <li Class="VEF.Abilities.AbilityExtension_Hediff">
+        <hediff>Deepcaller_Grasped</hediff>
+        <severity>1</severity>
+        <targetOnlyEnemies>true</targetOnlyEnemies>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <!-- Level 2 -->
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Riptide</defName>
+    <label>riptide</label>
+    <description>The deep surges beneath the target point. Every hostile creature in the area is dragged toward the center, slammed into whatever stands in the way — walls, or each other — and stunned as the current releases it.\n\nThe surge answers only a fed god: casting requires an idol with sufficient devotion, and higher devotion extends the reach of the current and the force of its collisions.</description>
+    <iconPath>UI_Deepcaller/Abilities/Riptide</iconPath>
+    <abilityClass>Deepcaller.Ability_Riptide</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <!-- No cooldown: entropy (20) and psyfocus are the real limiters, and
+         any cooldown at all outlives the ~1.3s drag, making the mid-drag
+         redirect recast unreachable. (VEF cooldownTime is in TICKS; the
+         VPE_PsycastBase default is 120 = 2s.) -->
+    <cooldownTime>0</cooldownTime>
+    <!-- The current flows under the ground, not over it: no line of sight
+         needed, so you can surge behind walls and drag enemies into them. -->
+    <requireLineOfSight>false</requireLineOfSight>
+    <castTime>30</castTime>
+    <range>24.9</range>
+    <radius>6.9</radius>
+    <targetMode>Location</targetMode>
+    <targetingParameters>
+      <canTargetLocations>true</canTargetLocations>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>2</level>
+        <order>2</order>
+        <psyfocusCost>0.15</psyfocusCost>
+        <entropyGain>20</entropyGain>
+        <!-- Riptide is unusable below 10 idol devotion, so it must sit
+             behind Raise Idol in the tree — otherwise the point is a trap
+             for anyone without an idol. NOTE: VPE prerequisites are OR
+             (PrereqsCompleted uses Any), so exactly one entry here. -->
+        <prerequisites>
+          <li>Deepcaller_RaiseIdol</li>
+        </prerequisites>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_Riptide">
+        <!-- Pull speed: 1 cell per 5 ticks = 12 cells/s -->
+        <ticksPerCell>5</ticksPerCell>
+        <stunTicks>120</stunTicks>
+        <ringWidth>1.4</ringWidth>
+        <!-- Devotion economy: casting requires minDevotion. Cast range gets
+             +1 cell per 5 devotion (capped +8). AoE radius follows the
+             curve below — diminishing returns, never stops growing;
+             interpolated between points, clamped outside them. -->
+        <minDevotion>10</minDevotion>
+        <devotionPerBonusCell>5</devotionPerBonusCell>
+        <maxBonusCells>8</maxBonusCells>
+        <radiusByDevotion>
+          <points>
+            <li>(10, 2)</li>
+            <li>(80, 8)</li>
+            <li>(240, 12)</li>
+            <li>(2160, 16)</li>
+          </points>
+        </radiusByDevotion>
+        <!-- Pawn collision: 3 + 0.4/devotion (7 at the gate, 15 at 30).
+             Walls scale separately at 1/devotion: 200 devotion breaks a
+             200 hp wooden wall in one slam. Zero both to spare masonry. -->
+        <collisionDamageBase>3</collisionDamageBase>
+        <collisionDamagePerDevotion>0.4</collisionDamagePerDevotion>
+        <wallDamageBase>0</wallDamageBase>
+        <wallDamagePerDevotion>1</wallDamagePerDevotion>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_RaiseIdol</defName>
+    <label>raise idol</label>
+    <description>Raise an Idol of the Deep from the crust. Corpses left within its shadow are drawn under as offerings, building devotion. New tentacles are summoned at the deep's current devotion stage.\n\nIf an idol already stands, it sinks beneath the crust and rises anew at the target — devotion, hunger and hoard intact. There is only ever one god.</description>
+    <iconPath>UI_Deepcaller/Abilities/RaiseIdol</iconPath>
+    <abilityClass>Deepcaller.Ability_RaiseIdol</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <castTime>300</castTime>
+    <range>9.9</range>
+    <targetMode>Location</targetMode>
+    <targetingParameters>
+      <canTargetLocations>true</canTargetLocations>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>2</level>
+        <order>1</order>
+        <psyfocusCost>0.5</psyfocusCost>
+        <entropyGain>30</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Lash</li>
+        </prerequisites>
+      </li>
+      <!-- Ability_SpawnBuilding reads AbilityExtension_Building (not
+           AbilityExtension_Spawn, which belongs to Ability_Spawn) -->
+      <li Class="VEF.Abilities.AbilityExtension_Building">
+        <building>Deepcaller_Idol</building>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_InkVeil</defName>
+    <label>ink veil</label>
+    <description>The deep exhales a rolling cloud of abyssal ink over the target area. Gunfire through the murk goes wild and turrets cannot find their mark. The veil disperses on the wind, as all things return to the deep.\n\nCast it over your tentacles and let them fight in the dark they were born to.</description>
+    <iconPath>UI_Deepcaller/Abilities/InkVeil</iconPath>
+    <abilityClass>Deepcaller.Ability_InkVeil</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <!-- Like Riptide: the ink rises from below, no line of sight needed. -->
+    <requireLineOfSight>false</requireLineOfSight>
+    <castTime>30</castTime>
+    <range>24.9</range>
+    <radius>4.9</radius>
+    <targetMode>Location</targetMode>
+    <targetingParameters>
+      <canTargetLocations>true</canTargetLocations>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>2</level>
+        <order>3</order>
+        <psyfocusCost>0.1</psyfocusCost>
+        <entropyGain>15</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Lash</li>
+        </prerequisites>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_InkVeil">
+        <!-- Cloud grows +1 radius per 5 devotion, capped +10. Hostiles in
+             the bloom are Inked (Sight debuff): severity 0.25 + 0.01 per
+             devotion — stages at 0.45 (Sight x0.4) and 0.75 (x0.15), decays
+             at 8/day so deeper ink also lasts longer. -->
+        <devotionPerBonusCell>5</devotionPerBonusCell>
+        <maxBonusCells>10</maxBonusCells>
+        <inkSeverityBase>0.25</inkSeverityBase>
+        <inkSeverityPerDevotion>0.01</inkSeverityPerDevotion>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <!-- Level 3 -->
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Consume</defName>
+    <label>consume</label>
+    <description>The deep swallows a living creature whole. Instant death; no corpse — the flesh becomes devotion, fed to the idol from anywhere on the map.\n\nThe victim's vitality passes through the caster as neural heat on its way down. Devour something beyond your capacity, and the idol eats you too.\n\nAny living creature is a valid offering. The deep does not judge.</description>
+    <iconPath>UI_Deepcaller/Abilities/Consume</iconPath>
+    <abilityClass>Deepcaller.Ability_Consume</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <requireLineOfSight>false</requireLineOfSight>
+    <castTime>60</castTime>
+    <range>19.9</range>
+    <targetMode>Pawn</targetMode>
+    <targetingParameters>
+      <canTargetPawns>true</canTargetPawns>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetBuildings>false</canTargetBuildings>
+      <canTargetAnimals>true</canTargetAnimals>
+      <canTargetMechs>false</canTargetMechs>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>3</level>
+        <order>1</order>
+        <!-- Heat is the real cost, scaling with the victim's HP -->
+        <psyfocusCost>0.05</psyfocusCost>
+        <entropyGain>0</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_RaiseIdol</li>
+        </prerequisites>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_Consume">
+        <!-- Healthy human ~40-60 heat; wound them first for a discount -->
+        <heatPerHitPoint>0.2</heatPerHitPoint>
+        <liveOfferingFactor>1.5</liveOfferingFactor>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <!-- Level 4 -->
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_DeepHoard</defName>
+    <label>Passive: Deep Hoard</label>
+    <description>Passive Skill: Unlocking this ability will automatically apply its effect.\n\nThe deep learns to keep what it cannot digest. Equipment, apparel and belongings of creatures devoured by Consume survive into the idol's belly, and can be ransomed back — for silver laid within the idol's shadow, at the deep's own generous valuation of their worth.\n\nThe deep is a god, not a charity.</description>
+    <iconPath>UI_Deepcaller/Abilities/DeepHoard</iconPath>
+    <abilityClass>Deepcaller.Ability_Passive</abilityClass>
+    <targetMode>Self</targetMode>
+    <castTime>0</castTime>
+    <range>0</range>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>4</level>
+        <order>1</order>
+        <psyfocusCost>0</psyfocusCost>
+        <entropyGain>0</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Consume</li>
+        </prerequisites>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Overgrowth</defName>
+    <label>overgrowth</label>
+    <description>The caller screams into the ground, and the deep answers all at once: every tentacle on the map surges forward one full growth stage, wounds knitting and lost flesh regrowing as it swells.</description>
+    <iconPath>UI_Deepcaller/Abilities/Overgrowth</iconPath>
+    <abilityClass>Deepcaller.Ability_Overgrowth</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <castTime>90</castTime>
+    <targetMode>Self</targetMode>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>4</level>
+        <order>2</order>
+        <psyfocusCost>0.25</psyfocusCost>
+        <entropyGain>30</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Lash</li>
+        </prerequisites>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Symbiote</defName>
+    <label>symbiote</label>
+    <description>Graft a living tentacle of the deep onto your own flesh. Once mastered, each graft lends dexterity scaled to the idol's devotion when it was taken — but a fresh graft is a shock the body must grow into over many days.\n\nThe deep permits the first graft freely. Each one after tempts it: fail its regard, and the tentacle devours its host.</description>
+    <iconPath>UI_Deepcaller/Abilities/Symbiote</iconPath>
+    <abilityClass>Deepcaller.Ability_Symbiote</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <castTime>120</castTime>
+    <targetMode>Self</targetMode>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>4</level>
+        <order>3</order>
+        <psyfocusCost>0.2</psyfocusCost>
+        <entropyGain>25</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Consume</li>
+        </prerequisites>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_Symbiote">
+        <!-- Max bonus = devotion/100 capped at +25 (1000 -> +10, 2500 ->
+             +25); grafts start at -10 and adapt up. Fail chances by grafts
+             already carried: the tentacle eats the caster. -->
+        <devotionPerBonusPoint>100</devotionPerBonusPoint>
+        <maxBonusPerGraft>25</maxBonusPerGraft>
+        <startingBonus>-10</startingBonus>
+        <failChances>
+          <li>0</li>
+          <li>0.05</li>
+          <li>0.10</li>
+          <li>0.20</li>
+          <li>0.40</li>
+          <li>0.80</li>
+        </failChances>
+        <liveOfferingFactor>1.5</liveOfferingFactor>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <!-- Level 5 -->
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_LeviathansWake</defName>
+    <label>leviathan's wake</label>
+    <description>Wake the deep itself. A vast head breaches at the target point, ringed by eight arms, spitting abyssal sludge at everything hostile to its caller.\n\nThe leviathan's flesh is one: wound any arm and it is the whole that bleeds, one single enormous pool of vitality scaled by the idol's devotion. When the pool is spent — or the deep's patience — the whole god sinks at once.</description>
+    <iconPath>UI_Deepcaller/Abilities/LeviathansWake</iconPath>
+    <abilityClass>Deepcaller.Ability_LeviathansWake</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <requireLineOfSight>false</requireLineOfSight>
+    <castTime>300</castTime>
+    <range>29.9</range>
+    <targetMode>Location</targetMode>
+    <targetingParameters>
+      <canTargetLocations>true</canTargetLocations>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>5</level>
+        <order>1</order>
+        <psyfocusCost>0.85</psyfocusCost>
+        <entropyGain>60</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Overgrowth</li>
+        </prerequisites>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_Leviathan">
+        <headKind>Deepcaller_LeviathanHead</headKind>
+        <armKind>Deepcaller_Tentacle</armKind>
+        <armCount>8</armCount>
+        <ringRadius>3</ringRadius>
+        <!-- Arms born Crushers -->
+        <armStage>2</armStage>
+        <!-- Shared pool: 1500 + 2/devotion -->
+        <basePool>1500</basePool>
+        <poolPerDevotion>2</poolPerDevotion>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Tideguard</defName>
+    <label>Passive: Tideguard</label>
+    <description>Passive Skill: Unlocking this ability will automatically apply its effect.\n\nTentacles you summon rise wrapped in a skin of pressurized deep-water force — an energy shield that scales with their growth stage, from a thin film on a sprout to beyond shield-belt strength on a colossus. Like all such shields it stops projectiles, not blades, and breaks under EMP.\n\nThe leviathan's head is the deep itself. It does not hide behind shields.</description>
+    <iconPath>UI_Deepcaller/Abilities/Tideguard</iconPath>
+    <abilityClass>Deepcaller.Ability_Passive</abilityClass>
+    <targetMode>Self</targetMode>
+    <castTime>0</castTime>
+    <range>0</range>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>5</level>
+        <order>2</order>
+        <psyfocusCost>0</psyfocusCost>
+        <entropyGain>0</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_LeviathansWake</li>
+        </prerequisites>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+</Defs>

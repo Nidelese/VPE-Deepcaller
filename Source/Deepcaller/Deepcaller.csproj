@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- net48 (not 472): VanillaPsycastsExpanded.dll is built against 4.8
+         and MSBuild refuses to reference upward. The game's runtime runs
+         4.8-compiled mods fine (VPE itself is one). -->
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>Deepcaller</RootNamespace>
+    <AssemblyName>Deepcaller</AssemblyName>
+    <OutputPath>..\..\1.6\Assemblies\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType>none</DebugType>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <!-- Local Steam Workshop content; adjust if the library moves -->
+    <WorkshopDir>$(HOME)/.local/share/Steam/steamapps/workshop/content/294100</WorkshopDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- RimWorld reference assemblies (no game code shipped, compile-only) -->
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" />
+    <PackageReference Include="Lib.Harmony" Version="2.*" ExcludeAssets="runtime" />
+    <Reference Include="VEF">
+      <HintPath>$(WorkshopDir)/2023507013/1.6/Assemblies/VEF.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VanillaPsycastsExpanded">
+      <HintPath>$(WorkshopDir)/2842502659/1.6/Assemblies/VanillaPsycastsExpanded.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+</Project>
