@@ -73,8 +73,12 @@ need, so do not upload the development tree directly.
 ## Embedded banners
 
 Steam's item description can embed hosted images with `[img]URL[/img]`. The
-three final banners are attached to the public GitHub `v1.0.0` release, and
-`description.bbcode` embeds those stable release URLs directly:
+three final banners are attached to the public GitHub `v1.0.0` release. Steam
+does not render the release-download URLs because GitHub serves those through
+an attachment redirect with `application/octet-stream`; `description.bbcode`
+therefore embeds immutable `raw.githubusercontent.com` URLs pinned to commit
+`b407287693949470a42ada9c0975830865b339c8`. Those URLs serve `image/png`
+directly and remain stable even if the source branch is later removed:
 
 - `Assets/Deepcaller_DescriptionBanner_1280x320.png`
 - `Assets/Deepcaller_FeatureStrip_1280x320.png`
