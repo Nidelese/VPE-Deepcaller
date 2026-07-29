@@ -1,0 +1,3 @@
+Deepcaller 1.0.0 — first public release.
+
+Adds the complete Deepcaller psycast path, Idol devotion system, animated growing Sprouts, static ranged Buds, the coordinated multi-limbed Leviathan, and custom visual effects for Grasp, Riptide, Ink Veil and Tideguard.

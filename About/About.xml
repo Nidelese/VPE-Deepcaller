@@ -3,6 +3,7 @@
   <name>Vanilla Psycasts Expanded - Deepcaller</name>
   <author>Nidelese</author>
   <packageId>Nidelese.VPE.Deepcaller</packageId>
+  <url>https://github.com/Nidelese/VPE-Deepcaller</url>
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
