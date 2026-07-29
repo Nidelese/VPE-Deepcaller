@@ -57,6 +57,7 @@ namespace Deepcaller
             // Evolution stages are life stages: the setter recalculates the
             // life stage index, which applies size/health/damage factors.
             Pawn.ageTracker.AgeBiologicalTicks = Stage * TicksPerBiologicalYear + 1000L;
+            Pawn.Drawer?.renderer?.SetAllGraphicsDirty();
             Regenerate();
             // Tideguard shield (if granted) scales with stage.
             var shield = Pawn.health.hediffSet.GetFirstHediffOfDef(Deepcaller_DefOf.Deepcaller_TideguardShield);

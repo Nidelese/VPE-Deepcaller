@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- The Bud's capstone expression. Each flower is a real pawn and owns a
+       separate CompTurretGun, so the three petals acquire targets and cycle
+       cooldowns independently. Their apertures open into the same submerged
+       body and settle around distinct inner-ring hardpoints. -->
+  <ThingDef ParentName="VPE_UndeadBase">
+    <defName>Deepcaller_LeviathanFlower</defName>
+    <label>leviathan flower</label>
+    <description>An elder bud opened directly from the leviathan's flesh. Its eye follows prey independently, spitting nerve-cold pearls that interrupt the victim's body on impact.</description>
+    <statBases>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+      <MarketValue>260</MarketValue>
+      <ArmorRating_Sharp>0.18</ArmorRating_Sharp>
+      <!-- Used only to return to a moving hardpoint; it never pursues prey. -->
+      <MoveSpeed>2.4</MoveSpeed>
+    </statBases>
+    <tools />
+    <comps>
+      <li Class="VEF.AnimalBehaviours.CompProperties_InitialHediff">
+        <hediffname>VPE_NoPain</hediffname>
+        <hediffseverity>1</hediffseverity>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DieAfterPeriod">
+        <compClass>Deepcaller.CompDeepReturn</compClass>
+        <timeToDieInTicks>30000</timeToDieInTicks>
+        <effect>true</effect>
+        <effectFilth>Filth_Slime</effectFilth>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DoesntFlee"/>
+      <li Class="Deepcaller.CompProperties_LeviathanPart">
+        <!-- Flowers never pursue prey; this only governs how quickly a
+             displaced aperture resurfaces at its inner-ring hardpoint. -->
+        <predationExtension>0</predationExtension>
+        <resurfaceGraceDistance>1.2</resurfaceGraceDistance>
+      </li>
+      <li Class="Deepcaller.CompProperties_LeviathanAnimation"/>
+      <li Class="CompProperties_TurretGun">
+        <turretDef>Deepcaller_LeviathanFlowerOrgan</turretDef>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="Deepcaller.TentacleRaceExtension">
+        <targetPriorityFactor>2.8</targetPriorityFactor>
+      </li>
+    </modExtensions>
+    <race>
+      <thinkTreeMain>Deepcaller_LeviathanFlower</thinkTreeMain>
+      <body>Deepcaller_TentacleBody</body>
+      <baseBodySize>1.3</baseBodySize>
+      <baseHealthScale>2.0</baseHealthScale>
+      <lifeStageAges>
+        <li>
+          <minAge>0</minAge>
+          <def>Deepcaller_StageGrasper</def>
+        </li>
+      </lifeStageAges>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>Deepcaller_LeviathanFlower</defName>
+    <label>leviathan flower</label>
+    <race>Deepcaller_LeviathanFlower</race>
+    <combatPower>180</combatPower>
+    <canArriveManhunter>false</canArriveManhunter>
+    <canMeleeAttack>false</canMeleeAttack>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <lifeStages>
+      <li>
+        <label>leviathan flower</label>
+        <labelPlural>leviathan flowers</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Leviathan/LeviathanFlower</texPath>
+          <graphicClass>Deepcaller.Graphic_LeviathanFlower</graphicClass>
+          <drawSize>1.7</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+  <ThingDef ParentName="BaseWeaponTurret">
+    <defName>Deepcaller_LeviathanFlowerOrgan</defName>
+    <label>stilling bloom</label>
+    <description>A nerve-stilling eye-flower grown as part of the leviathan. It cannot survive apart from the god's shared flesh.</description>
+    <tradeability>None</tradeability>
+    <destroyOnDrop>true</destroyOnDrop>
+    <graphicData>
+      <texPath>Things/Deepcaller_Leviathan/FlowerStunPearl</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <Mass>2</Mass>
+      <AccuracyTouch>0.88</AccuracyTouch>
+      <AccuracyShort>0.82</AccuracyShort>
+      <AccuracyMedium>0.72</AccuracyMedium>
+      <AccuracyLong>0.50</AccuracyLong>
+      <RangedWeapon_Cooldown>3.6</RangedWeapon_Cooldown>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Deepcaller.Verb_LeviathanFlowerStun</verbClass>
+        <defaultProjectile>Deepcaller_LeviathanFlowerPearl</defaultProjectile>
+        <range>22.9</range>
+        <!-- Pawn-mounted CompTurretGun requires zero warmup to fire reliably. -->
+        <defaultCooldownTime>3.6</defaultCooldownTime>
+        <burstShotCount>1</burstShotCount>
+        <muzzleFlashScale>0</muzzleFlashScale>
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>Deepcaller_LeviathanFlowerPearl</defName>
+    <label>stilling pearl</label>
+    <thingClass>Deepcaller.Projectile_LeviathanStun</thingClass>
+    <graphicData>
+      <texPath>Things/Deepcaller_Leviathan/FlowerStunPearl</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.5</drawSize>
+    </graphicData>
+    <projectile>
+      <damageDef>Blunt</damageDef>
+      <damageAmountBase>4</damageAmountBase>
+      <speed>26</speed>
+    </projectile>
+    <modExtensions>
+      <li Class="Deepcaller.LeviathanStunExtension">
+        <!-- One second at normal game speed. Three independent flowers can
+             overlap, but their 3.6-second cooldown prevents a guaranteed
+             permanent lock against a lone target. -->
+        <stunTicks>60</stunTicks>
+      </li>
+    </modExtensions>
+  </ThingDef>
+
+</Defs>

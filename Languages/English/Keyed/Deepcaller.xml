@@ -40,4 +40,5 @@
   <Deepcaller_HungryGodAlert>The God of the Deep hungers</Deepcaller_HungryGodAlert>
   <Deepcaller_HungryGodAlertDesc>The idol has not fed in {0} days. While it hungers, bargain prices carry a growing surcharge — currently {1} of market value. Offer it a corpse, or a living sacrifice via Consume.</Deepcaller_HungryGodAlertDesc>
   <Deepcaller_ReturnsToDeep>Returns to the deep in: {0}</Deepcaller_ReturnsToDeep>
+  <Deepcaller_BudStats>Ghost-fire: {0} damage • {1} cells/s • {2}s between shots</Deepcaller_BudStats>
 </LanguageData>

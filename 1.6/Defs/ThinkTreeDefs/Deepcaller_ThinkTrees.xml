@@ -24,29 +24,88 @@
           <targetAcquireRadius>32</targetAcquireRadius>
           <targetKeepRadius>40</targetKeepRadius>
         </li>
-        <!-- Leviathan arms only (inert otherwise): path back to the head.
-             The tether teleport can't cross walls; this can walk around
-             them. -->
+        <!-- Leviathan arms only (inert otherwise): settle back into their
+             assigned aperture around the head after a short predatory reach. -->
         <li Class="Deepcaller.JobGiver_FollowLeviathanCore" />
         <!-- No enemies in reach: devour the fallen to grow -->
         <li Class="Deepcaller.JobGiver_ConsumeNearbyCorpse" />
-        <!-- No threats: hold position, swaying in unfelt currents.
-             (JobGiver_IdleForever is downed-pawn-only: it issues Wait_Downed,
-             which instantly aborts on a standing pawn and churns jobs.) -->
+        <!-- No threats: nose around like a curious summoned animal. Buds are
+             the later, deliberately immobile branch; Sprouts should live. -->
         <li Class="ThinkNode_Tagger">
           <tagToGive>Idle</tagToGive>
           <subNodes>
-            <li Class="JobGiver_Idle" />
+            <li Class="JobGiver_WanderAnywhere">
+              <maxDanger>Deadly</maxDanger>
+            </li>
           </subNodes>
         </li>
       </subNodes>
     </thinkRoot>
   </ThinkTreeDef>
 
-  <!-- The Leviathan's head: fight what's near, otherwise pad after the
-       summoner (dragging the tethered arms along), otherwise wander. The
-       sludge turret is a comp and fires independently of whatever job the
-       head is doing. -->
+  <!-- Leviathan arms have no autonomous Sprout life. The head's shared
+       command feeds JobGiver_TentacleFight; otherwise they settle into their
+       hardpoint and remain there. -->
+  <ThinkTreeDef>
+    <defName>Deepcaller_LeviathanArm</defName>
+    <thinkRoot Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Despawned</treeDef>
+        </li>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Downed</treeDef>
+        </li>
+        <li Class="ThinkNode_QueuedJob"/>
+        <li Class="Deepcaller.JobGiver_TentacleFight">
+          <targetAcquireRadius>8</targetAcquireRadius>
+          <targetKeepRadius>8</targetKeepRadius>
+        </li>
+        <li Class="Deepcaller.JobGiver_FollowLeviathanCore"/>
+        <li Class="Deepcaller.JobGiver_BudWait"/>
+      </subNodes>
+    </thinkRoot>
+  </ThinkTreeDef>
+
+  <!-- Buds are living turrets. CompTurretGun acquires and shoots targets
+       independently; their only job is to remain rooted on the cast square. -->
+  <ThinkTreeDef>
+    <defName>Deepcaller_Bud</defName>
+    <thinkRoot Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Despawned</treeDef>
+        </li>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Downed</treeDef>
+        </li>
+        <li Class="Deepcaller.JobGiver_BudWait"/>
+      </subNodes>
+    </thinkRoot>
+  </ThinkTreeDef>
+
+  <!-- Each flower has its own CompTurretGun targeter. Its pawn brain only
+       keeps the bloom seated on its moving hardpoint, then waits without
+       injecting a shared combat job. -->
+  <ThinkTreeDef>
+    <defName>Deepcaller_LeviathanFlower</defName>
+    <thinkRoot Class="ThinkNode_Priority">
+      <subNodes>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Despawned</treeDef>
+        </li>
+        <li Class="ThinkNode_Subtree">
+          <treeDef>Downed</treeDef>
+        </li>
+        <li Class="Deepcaller.JobGiver_FollowLeviathanCore"/>
+        <li Class="Deepcaller.JobGiver_BudWait"/>
+      </subNodes>
+    </thinkRoot>
+  </ThinkTreeDef>
+
+  <!-- The Leviathan's head: advance toward nearby prey in short formation
+       steps, otherwise pad after the summoner, otherwise drift. The sludge
+       turret is a comp and fires independently of locomotion. -->
   <ThinkTreeDef>
     <defName>Deepcaller_LeviathanHead</defName>
     <thinkRoot Class="ThinkNode_Priority">
@@ -76,9 +135,7 @@
         <li Class="ThinkNode_Tagger">
           <tagToGive>Idle</tagToGive>
           <subNodes>
-            <li Class="JobGiver_WanderAnywhere">
-              <maxDanger>Deadly</maxDanger>
-            </li>
+            <li Class="Deepcaller.JobGiver_LeviathanHeadIdle"/>
           </subNodes>
         </li>
       </subNodes>

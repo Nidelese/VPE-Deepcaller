@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-  <!-- The Leviathan's head: lumbers after its summoner, spits poison sludge
-       via a vanilla CompTurretGun (War Queen pattern), carries the shared
-       health pool. Its own damage is absorbed into the pool by
-       CompLeviathanPart (linked to itself at summon). -->
+  <!-- The Leviathan's head: lumbers after its summoner, spits scaling sludge
+       via a CompTurretGun (War Queen pattern), and carries the shared health
+       pool. Its own damage is absorbed into the pool by CompLeviathanPart
+       (linked to itself at summon). -->
   <ThingDef ParentName="VPE_UndeadBase">
     <defName>Deepcaller_LeviathanHead</defName>
     <label>the leviathan</label>
-    <description>The deep, surfaced. A vast head crowned by eight arms, spitting abyssal sludge at everything hostile to its caller. Its flesh is one: wound any part and it is the whole that bleeds.</description>
+    <description>The deep, surfaced through a vast head, eight hunting arms, and three stilling flowers. Each organ breaches reality independently, but all open into one submerged body. Its sludge digests resistance itself, and wound any aperture and it is the whole that bleeds.</description>
     <statBases>
       <ComfyTemperatureMin>-100</ComfyTemperatureMin>
       <ComfyTemperatureMax>250</ComfyTemperatureMax>
@@ -43,6 +43,7 @@
       <li Class="VEF.AnimalBehaviours.CompProperties_DoesntFlee"/>
       <li Class="Deepcaller.CompProperties_LeviathanCore"/>
       <li Class="Deepcaller.CompProperties_LeviathanPart"/>
+      <li Class="Deepcaller.CompProperties_LeviathanAnimation"/>
       <li Class="CompProperties_TurretGun">
         <turretDef>Deepcaller_SludgeSpitter</turretDef>
       </li>
@@ -79,6 +80,7 @@
         <labelPlural>leviathans</labelPlural>
         <bodyGraphicData>
           <texPath>Things/Deepcaller_Leviathan/LeviathanHead</texPath>
+          <graphicClass>Deepcaller.Graphic_Leviathan</graphicClass>
           <drawSize>4.2</drawSize>
         </bodyGraphicData>
       </li>
@@ -107,7 +109,7 @@
     </statBases>
     <verbs>
       <li>
-        <verbClass>Verb_Shoot</verbClass>
+        <verbClass>Deepcaller.Verb_LeviathanGlob</verbClass>
         <defaultProjectile>Deepcaller_SludgeGlob</defaultProjectile>
         <range>26.9</range>
         <!-- NO warmupTime: on a pawn-mounted CompTurretGun, warmup > 0 puts a
@@ -126,6 +128,7 @@
   <ThingDef ParentName="BaseBullet">
     <defName>Deepcaller_SludgeGlob</defName>
     <label>sludge glob</label>
+    <thingClass>Deepcaller.Projectile_LeviathanGlob</thingClass>
     <graphicData>
       <texPath>Things/Deepcaller_Leviathan/SludgeGlob</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -136,6 +139,18 @@
       <damageAmountBase>9</damageAmountBase>
       <speed>32</speed>
     </projectile>
+    <modExtensions>
+      <li Class="Deepcaller.LeviathanGlobExtension">
+        <!-- Four percent of a pawn's total body-part maximum health, or of a
+             non-pawn Thing's MaxHitPoints; never less than the old 9 damage. -->
+        <maxHealthFraction>0.04</maxHealthFraction>
+        <minimumDamage>9</minimumDamage>
+        <resistanceHediff>Deepcaller_AbyssalSoftening</resistanceHediff>
+        <!-- +8% incoming damage per hit, five stacks; refreshed for 15 sec. -->
+        <resistanceSeverityPerHit>0.2</resistanceSeverityPerHit>
+        <resistanceDurationTicks>900</resistanceDurationTicks>
+      </li>
+    </modExtensions>
   </ThingDef>
 
 </Defs>

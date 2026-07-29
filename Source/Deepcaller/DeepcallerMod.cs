@@ -17,6 +17,7 @@ namespace Deepcaller
     {
         public static JobDef Deepcaller_ConsumeCorpse;
         public static ThingDef Deepcaller_Idol;
+        public static HediffDef Deepcaller_Grasped;
         public static HediffDef Deepcaller_Riptiden;
         public static HediffDef Deepcaller_Inked;
         public static VEF.Abilities.AbilityDef Deepcaller_DeepHoard;
@@ -24,6 +25,8 @@ namespace Deepcaller
         public static HediffDef Deepcaller_Symbiote;
         public static VEF.Abilities.AbilityDef Deepcaller_Tideguard;
         public static HediffDef Deepcaller_TideguardShield;
+        public static HediffDef Deepcaller_AbyssalSoftening;
+        public static ThingDef Deepcaller_AbilityVisual;
 
         static Deepcaller_DefOf() => DefOfHelper.EnsureInitializedInCtor(typeof(Deepcaller_DefOf));
     }

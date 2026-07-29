@@ -183,6 +183,64 @@
     </modExtensions>
   </HediffDef>
 
+  <!-- Each glob dissolves another layer of protection. Severity rises by
+       0.2 per unshielded hit: +8% incoming damage per stack, max +40%.
+       Projectile_LeviathanGlob refreshes the 15-second duration. -->
+  <HediffDef>
+    <defName>Deepcaller_AbyssalSoftening</defName>
+    <label>abyssally softened</label>
+    <description>Leviathan sludge is digesting the boundary between this body and the deep. Each coating leaves the victim more vulnerable to every source of damage.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <defaultLabelColor>(0.25,0.85,0.82)</defaultLabelColor>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.2</initialSeverity>
+    <maxSeverity>1</maxSeverity>
+    <isBad>true</isBad>
+    <everCurableByItem>false</everCurableByItem>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>900</disappearsAfterTicks>
+        <showRemainingTime>true</showRemainingTime>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>slickened</label>
+        <statOffsets>
+          <IncomingDamageFactor>0.08</IncomingDamageFactor>
+        </statOffsets>
+      </li>
+      <li>
+        <minSeverity>0.4</minSeverity>
+        <label>softened</label>
+        <statOffsets>
+          <IncomingDamageFactor>0.16</IncomingDamageFactor>
+        </statOffsets>
+      </li>
+      <li>
+        <minSeverity>0.6</minSeverity>
+        <label>yielding</label>
+        <statOffsets>
+          <IncomingDamageFactor>0.24</IncomingDamageFactor>
+        </statOffsets>
+      </li>
+      <li>
+        <minSeverity>0.8</minSeverity>
+        <label>digested</label>
+        <statOffsets>
+          <IncomingDamageFactor>0.32</IncomingDamageFactor>
+        </statOffsets>
+      </li>
+      <li>
+        <minSeverity>1</minSeverity>
+        <label>open to the deep</label>
+        <statOffsets>
+          <IncomingDamageFactor>0.40</IncomingDamageFactor>
+        </statOffsets>
+      </li>
+    </stages>
+  </HediffDef>
+
   <!-- Tideguard: grants shield stats to the race's inert CompShield_Deep.
        Severity = growth stage + 1 (kept in sync by CompTentacleGrowth).
        Vanilla belt is 1.1 / 0.13 — Crushers reach belt parity. -->

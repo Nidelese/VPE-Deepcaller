@@ -33,11 +33,11 @@ namespace Deepcaller
     /// tentacles pounding on the held target.
     public class Hediff_Grasped : HediffWithComps
     {
-        private static readonly Color DeepColor = new Color(0.35f, 0.55f, 0.5f);
         private static readonly GraspExtension DefaultExt = new GraspExtension();
 
         private IntVec3 anchor = IntVec3.Invalid;
         private int ticksUntilPull;
+        private Thing_AbilityVisual visual;
 
         // Set by Ability_Grasp from Idol devotion; divides break-on-damage.
         public float gripStrength = 1f;
@@ -51,8 +51,7 @@ namespace Deepcaller
                 return;
             anchor = pawn.Position;
             FilthMaker.TryMakeFilth(pawn.Position, pawn.Map, ThingDefOf.Filth_Slime);
-            for (var i = 0; i < 5; i++)
-                FleckMaker.ThrowDustPuffThick(pawn.DrawPos, pawn.Map, 2f, DeepColor);
+            EnsureVisual();
         }
 
         public override void TickInterval(int delta)
@@ -60,7 +59,10 @@ namespace Deepcaller
             base.TickInterval(delta);
             if (!pawn.Spawned || pawn.Downed)
                 return;
+            if (!pawn.health.hediffSet.hediffs.Contains(this))
+                return;
 
+            EnsureVisual();
             ticksUntilPull -= delta;
             if (ticksUntilPull > 0)
                 return;
@@ -71,7 +73,8 @@ namespace Deepcaller
             if (pawn.Position.InHorDistOf(anchor, Ext.leashRadius))
                 return;
 
-            DeepPullUtility.PullTowards(pawn, anchor, Ext.pullDistance, Ext.leashRadius);
+            if (DeepPullUtility.PullTowards(pawn, anchor, Ext.pullDistance, Ext.leashRadius))
+                visual?.Pulse();
         }
 
         public override void Notify_PawnPostApplyDamage(DamageInfo dinfo, float totalDamageDealt)
@@ -84,7 +87,28 @@ namespace Deepcaller
         {
             base.PostRemoved();
             if (pawn.Spawned && !pawn.Dead)
+            {
+                Thing_AbilityVisual.SpawnGraspRelease(pawn.Map, pawn.Position);
                 MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, "Deepcaller_GraspReleased".Translate(), 2.5f);
+            }
+            if (visual != null && !visual.Destroyed)
+                visual.Destroy(DestroyMode.Vanish);
+            visual = null;
+        }
+
+        private void EnsureVisual()
+        {
+            if (!pawn.Spawned || visual != null && !visual.Destroyed)
+                return;
+            if (!anchor.IsValid)
+                anchor = pawn.Position;
+
+            var remaining = 900;
+            var disappears = this.TryGetComp<HediffComp_Disappears>();
+            if (disappears != null)
+                remaining = Mathf.Max(1, disappears.ticksToDisappear);
+            visual = Thing_AbilityVisual.SpawnGrasp(
+                pawn.Map, anchor, pawn, remaining);
         }
 
         public override void ExposeData()
@@ -93,6 +117,7 @@ namespace Deepcaller
             Scribe_Values.Look(ref anchor, "anchor", IntVec3.Invalid);
             Scribe_Values.Look(ref ticksUntilPull, "ticksUntilPull");
             Scribe_Values.Look(ref gripStrength, "gripStrength", 1f);
+            Scribe_References.Look(ref visual, "deepcallerGraspVisual");
         }
     }
 }

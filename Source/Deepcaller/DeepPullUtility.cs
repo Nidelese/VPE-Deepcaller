@@ -36,10 +36,8 @@ namespace Deepcaller
             if (moved == 0)
                 return false;
 
-            FleckMaker.ThrowDustPuffThick(victim.DrawPos, map, 1.5f, DeepColor);
             victim.Position = dest;
             victim.Notify_Teleported(endCurrentJob: true, resetTweenedPos: true);
-            FleckMaker.ThrowDustPuffThick(victim.DrawPos, map, 1.5f, DeepColor);
             return true;
         }
     }

@@ -75,8 +75,6 @@ namespace Deepcaller
             store.ClearWithdrawnGod();
         }
 
-        public IThingHolder ParentHolder => parent.ParentHolder;
-
         public ThingOwner GetDirectlyHeldThings() => hoard;
 
         public void GetChildHolders(List<IThingHolder> outChildren) =>

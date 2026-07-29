@@ -13,6 +13,11 @@ Call writhing tentacles up from beneath the rimworld's crust to guard your home.
 An area-defense summoner path: control the ground, choose what gets close, and make them regret it.</description>
   <modDependencies>
     <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+    </li>
+    <li>
       <packageId>OskarPotocki.VanillaFactionsExpanded.Core</packageId>
       <displayName>Vanilla Expanded Framework</displayName>
       <steamWorkshopUrl>steam://url/CommunityFilePage/2023507013</steamWorkshopUrl>
@@ -24,6 +29,7 @@ An area-defense summoner path: control the ground, choose what gets close, and m
     </li>
   </modDependencies>
   <loadAfter>
+    <li>brrainz.harmony</li>
     <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
     <li>VanillaExpanded.VPsycastsE</li>
   </loadAfter>

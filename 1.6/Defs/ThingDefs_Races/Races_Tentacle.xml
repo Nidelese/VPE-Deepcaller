@@ -52,6 +52,8 @@
         <acquireRadiusBase>32</acquireRadiusBase>
         <acquireRadiusPerStage>10</acquireRadiusPerStage>
       </li>
+      <!-- Advances the Sprout's cached low-frequency pose materials. -->
+      <li Class="Deepcaller.CompProperties_SproutAnimation"/>
     </comps>
     <modExtensions>
       <li Class="Deepcaller.TentacleRaceExtension">
@@ -98,7 +100,10 @@
         <label>tentacle sprout</label>
         <labelPlural>tentacle sprouts</labelPlural>
         <bodyGraphicData>
-          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <!-- The finished animated family currently carries every growth
+               stage; each evolved stage can receive a distinct path later. -->
+          <texPath>Things/Deepcaller_Tentacle/TentacleSprout</texPath>
+          <graphicClass>Deepcaller.Graphic_Sprout</graphicClass>
           <drawSize>1.1</drawSize>
         </bodyGraphicData>
       </li>
@@ -106,7 +111,10 @@
         <label>tentacle grasper</label>
         <labelPlural>tentacle graspers</labelPlural>
         <bodyGraphicData>
-          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <!-- Temporary shared production family: retain the finished,
+               animated anatomy while distinct evolved-form art is created. -->
+          <texPath>Things/Deepcaller_Tentacle/TentacleSprout</texPath>
+          <graphicClass>Deepcaller.Graphic_Sprout</graphicClass>
           <drawSize>1.5</drawSize>
         </bodyGraphicData>
       </li>
@@ -114,7 +122,8 @@
         <label>tentacle crusher</label>
         <labelPlural>tentacle crushers</labelPlural>
         <bodyGraphicData>
-          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <texPath>Things/Deepcaller_Tentacle/TentacleSprout</texPath>
+          <graphicClass>Deepcaller.Graphic_Sprout</graphicClass>
           <drawSize>2.0</drawSize>
         </bodyGraphicData>
       </li>
@@ -122,7 +131,8 @@
         <label>tentacle colossus</label>
         <labelPlural>tentacle colossi</labelPlural>
         <bodyGraphicData>
-          <texPath>Things/Deepcaller_Tentacle/Tentacle</texPath>
+          <texPath>Things/Deepcaller_Tentacle/TentacleSprout</texPath>
+          <graphicClass>Deepcaller.Graphic_Sprout</graphicClass>
           <drawSize>2.6</drawSize>
         </bodyGraphicData>
       </li>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- A rooted ranged expression of the deep. Unlike the mobile, corpse-fed
+       Sprout branch, Buds never path and read their combat scaling directly
+       from the faction's best-fed idol. -->
+  <ThingDef ParentName="VPE_UndeadBase">
+    <defName>Deepcaller_Bud</defName>
+    <label>bud of the deep</label>
+    <description>A rooted flower of abyssal flesh. It watches from the square where it was called, opening its luminous core to spit slow ghost-fire at anything hostile. Feeding an Idol of the Deep strengthens every living bud.</description>
+    <statBases>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+      <MarketValue>140</MarketValue>
+      <ArmorRating_Sharp>0.16</ArmorRating_Sharp>
+      <!-- It never receives a locomotion job; the non-zero fallback keeps
+           vanilla path-cost/stat calculations in valid ranges. -->
+      <MoveSpeed>0.1</MoveSpeed>
+    </statBases>
+    <tools />
+    <comps>
+      <li Class="VEF.AnimalBehaviours.CompProperties_InitialHediff">
+        <hediffname>VPE_NoPain</hediffname>
+        <hediffseverity>1</hediffseverity>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DieAfterPeriod">
+        <compClass>Deepcaller.CompDeepReturn</compClass>
+        <!-- One full day: twice the Sprout's duration. -->
+        <timeToDieInTicks>60000</timeToDieInTicks>
+        <effect>true</effect>
+        <effectFilth>Filth_Slime</effectFilth>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DoesntFlee"/>
+      <li Class="CompProperties_Shield">
+        <compClass>Deepcaller.CompShield_Deep</compClass>
+      </li>
+      <li Class="Deepcaller.CompProperties_BudAnimation"/>
+      <li Class="Deepcaller.CompProperties_BudTurretGun">
+        <turretDef>Deepcaller_BudGhostfireOrgan</turretDef>
+      </li>
+    </comps>
+    <modExtensions>
+      <li Class="Deepcaller.TentacleRaceExtension">
+        <targetPriorityFactor>2.75</targetPriorityFactor>
+      </li>
+      <li Class="Deepcaller.BudScalingExtension">
+        <damageByDevotion>
+          <points>
+            <li>(0, 8)</li>
+            <li>(30, 10)</li>
+            <li>(100, 14)</li>
+            <li>(300, 22)</li>
+            <li>(1000, 40)</li>
+            <li>(2500, 80)</li>
+          </points>
+        </damageByDevotion>
+        <projectileSpeedFactorByDevotion>
+          <points>
+            <li>(0, 1)</li>
+            <li>(30, 1.15)</li>
+            <li>(100, 1.4)</li>
+            <li>(300, 1.8)</li>
+            <li>(1000, 2.6)</li>
+            <li>(2500, 4)</li>
+          </points>
+        </projectileSpeedFactorByDevotion>
+        <cooldownSecondsByDevotion>
+          <points>
+            <li>(0, 3.2)</li>
+            <li>(30, 2.8)</li>
+            <li>(100, 2.2)</li>
+            <li>(300, 1.6)</li>
+            <li>(1000, 0.9)</li>
+            <li>(2500, 0.45)</li>
+          </points>
+        </cooldownSecondsByDevotion>
+      </li>
+    </modExtensions>
+    <race>
+      <thinkTreeMain>Deepcaller_Bud</thinkTreeMain>
+      <body>Deepcaller_TentacleBody</body>
+      <baseBodySize>1.0</baseBodySize>
+      <baseHealthScale>1.8</baseHealthScale>
+      <lifeStageAges>
+        <li>
+          <minAge>0</minAge>
+          <def>Deepcaller_StageSprout</def>
+        </li>
+      </lifeStageAges>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>Deepcaller_Bud</defName>
+    <label>bud of the deep</label>
+    <race>Deepcaller_Bud</race>
+    <combatPower>110</combatPower>
+    <canArriveManhunter>false</canArriveManhunter>
+    <!-- JobDriver_Wait probes adjacent threats for a melee verb unless the
+         pawn kind explicitly opts out. Buds attack only through their organ. -->
+    <canMeleeAttack>false</canMeleeAttack>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <lifeStages>
+      <li>
+        <label>bud of the deep</label>
+        <labelPlural>buds of the deep</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Bud/Bud</texPath>
+          <graphicClass>Deepcaller.Graphic_Bud</graphicClass>
+          <drawSize>1.15</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+  <ThingDef ParentName="BaseWeaponTurret">
+    <defName>Deepcaller_BudGhostfireOrgan</defName>
+    <label>ghost-fire bud</label>
+    <description>A luminous organ grown around a tear in the deep. It cannot be wielded apart from the bud that grew it.</description>
+    <tradeability>None</tradeability>
+    <destroyOnDrop>true</destroyOnDrop>
+    <graphicData>
+      <texPath>Things/Deepcaller_Bud/GhostfireTailUp</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <statBases>
+      <Mass>1</Mass>
+      <AccuracyTouch>0.82</AccuracyTouch>
+      <AccuracyShort>0.78</AccuracyShort>
+      <AccuracyMedium>0.68</AccuracyMedium>
+      <AccuracyLong>0.48</AccuracyLong>
+      <RangedWeapon_Cooldown>3.2</RangedWeapon_Cooldown>
+    </statBases>
+    <verbs>
+      <li>
+        <verbClass>Deepcaller.Verb_BudGhostfire</verbClass>
+        <defaultProjectile>Deepcaller_BudGhostfire</defaultProjectile>
+        <!-- Autopistol-like reach. Range upgrades belong to the idol's later
+             purchase menu rather than passive devotion scaling. -->
+        <range>24.9</range>
+        <!-- Pawn-mounted CompTurretGun requires zero warmup to fire reliably. -->
+        <defaultCooldownTime>3.2</defaultCooldownTime>
+        <burstShotCount>1</burstShotCount>
+        <muzzleFlashScale>0</muzzleFlashScale>
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>Deepcaller_BudGhostfire</defName>
+    <label>ghost-fire bolt</label>
+    <thingClass>Deepcaller.Projectile_BudGhostfire</thingClass>
+    <graphicData>
+      <texPath>Things/Deepcaller_Bud/GhostfireTailUp</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.7</drawSize>
+    </graphicData>
+    <projectile>
+      <damageDef>Burn</damageDef>
+      <damageAmountBase>8</damageAmountBase>
+      <!-- Slow and readable at zero devotion; the projectile captures the
+           idol-derived speed multiplier when it launches. -->
+      <speed>18</speed>
+    </projectile>
+  </ThingDef>
+
+</Defs>

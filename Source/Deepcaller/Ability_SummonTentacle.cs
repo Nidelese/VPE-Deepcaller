@@ -9,6 +9,7 @@ namespace Deepcaller
     {
         public PawnKindDef kind;
         public int count = 1;
+        public bool exactCell;
     }
 
     public class Ability_SummonTentacle : VEF.Abilities.Ability
@@ -34,7 +35,11 @@ namespace Deepcaller
                         forceGenerateNewPawn: true,
                         fixedBiologicalAge: 0f, fixedChronologicalAge: 0f);
                     var summon = PawnGenerator.GeneratePawn(request);
-                    var cell = CellFinder.StandableCellNear(target.Cell, pawn.Map, 2f);
+                    var targetCellIsFree = target.Cell.Standable(pawn.Map)
+                        && target.Cell.GetFirstPawn(pawn.Map) == null;
+                    var cell = ext.exactCell && targetCellIsFree
+                        ? target.Cell
+                        : CellFinder.StandableCellNear(target.Cell, pawn.Map, 2f);
                     GenSpawn.Spawn(summon, cell, pawn.Map);
                     summon.TryGetComp<CompTentacleGrowth>()
                         ?.GrantStage(CompIdolDevotion.HighestDevotionLevel(pawn.Map, pawn.Faction));

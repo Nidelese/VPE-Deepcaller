@@ -140,6 +140,7 @@
         <collisionDamagePerDevotion>0.4</collisionDamagePerDevotion>
         <wallDamageBase>0</wallDamageBase>
         <wallDamagePerDevotion>1</wallDamagePerDevotion>
+        <visualDurationTicks>120</visualDurationTicks>
       </li>
     </modExtensions>
   </VEF.Abilities.AbilityDef>
@@ -220,6 +221,7 @@
         <maxBonusCells>10</maxBonusCells>
         <inkSeverityBase>0.25</inkSeverityBase>
         <inkSeverityPerDevotion>0.01</inkSeverityPerDevotion>
+        <visualDurationTicks>900</visualDurationTicks>
       </li>
     </modExtensions>
   </VEF.Abilities.AbilityDef>
@@ -261,6 +263,42 @@
         <!-- Healthy human ~40-60 heat; wound them first for a discount -->
         <heatPerHitPoint>0.2</heatPerHitPoint>
         <liveOfferingFactor>1.5</liveOfferingFactor>
+      </li>
+    </modExtensions>
+  </VEF.Abilities.AbilityDef>
+
+  <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
+    <defName>Deepcaller_Bud</defName>
+    <label>bud</label>
+    <description>Plant a rooted bud of the deep on the target square. It cannot move, but watches a pistol's distance around itself and spits slow ghost-fire at hostiles for twice as long as a Sprout remains.\n\nEvery offering fed to an Idol of the Deep strengthens all living buds: their bolts strike harder, fly faster, and bloom more frequently.</description>
+    <iconPath>UI_Deepcaller/Abilities/Bud</iconPath>
+    <abilityClass>Deepcaller.Ability_SummonTentacle</abilityClass>
+    <showUndrafted>true</showUndrafted>
+    <castTime>60</castTime>
+    <range>24.9</range>
+    <targetMode>Location</targetMode>
+    <targetingParameters>
+      <canTargetLocations>true</canTargetLocations>
+      <canTargetSelf>false</canTargetSelf>
+      <canTargetPawns>false</canTargetPawns>
+      <canTargetBuildings>false</canTargetBuildings>
+    </targetingParameters>
+    <castSound>VPE_Enthrall_Cast</castSound>
+    <modExtensions>
+      <li Class="VanillaPsycastsExpanded.AbilityExtension_Psycast">
+        <path>Deepcaller_Path</path>
+        <level>3</level>
+        <order>2</order>
+        <psyfocusCost>0.08</psyfocusCost>
+        <entropyGain>12</entropyGain>
+        <prerequisites>
+          <li>Deepcaller_Lash</li>
+        </prerequisites>
+      </li>
+      <li Class="Deepcaller.AbilityExtension_SummonPawn">
+        <kind>Deepcaller_Bud</kind>
+        <count>1</count>
+        <exactCell>true</exactCell>
       </li>
     </modExtensions>
   </VEF.Abilities.AbilityDef>
@@ -360,7 +398,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_LeviathansWake</defName>
     <label>leviathan's wake</label>
-    <description>Wake the deep itself. A vast head breaches at the target point, ringed by eight arms, spitting abyssal sludge at everything hostile to its caller.\n\nThe leviathan's flesh is one: wound any arm and it is the whole that bleeds, one single enormous pool of vitality scaled by the idol's devotion. When the pool is spent — or the deep's patience — the whole god sinks at once.</description>
+    <description>Wake the deep itself. A vast head, eight hunting arms, and three stilling flowers breach through separate apertures into one submerged god. Every limb chooses prey within the body's reach while the head spits abyssal sludge that scales with the victim and leaves its defenses yielding.\n\nThe leviathan's flesh is one: wound any aperture and it is the whole that bleeds, one single enormous pool of vitality scaled by the idol's devotion. When the pool is spent — or the deep's patience — the whole god sinks at once.</description>
     <iconPath>UI_Deepcaller/Abilities/LeviathansWake</iconPath>
     <abilityClass>Deepcaller.Ability_LeviathansWake</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -388,11 +426,12 @@
       </li>
       <li Class="Deepcaller.AbilityExtension_Leviathan">
         <headKind>Deepcaller_LeviathanHead</headKind>
-        <armKind>Deepcaller_Tentacle</armKind>
+        <armKind>Deepcaller_LeviathanArm</armKind>
+        <flowerKind>Deepcaller_LeviathanFlower</flowerKind>
         <armCount>8</armCount>
+        <flowerCount>3</flowerCount>
         <ringRadius>3</ringRadius>
-        <!-- Arms born Crushers -->
-        <armStage>2</armStage>
+        <flowerRingRadius>2.15</flowerRingRadius>
         <!-- Shared pool: 1500 + 2/devotion -->
         <basePool>1500</basePool>
         <poolPerDevotion>2</poolPerDevotion>

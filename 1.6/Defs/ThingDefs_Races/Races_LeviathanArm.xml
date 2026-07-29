@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- A dedicated organ of the Leviathan, not an independently summoned
+       Sprout. It reuses the polished tentacle animation family but has no
+       growth, corpse appetite, wandering instinct, or private hunt state. -->
+  <ThingDef ParentName="VPE_UndeadBase">
+    <defName>Deepcaller_LeviathanArm</defName>
+    <label>leviathan arm</label>
+    <description>An independently moving aperture into the leviathan's submerged body. It has no life apart from the head's command and the seven other arms answering it.</description>
+    <statBases>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>250</ComfyTemperatureMax>
+      <MarketValue>180</MarketValue>
+      <ArmorRating_Sharp>0.2</ArmorRating_Sharp>
+      <!-- Crusher's x1.5 life-stage factor produces 3.3 cells/sec: enough
+           to settle around the head without becoming a free hunter. -->
+      <MoveSpeed>2.2</MoveSpeed>
+    </statBases>
+    <tools>
+      <li>
+        <label>lash</label>
+        <capacities>
+          <li>Deepcaller_Grip</li>
+        </capacities>
+        <power>12</power>
+        <cooldownTime>1.8</cooldownTime>
+      </li>
+    </tools>
+    <comps>
+      <li Class="VEF.AnimalBehaviours.CompProperties_InitialHediff">
+        <hediffname>VPE_NoPain</hediffname>
+        <hediffseverity>1</hediffseverity>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DieAfterPeriod">
+        <compClass>Deepcaller.CompDeepReturn</compClass>
+        <timeToDieInTicks>30000</timeToDieInTicks>
+        <effect>true</effect>
+        <effectFilth>Filth_Slime</effectFilth>
+      </li>
+      <li Class="VEF.AnimalBehaviours.CompProperties_DoesntFlee"/>
+      <li Class="Deepcaller.CompProperties_LeviathanPart"/>
+      <li Class="CompProperties_Shield">
+        <compClass>Deepcaller.CompShield_Deep</compClass>
+      </li>
+      <li Class="Deepcaller.CompProperties_SproutAnimation"/>
+    </comps>
+    <modExtensions>
+      <li Class="Deepcaller.TentacleRaceExtension">
+        <targetPriorityFactor>2.5</targetPriorityFactor>
+      </li>
+    </modExtensions>
+    <race>
+      <thinkTreeMain>Deepcaller_LeviathanArm</thinkTreeMain>
+      <body>Deepcaller_TentacleBody</body>
+      <baseBodySize>1.0</baseBodySize>
+      <baseHealthScale>1.6</baseHealthScale>
+      <lifeStageAges>
+        <li>
+          <minAge>0</minAge>
+          <def>Deepcaller_StageCrusher</def>
+        </li>
+      </lifeStageAges>
+    </race>
+  </ThingDef>
+
+  <PawnKindDef ParentName="AnimalKindBase">
+    <defName>Deepcaller_LeviathanArm</defName>
+    <label>leviathan arm</label>
+    <race>Deepcaller_LeviathanArm</race>
+    <combatPower>180</combatPower>
+    <canArriveManhunter>false</canArriveManhunter>
+    <ecoSystemWeight>0</ecoSystemWeight>
+    <lifeStages>
+      <li>
+        <label>leviathan arm</label>
+        <labelPlural>leviathan arms</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Deepcaller_Tentacle/TentacleSprout</texPath>
+          <graphicClass>Deepcaller.Graphic_Sprout</graphicClass>
+          <drawSize>2.0</drawSize>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
+</Defs>

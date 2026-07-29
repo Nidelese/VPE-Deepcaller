@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- Saved visual actor shared by Riptide, Grasp, Ink Veil and Tideguard.
+       It is ethereal and non-selectable: all gameplay remains on the
+       abilities, hediffs and shield comp. The graphicData is only a safe
+       fallback; Thing_AbilityVisual draws the requested animation itself. -->
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>Deepcaller_AbilityVisual</defName>
+    <label>deepcaller ability visual</label>
+    <thingClass>Deepcaller.Thing_AbilityVisual</thingClass>
+    <category>Ethereal</category>
+    <useHitPoints>false</useHitPoints>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <selectable>false</selectable>
+    <rotatable>false</rotatable>
+    <graphicData>
+      <texPath>Things/Deepcaller_Effects/Riptide/Riptide_0</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>TransparentPostLight</shaderType>
+    </graphicData>
+  </ThingDef>
+
+</Defs>

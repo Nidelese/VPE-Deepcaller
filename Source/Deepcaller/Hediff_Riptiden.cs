@@ -70,7 +70,6 @@ namespace Deepcaller
                 return;
             }
 
-            FleckMaker.ThrowDustPuffThick(pawn.DrawPos, pawn.Map, 1.2f, DeepPullUtility.DeepColor);
             pawn.Position = next;
             pawn.Notify_Teleported(endCurrentJob: true, resetTweenedPos: true);
         }

@@ -31,6 +31,10 @@ namespace Deepcaller
         // wall in one slam. Set both to 0 to spare masonry entirely.
         public float wallDamageBase = 0f;
         public float wallDamagePerDevotion = 1f;
+
+        // Long enough to accompany a maximum-range drag, with a closing
+        // ring after the surge has done its work.
+        public int visualDurationTicks = 120;
     }
 
     /// The deep's current: every hostile in the radius is dragged cell by
@@ -84,8 +88,8 @@ namespace Deepcaller
             foreach (var target in targets)
             {
                 var center = target.Cell;
-                for (var i = 0; i < 8; i++)
-                    FleckMaker.ThrowDustPuffThick(center.ToVector3Shifted(), map, 2.5f, DeepPullUtility.DeepColor);
+                Thing_AbilityVisual.SpawnRiptide(
+                    map, center, radius, ext.visualDurationTicks);
 
                 foreach (var victim in map.mapPawns.AllPawnsSpawned
                              .Where(p => p.HostileTo(pawn) && p.Position.InHorDistOf(center, radius))

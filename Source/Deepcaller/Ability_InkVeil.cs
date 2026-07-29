@@ -19,6 +19,9 @@ namespace Deepcaller
         // the hediff), so higher devotion is both blinder and longer.
         public float inkSeverityBase = 0.25f;
         public float inkSeverityPerDevotion = 0.01f;
+
+        // The custom cloud accompanies the mechanically authoritative gas.
+        public int visualDurationTicks = 900;
     }
 
     /// Blooms a cloud of abyssal ink (vanilla BlindSmoke gas) over the
@@ -51,7 +54,8 @@ namespace Deepcaller
             {
                 var center = target.Cell;
                 GasUtility.AddGas(center, map, GasType.BlindSmoke, radius);
-                FleckMaker.ThrowDustPuffThick(center.ToVector3Shifted(), map, 3f, DeepPullUtility.DeepColor);
+                Thing_AbilityVisual.SpawnInk(
+                    map, center, radius, ext.visualDurationTicks);
 
                 foreach (var victim in map.mapPawns.AllPawnsSpawned
                              .Where(p => p.HostileTo(pawn) && p.Position.InHorDistOf(center, radius))
