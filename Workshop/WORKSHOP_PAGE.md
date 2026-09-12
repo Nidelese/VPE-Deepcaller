@@ -7,14 +7,16 @@
 - Tags: `Mod`, `1.6`
 - Full Steam BBCode: `description.bbcode`
 - Initial change note: `change_note_1.0.0.txt`
+- Progression update change note: `change_note_1.1.0.txt`
 - Primary preview: `../About/Preview.png` (640×360, below 1 MB)
 - Large hero and optional description banners: `Assets/`
 
 The page copy identifies Deepcaller as an unofficial VPE add-on, credits
 Nidelese, thanks Oskar Potocki and the Vanilla Expanded team for the
-Vanilla Psycasts Expanded foundation, credits Codex as Nidelese's AI
-collaborator, links the public source repository, and places the Patreon link
-only in a clearly optional donation section.
+Vanilla Psycasts Expanded foundation, preserves Nidelese's published credits
+for Codex, Claude and other AI collaborators, and includes an optional-support
+section. The 1.1.0 copy preserves edits made directly on Steam and adds the
+new progression details; compare the live description before future updates.
 
 ## Required Workshop items
 
@@ -75,8 +77,8 @@ need, so do not upload the development tree directly.
 Steam's item description can embed hosted images with `[img]URL[/img]`. The
 three final banners are attached to the public GitHub `v1.0.0` release. Steam
 does not render the release-download URLs because GitHub serves those through
-an attachment redirect with `application/octet-stream`; `description.bbcode`
-therefore embeds immutable `raw.githubusercontent.com` URLs pinned to commit
+an attachment redirect with `application/octet-stream`. The image URLs instead
+use immutable `raw.githubusercontent.com` paths pinned to commit
 `b407287693949470a42ada9c0975830865b339c8`. Those URLs serve `image/png`
 directly and remain stable even if the source branch is later removed:
 
@@ -91,8 +93,9 @@ The optional-support art is also supplied as a standalone cutout:
 The support banner is wrapped in a Patreon URL, making the little busker itself
 clickable.
 
-Keep the accompanying wording from `description.bbcode`: support is optional,
-the mod is free and complete, and nothing is locked behind donations.
+The current page embeds the optional-support banner; the other banners remain
+available as assets. Preserve the author's current published wording when
+updating the description.
 
 ## Future updates
 
