@@ -24,6 +24,15 @@ namespace Deepcaller
         public float hungerGraceDays = 3f;
         public float hungerPenaltyPerDay = 0.25f;
 
+        // Bud cultivation takes gold. Each rank costs more than the last,
+        // while every point of devotion keeps lowering the gold cost. The
+        // discount deliberately has no cap: feeding the god always matters.
+        public int budDamageBaseGold = 20;
+        public int budFireRateBaseGold = 25;
+        public int budBoltSpeedBaseGold = 15;
+        public double budUpgradeCostMultiplier = 1.6;
+        public double budUpgradeDevotionPerDiscount = 250;
+
         // Devotion thresholds for the god's mood words (Disdainful below
         // the first, then Dismissive/Bored/Curious/Pleased, Proud past the
         // last). Cinematic stand-in for the exact price factor.
@@ -32,10 +41,13 @@ namespace Deepcaller
         public CompProperties_IdolDevotion() => compClass = typeof(CompIdolDevotion);
     }
 
-    public class CompIdolDevotion : ThingComp, IThingHolder, ITrader
+    public partial class CompIdolDevotion : ThingComp, IThingHolder, ITrader
     {
-        private float devotion;
+        private double devotion;
         private int ticksSinceConsume;
+        private int budDamageLevel;
+        private int budFireRateLevel;
+        private int budBoltSpeedLevel;
 
         // The deep's hoard: gear swallowed by Consume (with the Deep Hoard
         // passive learned), ransomable back for silver.
@@ -45,13 +57,19 @@ namespace Deepcaller
 
         public ThingOwner<Thing> Hoard => hoard;
 
+        public double BudGoldDiscount => 1 + devotion / System.Math.Max(1, Props.budUpgradeDevotionPerDiscount);
+
         /// Re-raising the idol moves the god, not replaces it: the freshly
         /// spawned idol inherits everything, the old shell is vanished by
         /// the caller (Ability_RaiseIdol).
         public void TransplantFrom(CompIdolDevotion other)
         {
+            other.ImportLegacyCultivation();
             devotion = other.devotion;
             ticksSinceConsume = other.ticksSinceConsume;
+            budDamageLevel = other.budDamageLevel;
+            budFireRateLevel = other.budFireRateLevel;
+            budBoltSpeedLevel = other.budBoltSpeedLevel;
             other.hoard.TryTransferAllToContainer(hoard);
         }
 
@@ -60,10 +78,14 @@ namespace Deepcaller
         /// map. Keeps the best god if several idols sink at once.
         public void WithdrawTo(DeepcallerGameComponent store)
         {
+            ImportLegacyCultivation();
             if (devotion < store.withdrawnDevotion)
                 return;
             store.withdrawnDevotion = devotion;
             store.withdrawnTicksSinceConsume = ticksSinceConsume;
+            store.withdrawnBudDamageLevel = budDamageLevel;
+            store.withdrawnBudFireRateLevel = budFireRateLevel;
+            store.withdrawnBudBoltSpeedLevel = budBoltSpeedLevel;
             hoard.TryTransferAllToContainer(store.WithdrawnHoard);
         }
 
@@ -71,6 +93,10 @@ namespace Deepcaller
         {
             devotion = store.withdrawnDevotion;
             ticksSinceConsume = store.withdrawnTicksSinceConsume;
+            budDamageLevel = store.withdrawnBudDamageLevel;
+            budFireRateLevel = store.withdrawnBudFireRateLevel;
+            budBoltSpeedLevel = store.withdrawnBudBoltSpeedLevel;
+            ImportLegacyCultivation();
             store.WithdrawnHoard.TryTransferAllToContainer(hoard);
             store.ClearWithdrawnGod();
         }
@@ -82,14 +108,27 @@ namespace Deepcaller
 
         public CompProperties_IdolDevotion Props => (CompProperties_IdolDevotion)props;
 
-        public float Devotion => devotion;
+        public float Devotion => (float)System.Math.Min(devotion, float.MaxValue);
+        public double TotalDevotion => devotion;
+
+        private int BudUpgradeBaseGold(BudUpgradeKind upgrade) => upgrade switch
+        {
+            BudUpgradeKind.Damage => Props.budDamageBaseGold,
+            BudUpgradeKind.FireRate => Props.budFireRateBaseGold,
+            BudUpgradeKind.BoltSpeed => Props.budBoltSpeedBaseGold,
+            BudUpgradeKind.Feeding => 20,
+            BudUpgradeKind.Regeneration => 20,
+            BudUpgradeKind.MaturePower => 30,
+            BudUpgradeKind.MoveSpeed => 25,
+            _ => 25,
+        };
 
         /// Current ransom price factor: devotion curve plus hunger surcharge.
         public float PriceFactor
         {
             get
             {
-                var factor = Props.hoardPriceFactorByDevotion?.Evaluate(devotion)
+                var factor = Props.hoardPriceFactorByDevotion?.Evaluate(Devotion)
                              ?? Props.hoardGreedFactor;
                 var hungryDays = ticksSinceConsume / (float)GenDate.TicksPerDay - Props.hungerGraceDays;
                 if (hungryDays > 0f)
@@ -194,7 +233,7 @@ namespace Deepcaller
                 return false;
 
             var gained = bodySizeEquivalent * best.Props.devotionPerBodySize;
-            best.devotion += gained;
+            best.AddOffering(gained);
             best.ticksSinceConsume = 0; // a living sacrifice is a meal
             MoteMaker.ThrowText(best.parent.DrawPos, map,
                 "Deepcaller_OfferingTaken".Translate(gained.ToString("0.#")), 3.65f);
@@ -210,7 +249,7 @@ namespace Deepcaller
                 return best;
             foreach (var thing in map.listerThings.ThingsOfDef(Deepcaller_DefOf.Deepcaller_Idol))
                 if (thing.Faction == faction && thing.TryGetComp<CompIdolDevotion>() is { } comp)
-                    best = Mathf.Max(best, comp.devotion);
+                    best = Mathf.Max(best, comp.Devotion);
             return best;
         }
 
@@ -218,20 +257,24 @@ namespace Deepcaller
         {
             base.CompTickRare();
             ticksSinceConsume += GenTicks.TickRareInterval;
-            if (ticksSinceConsume < Props.consumeIntervalTicks)
+            if (ticksSinceConsume < DigestionInterval)
                 return;
 
-            var corpse = FindOffering();
-            if (corpse == null)
-                return;
-
+            double gained = 0;
+            int eaten = 0;
+            for (int i = 0; i < DigestionBatch; i++)
+            {
+                var corpse = FindOffering();
+                if (corpse == null) break;
+                gained += corpse.InnerPawn.BodySize * Props.devotionPerBodySize;
+                corpse.Destroy();
+                eaten++;
+            }
+            if (eaten == 0) return;
             ticksSinceConsume = 0;
-            var gained = corpse.InnerPawn.BodySize * Props.devotionPerBodySize;
-            devotion += gained;
-            FilthMaker.TryMakeFilth(corpse.Position, parent.Map, ThingDefOf.Filth_Blood, 2);
-            MoteMaker.ThrowText(corpse.DrawPos, parent.Map,
-                "Deepcaller_OfferingTaken".Translate(gained.ToString("0.#")), 3.65f);
-            corpse.Destroy();
+            AddOffering(gained);
+            MoteMaker.ThrowText(parent.DrawPos, parent.Map,
+                "Deepcaller_OfferingTaken".Translate(Cultivation.Number(gained)), 3.65f);
         }
 
         private Corpse FindOffering()
@@ -252,6 +295,9 @@ namespace Deepcaller
             base.PostExposeData();
             Scribe_Values.Look(ref devotion, "devotion");
             Scribe_Values.Look(ref ticksSinceConsume, "ticksSinceConsume");
+            Scribe_Values.Look(ref budDamageLevel, "budDamageLevel");
+            Scribe_Values.Look(ref budFireRateLevel, "budFireRateLevel");
+            Scribe_Values.Look(ref budBoltSpeedLevel, "budBoltSpeedLevel");
             Scribe_Deep.Look(ref hoard, "hoard", this);
             if (Scribe.mode == LoadSaveMode.PostLoadInit && hoard == null)
                 hoard = new ThingOwner<Thing>(this);
@@ -272,13 +318,11 @@ namespace Deepcaller
 
         public override string CompInspectStringExtra()
         {
-            var line = "Deepcaller_DevotionInspect".Translate(
-                devotion.ToString("0.#"), DevotionLevel);
-            if (DevotionLevel < Props.devotionThresholds.Count)
-                line += " (" + "Deepcaller_DevotionNext".Translate(
-                    Props.devotionThresholds[DevotionLevel].ToString("0.#")) + ")";
+            var line = "Deepcaller_IdolProgress".Translate(
+                Cultivation.Number(devotion), IdolTitle, Cultivation.Number(CultivationMath.NextIdolMilestone(devotion)));
             line += "\n" + "Deepcaller_GodMood".Translate(MoodWord,
                 (Hungry ? "Deepcaller_MoodHungry" : "Deepcaller_MoodSated").Translate());
+            line += "\n" + "Deepcaller_Digestion".Translate(DigestionBatch, (DigestionInterval / 2500f).ToString("0.##"));
             if (hoard.Count > 0)
                 line += "\n" + "Deepcaller_HoardInspect".Translate(hoard.Count);
             return line;
@@ -289,7 +333,7 @@ namespace Deepcaller
             foreach (var gizmo in base.CompGetGizmosExtra())
                 yield return gizmo;
 
-            yield return new Command_Action
+            if (parent.Faction == RimWorld.Faction.OfPlayer) yield return new Command_Action
             {
                 defaultLabel = "Deepcaller_CorpseStockpileLabel".Translate(),
                 defaultDesc = "Deepcaller_CorpseStockpileDesc".Translate(),
@@ -303,6 +347,14 @@ namespace Deepcaller
                 defaultDesc = "Deepcaller_BargainDesc".Translate(),
                 icon = ContentFinder<Texture2D>.Get("UI_Deepcaller/Abilities/Consume"),
                 action = OpenBargainMenu,
+            };
+
+            if (parent.Faction == RimWorld.Faction.OfPlayer) yield return new Command_Action
+            {
+                defaultLabel = "Deepcaller_BudCultivationLabel".Translate(),
+                defaultDesc = "Deepcaller_BudCultivationDesc".Translate(),
+                icon = ContentFinder<Texture2D>.Get("UI_Deepcaller/Abilities/Bud"),
+                action = () => Find.WindowStack.Add(new Dialog_Cultivation(this)),
             };
 
             if (DebugSettings.ShowDevGizmos)
@@ -385,6 +437,24 @@ namespace Deepcaller
                 return;
             }
             Find.WindowStack.Add(new Dialog_Trade(negotiator, this));
+        }
+
+        public long GoldInShadow() => !parent.Spawned ? 0 : parent.Map.listerThings.ThingsOfDef(ThingDefOf.Gold)
+            .Where(thing => thing.Position.InHorDistOf(parent.Position, Props.radius))
+            .Sum(thing => (long)thing.stackCount);
+
+        private void ConsumeGold(int amount)
+        {
+            foreach (var gold in parent.Map.listerThings.ThingsOfDef(ThingDefOf.Gold).ToList())
+            {
+                if (!gold.Position.InHorDistOf(parent.Position, Props.radius))
+                    continue;
+                var taken = Mathf.Min(amount, gold.stackCount);
+                gold.SplitOff(taken).Destroy();
+                amount -= taken;
+                if (amount == 0)
+                    return;
+            }
         }
 
         /// Harbinger-tree trick: zone the idol's radius as a corpse stockpile so

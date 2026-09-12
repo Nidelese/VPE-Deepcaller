@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <HediffDef>
+    <defName>Deepcaller_FeedingCredit</defName>
+    <label>flesh remembered by the deep</label>
+    <description>The deep remembers the flesh its tentacles have already consumed from this creature.</description>
+    <hediffClass>Deepcaller.Hediff_DeepFeedingCredit</hediffClass>
+    <initialSeverity>1</initialSeverity>
+    <maxSeverity>1</maxSeverity>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <everCurableByItem>false</everCurableByItem>
+  </HediffDef>
+  <HediffDef>
     <defName>Deepcaller_Gripped</defName>
     <label>gripped by the deep</label>
     <description>A crushing tentacle grip. Movement is badly hampered until the victim wrenches free.</description>

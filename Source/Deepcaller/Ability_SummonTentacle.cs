@@ -41,8 +41,11 @@ namespace Deepcaller
                         ? target.Cell
                         : CellFinder.StandableCellNear(target.Cell, pawn.Map, 2f);
                     GenSpawn.Spawn(summon, cell, pawn.Map);
-                    summon.TryGetComp<CompTentacleGrowth>()
-                        ?.GrantStage(CompIdolDevotion.HighestDevotionLevel(pawn.Map, pawn.Faction));
+                    // Devotion strengthens the deep's powers and its lasting
+                    // brood-wide rewards, but never skips this summon past
+                    // its own feeding arc.  A new tentacle always begins as
+                    // a Sprout and earns Grasper, Crusher and Colossus in the
+                    // current battle.
                     TideguardUtility.TryApply(summon, pawn);
                 }
             }

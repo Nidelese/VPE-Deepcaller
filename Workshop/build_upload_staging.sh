@@ -48,7 +48,7 @@ fi
 
 xmllint --noout \
     "$temp_root/About/About.xml" \
-    $(find "$temp_root/1.6/Defs" "$temp_root/Languages" \
+    $(find "$temp_root/1.6" "$temp_root/Languages" \
         -type f -name '*.xml' -print)
 
 if [[ -e "$stage_root" ]]; then

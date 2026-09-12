@@ -6,7 +6,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Lash</defName>
     <label>lash</label>
-    <description>Call a tentacle up from beneath the ground at the target location. It lashes at hostiles within reach until its strength is spent.</description>
+    <description>Call a tentacle up from beneath the ground. It begins as a Sprout, earning growth through damage dealt and corpse meals. Graspers drag and constrict prey, Crushers cleave nearby hostiles, and Colossi mark the ground before a crushing slam. Mature tentacles still eat to mend wounds, replenish active shields and extend their stay.\n\nGold cultivation at the idol improves feeding, regeneration, special attacks and movement across every ordinary tentacle you summon.</description>
     <iconPath>UI_Deepcaller/Abilities/Lash</iconPath>
     <abilityClass>Deepcaller.Ability_SummonTentacle</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -148,7 +148,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_RaiseIdol</defName>
     <label>raise idol</label>
-    <description>Raise an Idol of the Deep from the crust. Corpses left within its shadow are drawn under as offerings, building devotion. New tentacles are summoned at the deep's current devotion stage.\n\nIf an idol already stands, it sinks beneath the crust and rises anew at the target — devotion, hunger and hoard intact. There is only ever one god.</description>
+    <description>Raise an Idol of the Deep from the crust. Corpses left within its shadow are drawn under as offerings, building devotion. A fed god deepens its gifts: its powers reach farther and the leviathan rises stronger. Every tentacle still begins as a sprout and earns its own growth through battle.\n\nIf an idol already stands, it sinks beneath the crust and rises anew at the target — devotion, hunger and hoard intact. There is only ever one god.</description>
     <iconPath>UI_Deepcaller/Abilities/RaiseIdol</iconPath>
     <abilityClass>Deepcaller.Ability_RaiseIdol</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -270,7 +270,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Bud</defName>
     <label>bud</label>
-    <description>Plant a rooted bud of the deep on the target square. It cannot move, but watches a pistol's distance around itself and spits slow ghost-fire at hostiles for twice as long as a Sprout remains.\n\nEvery offering fed to an Idol of the Deep strengthens all living buds: their bolts strike harder, fly faster, and bloom more frequently.</description>
+    <description>Plant a rooted bud of the deep on the target square. It cannot move, but watches a pistol's distance around itself and spits ghost-fire at hostiles for twice as long as a Sprout normally remains.\n\nA fed idol on the map strengthens its bolts. Gold cultivation permanently improves every Bud across all maps: damage, fire rate and bolt speed, with piercing fire, paired volleys and spectral trails at rank milestones. Excess cadence and speed become stronger impacts.</description>
     <iconPath>UI_Deepcaller/Abilities/Bud</iconPath>
     <abilityClass>Deepcaller.Ability_SummonTentacle</abilityClass>
     <showUndrafted>true</showUndrafted>

@@ -31,8 +31,12 @@ namespace Deepcaller
         // is abandoned, Building_DeepIdol stashes its state here instead of
         // letting the map discard it. The next Raise Idol restores it.
         // withdrawnDevotion < 0 means nothing is stashed.
-        public float withdrawnDevotion = -1f;
+        public double withdrawnDevotion = -1;
+        public CultivationProgress cultivation = new CultivationProgress();
         public int withdrawnTicksSinceConsume;
+        public int withdrawnBudDamageLevel;
+        public int withdrawnBudFireRateLevel;
+        public int withdrawnBudBoltSpeedLevel;
         private ThingOwner<Thing> withdrawnHoard;
 
         public bool HasWithdrawnGod => withdrawnDevotion >= 0f;
@@ -60,6 +64,9 @@ namespace Deepcaller
         {
             withdrawnDevotion = -1f;
             withdrawnTicksSinceConsume = 0;
+            withdrawnBudDamageLevel = 0;
+            withdrawnBudFireRateLevel = 0;
+            withdrawnBudBoltSpeedLevel = 0;
             withdrawnHoard.ClearAndDestroyContents();
         }
 
@@ -67,11 +74,21 @@ namespace Deepcaller
         {
             base.ExposeData();
             Scribe_Values.Look(ref tentaclesEatCorpses, "tentaclesEatCorpses", true);
-            Scribe_Values.Look(ref withdrawnDevotion, "withdrawnDevotion", -1f);
+            Scribe_Deep.Look(ref cultivation, "cultivation");
+            Scribe_Values.Look(ref withdrawnDevotion, "withdrawnDevotion", -1.0);
             Scribe_Values.Look(ref withdrawnTicksSinceConsume, "withdrawnTicksSinceConsume");
+            Scribe_Values.Look(ref withdrawnBudDamageLevel, "withdrawnBudDamageLevel");
+            Scribe_Values.Look(ref withdrawnBudFireRateLevel, "withdrawnBudFireRateLevel");
+            Scribe_Values.Look(ref withdrawnBudBoltSpeedLevel, "withdrawnBudBoltSpeedLevel");
             Scribe_Deep.Look(ref withdrawnHoard, "withdrawnHoard", this);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
                 withdrawnHoard ??= new ThingOwner<Thing>(this);
+                cultivation ??= new CultivationProgress();
+                cultivation.Import(BudUpgradeKind.Damage, withdrawnBudDamageLevel);
+                cultivation.Import(BudUpgradeKind.FireRate, withdrawnBudFireRateLevel);
+                cultivation.Import(BudUpgradeKind.BoltSpeed, withdrawnBudBoltSpeedLevel);
+            }
         }
 
         public static void QueueDamage(Thing target, float amount, Pawn instigator)
@@ -95,6 +112,12 @@ namespace Deepcaller
 
         public override void StartedNewGame() => pending.Clear();
 
-        public override void LoadedGame() => pending.Clear();
+        public override void LoadedGame()
+        {
+            pending.Clear();
+            foreach (var map in Find.Maps)
+                foreach (var thing in map.listerThings.ThingsOfDef(Deepcaller_DefOf.Deepcaller_Idol))
+                    thing.TryGetComp<CompIdolDevotion>()?.ImportLegacyCultivation();
+        }
     }
 }

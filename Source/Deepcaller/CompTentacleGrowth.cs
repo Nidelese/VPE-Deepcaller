@@ -8,7 +8,7 @@ namespace Deepcaller
 {
     public class CompProperties_TentacleGrowth : CompProperties
     {
-        public List<float> stageThresholds = new List<float> { 1.5f, 4f, 8f };
+        public List<float> stageThresholds = new List<float> { 2f, 6f, 15f };
         public float killFeedFactor = 1f;
         public float corpseFeedFactor = 1.5f;
         public float healPerBodySizeConsumed = 12f;
@@ -18,11 +18,12 @@ namespace Deepcaller
         public CompProperties_TentacleGrowth() => compClass = typeof(CompTentacleGrowth);
     }
 
-    public class CompTentacleGrowth : ThingComp
+    public partial class CompTentacleGrowth : ThingComp
     {
         private const long TicksPerBiologicalYear = 3600000L;
 
         private float fed;
+        private int growthSchema = 1;
 
         public CompProperties_TentacleGrowth Props => (CompProperties_TentacleGrowth)props;
 
@@ -67,7 +68,26 @@ namespace Deepcaller
                 MoteMaker.ThrowText(Pawn.DrawPos, Pawn.Map, "Deepcaller_GrowthText".Translate(), 3.65f);
         }
 
-        /// Idol devotion: born-at-stage for new summons. No-op if already there.
+        public override void PostSpawnSetup(bool respawningAfterLoad)
+        {
+            base.PostSpawnSetup(respawningAfterLoad);
+            if (growthSchema == 0)
+            {
+                int earnedStage = Mathf.Clamp((int)(Pawn.ageTracker.AgeBiologicalTicks / TicksPerBiologicalYear),
+                    0, Props.stageThresholds.Count);
+                fed = CultivationMath.ReconcileGrowth(fed, earnedStage, Props.stageThresholds);
+                growthSchema = 1;
+            }
+            // Loading must reconcile the comp, body, graphics and shield without
+            // granting the free regeneration that a newly earned stage gives.
+            Pawn.ageTracker.AgeBiologicalTicks = Stage * TicksPerBiologicalYear + 1000L;
+            var shield = Pawn.health.hediffSet.GetFirstHediffOfDef(Deepcaller_DefOf.Deepcaller_TideguardShield);
+            if (shield != null) shield.Severity = Stage + 1;
+            Pawn.Drawer?.renderer?.SetAllGraphicsDirty();
+        }
+
+        /// Advances a living tentacle to a minimum stage. This is used by
+        /// Overgrowth; summoned tentacles always start as Sprouts.
         public void GrantStage(int stage)
         {
             stage = Mathf.Min(stage, Props.stageThresholds.Count);
@@ -107,6 +127,8 @@ namespace Deepcaller
         {
             base.PostExposeData();
             Scribe_Values.Look(ref fed, "fed");
+            Scribe_Values.Look(ref growthSchema, "growthSchema", 0);
+            ExposeCombatData();
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -134,8 +156,9 @@ namespace Deepcaller
         public override string CompInspectStringExtra()
         {
             if (FullyGrown)
-                return null;
-            return $"Growth: {fed:0.##} / {Props.stageThresholds[Stage]:0.##}";
+                return "Deepcaller_GrowthMature".Translate(fed.ToString("0.##")) + "\n" + CombatDescription;
+            return "Deepcaller_GrowthProgress".Translate(
+                fed.ToString("0.##"), Props.stageThresholds[Stage].ToString("0.##")) + "\n" + CombatDescription;
         }
     }
 }

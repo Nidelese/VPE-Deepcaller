@@ -4,14 +4,71 @@ Area-defense summoner path for Vanilla Psycasts Expanded (RimWorld 1.6).
 Fantasy: Illaoi / Nagakabouros — call tentacles from the deep, keep the Idol fed,
 control the ground around your home.
 
+## Current progression pass — 2026-09-11
+
+This section supersedes the historical implementation notes below.
+
+- Ordinary melee tentacles start as Sprouts and mature at 2 / 6 / 15 growth.
+  Damage dealt to hostile prey earns growth for its contributing tentacle;
+  one core-part HP budget per victim is shared by all attackers and never
+  refills when that victim heals. Corpses give 1.5 growth per body size before
+  feeding cultivation. Summoned deep creatures cannot be meals or XP targets.
+- Graspers drag and constrict prey within five cells, Crushers cleave within
+  a 1.5-cell area, and Colossi mark a 2.5-cell area for 45 ticks before slamming.
+  These special attacks have an eight-second cooldown and affect hostiles only.
+- Mature meals heal injuries, replenish active Tideguard energy (never bypass
+  EMP reset), and extend remaining life. No healthy, charged, newly summoned
+  Colossus eats without a benefit. A summon can gain at most one additional
+  original lifespan; each meal also cannot exceed its original remaining life.
+- Cultivation uses gold physically inside the idol's shadow. Seven independent
+  lines: Bud damage/fire rate/bolt speed; tentacle feeding/regeneration/special
+  attacks/movement. Purchased ranks belong to the player's game-wide brood,
+  remain on other maps when the idol moves, and survive its loss. Passive raw
+  devotion scaling still follows the idol-on-this-map rules of existing powers.
+- Price: ceil(baseGold × 1.6^rank / (1 + devotion / 250)), minimum one gold.
+  Base prices are 20 / 25 / 15 / 20 / 20 / 30 / 25 respectively. Devotion is
+  retained. Price evaluation uses logarithms; values too high for the gold
+  transaction are unavailable until discounted, never wrapped into cheap ranks.
+  Devotion and withdrawn devotion now use doubles, preserving old numeric saves.
+- Effects are additive relative to the devotion-derived baseline: +12% per
+  Bud/special-attack rank, +15% feeding/regeneration, +10% movement. Every fifth
+  rank also adds 10% of baseline and celebrates a milestone. At rank five,
+  damage unlocks line piercing, fire rate paired volleys, bolt speed spectral
+  trails/armor penetration, regeneration one regrown missing part per meal.
+  Later milestones improve those effects; melee feeding/attack/movement lines
+  receive their additional baseline bonus.
+- Buds use a fractional firing clock rather than the vanilla ten-tick poll.
+  Output is limited to three volleys (six bolts) per second and physical speed
+  to 180 cells/s; excess cadence or speed multiplies impact damage. Piercing
+  affects at most three hostiles behind the primary impact, within three cells.
+- The cultivation window shows current → next effects, local gold, retained
+  devotion, and a pinned goal's required additional devotion. The latest offering
+  receipt retains even sub-gold price reductions without notification spam.
+- Idol awakenings at 10 / 30 / 75 / 175 / 400 / 900 / 2,000 devotion change its
+  title, living rings, sound and digestion. Beyond 2,000 each doubling gives a
+  further Depth, with digestion batches bounded at 32 to protect frame time.
+- Movement cultivation is gated to exactly `Deepcaller_Tentacle`. Buds,
+  Leviathan heads, arms and flowers never receive it or the melee growth comp.
+- Old idol/withdrawn Bud ranks are imported monotonically into global ranks.
+  Old tentacles retain their earned biological stage and reconcile growth,
+  graphics and shield severity on spawn/load without free healing.
+
+Validation: `dotnet build Source/Deepcaller/Deepcaller.csproj --no-restore`;
+`dotnet run --project Tests/Progression/Progression.csproj --no-restore`;
+XML validation (including the MoveSpeed stat patch) during upload staging.
+The author reported the in-game playtest complete on 2026-09-12 and authorized
+the 1.1.0 release. The playtest checklist remains in Tests/Progression/README.md
+for future regression checks.
+
 ## Core loop
 
 1. Summon rooted tentacle pawns that lash (melee) and grasp (immobilize) enemies.
 2. Tentacles **evolve** through four stages: **Sprout → Grasper → Crusher → Colossus**.
 3. Evolution is **layered** (decided 2026-07-02):
    - **Idol devotion** (colony progression): the Idol of the Deep has a persistent
-     devotion level, raised by offerings (corpses via Consume, psyfocus rituals).
-     All new tentacles *spawn at* the Idol's current stage.
+     devotion level, raised by corpses in its shadow and living sacrifices via
+     Consume. It strengthens the god's powers and discounts gold cultivation;
+     it never skips a new tentacle's growth story.
    - **Feeding** (in-combat progression): each tentacle individually advances stages
      by dealing damage and consuming corpses during its lifetime.
 
@@ -73,8 +130,7 @@ labels are free to change). Path defName: `Deepcaller_Path`.
 - [ ] Rooting: tentacles currently slither; anchor later if playtests want it
 - [x] Idol of the Deep v1: level-2 psycast Raise Idol (VEF Ability_SpawnBuilding,
       XML-only placement); CompIdolDevotion consumes corpses in radius 12 every
-      ~1h (devotion += bodySize; thresholds 5/15/30 = levels 1-3); new summons
-      born at devotion level's stage; Harbinger-tree-style gizmo zones the
+      ~1h (devotion += bodySize; legacy thresholds 5/15/30 = levels 1-3); Harbinger-tree-style gizmo zones the
       radius as a corpse stockpile so vanilla hauling delivers offerings
 - [x] One god, movable (Evelyn, 2026-07-03): re-casting Raise Idol MOVES the
       existing idol (devotion/hunger/hoard transplanted into the fresh spawn,

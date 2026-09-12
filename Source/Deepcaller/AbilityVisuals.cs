@@ -147,6 +147,7 @@ namespace Deepcaller
     /// Keeping this in one place makes scale, cadence and visual altitude
     /// consistent across the whole path.
     /// </summary>
+    [StaticConstructorOnStartup]
     public static class DeepcallerVisualRenderer
     {
         private const string Root = "Things/Deepcaller_Effects/";
@@ -234,6 +235,18 @@ namespace Deepcaller
             var angle = (seed % 360) + age * 2.2f;
             Draw(riptide[frame], AtAltitude(center, AltitudeLayer.MoteLow),
                 angle, new Vector3(size, 1f, size), alpha);
+        }
+
+        public static void DrawIdolAura(Vector3 center, int tier, int tick)
+        {
+            EnsureMaterials();
+            for (int ring = 0; ring < 1 + tier / 3; ring++)
+            {
+                float size = 1.45f + tier * 0.08f + ring * 0.5f;
+                float pulse = 0.19f + 0.06f * Mathf.Sin(tick * 0.025f + ring);
+                Draw(riptide[2], AtAltitude(center, AltitudeLayer.MoteLow, ring * 0.002f),
+                    tick * (ring % 2 == 0 ? 0.2f : -0.2f), new Vector3(size, 1, size), pulse);
+            }
         }
 
         public static void DrawGrasp(
