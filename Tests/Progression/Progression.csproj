@@ -3,8 +3,15 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="../../Source/Deepcaller/CultivationMath.cs" Link="CultivationMath.cs" />
+    <Compile Include="../../Source/Deepcaller/RiptideMath.cs" Link="RiptideMath.cs" />
+    <Compile Include="../../Source/Deepcaller/RiptideKinetics.cs" Link="RiptideKinetics.cs" />
+    <Compile Include="../../Source/Deepcaller/HoardMath.cs" Link="HoardMath.cs" />
+    <Compile Include="../../Source/Deepcaller/ConsumeMath.cs" Link="ConsumeMath.cs" />
+    <Compile Include="../../Source/Deepcaller/PhysicalTargetRules.cs" Link="PhysicalTargetRules.cs" />
+    <Compile Include="../../Source/Deepcaller/RiptideImpactRules.cs" Link="RiptideImpactRules.cs" />
   </ItemGroup>
 </Project>

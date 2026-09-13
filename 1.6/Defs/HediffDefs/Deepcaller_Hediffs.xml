@@ -127,7 +127,7 @@
   <HediffDef>
     <defName>Deepcaller_Inked</defName>
     <label>inked</label>
-    <description>Abyssal ink in the eyes. Aim and reflexes suffer until it wears away.</description>
+    <description>Abyssal ink coats eyes and sensors. Aim and reflexes suffer until it wears away, whether the body is flesh, metal or animated stone.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.4,0.85,0.8)</defaultLabelColor>
     <scenarioCanAdd>false</scenarioCanAdd>

@@ -23,14 +23,16 @@ namespace Deepcaller
             var devour = Toils_General.Wait(DevourTicks, TargetIndex.A);
             devour.WithProgressBarToilDelay(TargetIndex.A);
             devour.FailOnDespawnedOrNull(TargetIndex.A);
-            devour.FailOn(() => CompIdolDevotion.ClaimsCorpse(Corpse, pawn.Faction)
+            devour.FailOn(() => !DeepTargetUtility.IsEdible(Corpse.InnerPawn)
+                || CompIdolDevotion.ClaimsCorpse(Corpse, pawn.Faction)
                 || pawn.TryGetComp<CompTentacleGrowth>()?.CanBenefitFromMeal != true);
             yield return devour;
 
             yield return Toils_General.Do(() =>
             {
                 var corpse = Corpse;
-                if (CompIdolDevotion.ClaimsCorpse(corpse, pawn.Faction)
+                if (!DeepTargetUtility.IsEdible(corpse.InnerPawn)
+                    || CompIdolDevotion.ClaimsCorpse(corpse, pawn.Faction)
                     || pawn.TryGetComp<CompTentacleGrowth>()?.CanBenefitFromMeal != true) return;
                 var meal = corpse.InnerPawn.BodySize;
                 FilthMaker.TryMakeFilth(corpse.Position, pawn.Map, ThingDefOf.Filth_Blood, 3);

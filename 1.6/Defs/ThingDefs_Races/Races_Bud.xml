@@ -157,7 +157,7 @@
       <drawSize>0.7</drawSize>
     </graphicData>
     <projectile>
-      <damageDef>Burn</damageDef>
+      <damageDef>Deepcaller_Ghostfire</damageDef>
       <damageAmountBase>8</damageAmountBase>
       <!-- Slow and readable at zero devotion; the projectile captures the
            idol-derived speed multiplier when it launches. -->

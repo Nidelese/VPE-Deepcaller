@@ -33,8 +33,7 @@ namespace Deepcaller
         private static bool IsValidMeal(Pawn pawn, Corpse corpse)
         {
             return corpse.InnerPawn.Faction != pawn.Faction
-                && !corpse.InnerPawn.RaceProps.IsMechanoid
-                && !corpse.InnerPawn.def.HasModExtension<TentacleRaceExtension>()
+                && DeepTargetUtility.IsEdible(corpse.InnerPawn)
                 && corpse.GetRotStage() != RotStage.Dessicated
                 && !CompIdolDevotion.ClaimsCorpse(corpse, pawn.Faction)
                 && pawn.CanReserve(corpse);

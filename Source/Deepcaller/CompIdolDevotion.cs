@@ -120,6 +120,19 @@ namespace Deepcaller
             BudUpgradeKind.Regeneration => 20,
             BudUpgradeKind.MaturePower => 30,
             BudUpgradeKind.MoveSpeed => 25,
+            BudUpgradeKind.NonOrganicTargets => 250,
+            BudUpgradeKind.RiptideRestraint => 1260,
+            BudUpgradeKind.RiptideDiscernment => 1680,
+            BudUpgradeKind.RiptideAcceleration => 40,
+            BudUpgradeKind.RiptidePossessions => 840,
+            BudUpgradeKind.RiptideArea => 2100,
+            BudUpgradeKind.RiptideReach => 1260,
+            BudUpgradeKind.HoardBargaining => 180,
+            BudUpgradeKind.HoardSalvage => 900,
+            BudUpgradeKind.HoardRestoration => 270,
+            BudUpgradeKind.HoardCleansing => 630,
+            BudUpgradeKind.ConsumeBurn => 180,
+            BudUpgradeKind.ConsumeArea => 360,
             _ => 25,
         };
 
@@ -133,7 +146,7 @@ namespace Deepcaller
                 var hungryDays = ticksSinceConsume / (float)GenDate.TicksPerDay - Props.hungerGraceDays;
                 if (hungryDays > 0f)
                     factor += Props.hungerPenaltyPerDay * hungryDays;
-                return factor;
+                return (float)(factor / HoardMath.Discount(devotion, Progress?.Rank(BudUpgradeKind.HoardBargaining) ?? 0));
             }
         }
 
@@ -188,7 +201,7 @@ namespace Deepcaller
         /// tentacle auto-consumption.
         public static bool ClaimsCorpse(Corpse corpse, Faction faction)
         {
-            if (corpse?.Map == null || corpse.InnerPawn.RaceProps.IsMechanoid)
+            if (corpse?.Map == null || !DeepTargetUtility.IsEdible(corpse.InnerPawn))
                 return false;
             foreach (var thing in corpse.Map.listerThings.ThingsOfDef(Deepcaller_DefOf.Deepcaller_Idol))
             {
@@ -267,6 +280,7 @@ namespace Deepcaller
                 var corpse = FindOffering();
                 if (corpse == null) break;
                 gained += corpse.InnerPawn.BodySize * Props.devotionPerBodySize;
+                if ((Progress?.Rank(BudUpgradeKind.HoardSalvage) ?? 0) > 0) StashGear(corpse.InnerPawn);
                 corpse.Destroy();
                 eaten++;
             }
@@ -283,7 +297,7 @@ namespace Deepcaller
             {
                 if (thing is Corpse corpse
                     && corpse.Position.InHorDistOf(parent.Position, Props.radius)
-                    && !corpse.InnerPawn.RaceProps.IsMechanoid)
+                    && DeepTargetUtility.IsEdible(corpse.InnerPawn))
                     return corpse;
             }
 
@@ -325,6 +339,7 @@ namespace Deepcaller
             line += "\n" + "Deepcaller_Digestion".Translate(DigestionBatch, (DigestionInterval / 2500f).ToString("0.##"));
             if (hoard.Count > 0)
                 line += "\n" + "Deepcaller_HoardInspect".Translate(hoard.Count);
+            line += "\n" + "Deepcaller_HoardPriceInspect".Translate((PriceFactor * 100).ToString("0.###"));
             return line;
         }
 
@@ -347,6 +362,14 @@ namespace Deepcaller
                 defaultDesc = "Deepcaller_BargainDesc".Translate(),
                 icon = ContentFinder<Texture2D>.Get("UI_Deepcaller/Abilities/Consume"),
                 action = OpenBargainMenu,
+            };
+
+            if (parent.Faction == RimWorld.Faction.OfPlayer) yield return new Command_Action
+            {
+                defaultLabel = "Deepcaller_HoardUpgrades".Translate(),
+                defaultDesc = "Deepcaller_HoardUpgradesDesc".Translate(),
+                icon = ContentFinder<Texture2D>.Get("UI_Deepcaller/Abilities/Consume"),
+                action = () => Find.WindowStack.Add(new Dialog_Cultivation(this, hoardOnly: true)),
             };
 
             if (parent.Faction == RimWorld.Faction.OfPlayer) yield return new Command_Action
@@ -418,6 +441,7 @@ namespace Deepcaller
         public void GiveSoldThingToPlayer(Thing toGive, int countToGive, Pawn playerNegotiator)
         {
             var sold = toGive.SplitOff(countToGive);
+            RestorePurchase(sold);
             GenPlace.TryPlaceThing(sold, parent.Position, parent.Map, ThingPlaceMode.Near);
         }
 

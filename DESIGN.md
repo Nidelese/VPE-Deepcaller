@@ -4,7 +4,124 @@ Area-defense summoner path for Vanilla Psycasts Expanded (RimWorld 1.6).
 Fantasy: Illaoi / Nagakabouros — call tentacles from the deep, keep the Idol fed,
 control the ground around your home.
 
-## Current progression pass — 2026-09-11
+## Physical force and non-organic combat — 2026-09-12
+
+Version 1.2.0. This section supersedes older Riptide
+terrain and target-filter notes below; the 1.1.0 progression systems remain.
+
+- Grasp is the clean tactical hold. Riptide is calamity: all loose physical
+  objects in the cast radius can be caught, including allies, caster, neutral
+  animals, summons, vehicles, corpses and item stacks. Its fixed roster is
+  captured before effects begin; dropped loot, new corpses and wreckage never
+  join that cast or take its direct collision damage. Buildings/plants stay
+  anchored but can be struck. Casts with no projectiles do not mine anything.
+- Initial acceleration is multiplied by starting distance / cast radius:
+  strongest at the included outer edge, zero at the exact center. An original
+  center occupant turns 180 degrees without translation, injury or stun.
+  Velocity integrates acceleration and determines actual displacement. Pressure
+  is D for structures/mining and 3 + 0.4D for bodies/debris. Damage is
+  `0.6 * pressure * effectiveMass/70 * closingSpeed²`. Normal armor
+  handles each side separately. Breaking rock also recoils onto the projectile;
+  it must survive to continue. Co-moving objects do not crash. Slow impacts
+  are mild, while opposing motion is worse. Acceleration ends at the center
+  plane; velocity remains. Air drag applies only afterward, exponentially at
+  `0.02 / max(0.25, (mass/70)^(1/3))` per tick. Collisions transfer momentum
+  to surviving movable targets, including people protected from pickup.
+  Before center, the god replenishes collision losses; intact obstacles still
+  block movement and both sides still take damage. After center, ordinary
+  impulse exchange with restitution 0.15 removes most impact energy. A paid,
+  sated wall favor explicitly stops the projectile while preserving the wall.
+- Let normalized mass m = kilograms/70 and authority q = D/(D+800).
+  Base acceleration is `(1 + log2(1+D/80)) / max(1,m)^(1.15-0.65q)`; multiply
+  by initial radial force and purchased acceleration, then divide by 25 to
+  obtain cells/tick². The simulation sweeps up to 32 substeps per tick, with
+  an eight-cell/tick integration ceiling. Weight gives modest impact
+  protection early and makes late impacts worse for equal run-up. Contact between two movable
+  objects uses twice their reduced mass; an anchored obstacle absorbs the
+  projectile's mass. Relative speed uses simulated velocities or observed
+  ordinary movement; the old cadence/run-up proxy is no longer authoritative.
+- A saved cast actor owns movement and collisions outside pawn health ticks.
+  It uses actual Vehicle Framework mass (including cargo), the full vehicle
+  footprint and the framework's teleport/path/occupancy notifications. Vehicle
+  Framework remains optional. Natural-rock hits use Mining damage for normal
+  yield, fog and roof handling. Unsupported roofs can collapse.
+- Free radius follows the existing curve through (2,160 devotion, 16 cells),
+  then gains two cells per devotion doubling up to 32. Damage is bounded to
+  1 billion; invalid/extreme devotion cannot overflow damage or indexing.
+  At 8,000 devotion: roughly 19.8 free radius. An edge-starting 70 kg projectile after three clear
+  cells hits stationary rock for roughly 8,820 before taking 3,530 raw recoil. A 450 kg
+  vehicle takes longer to accelerate, but after seven cells can break plasteel.
+  A tiny gold bar needs much greater devotion to become a useful mining tool.
+- Three independent, one-time favors: spare our walls (walls, doors and full
+  structural barriers); spare our people (only hostile non-vehicle pawns are
+  pulled); spare our possessions (player vehicles, player corpses, explicitly
+  owned items and items accepted in player stockpiles/shelves stay grounded).
+  A home-area mark or haul order does not claim debris. Unclaimed chunks fly.
+  People and possessions favors prevent pickup, never collision damage. A
+  protected colonist hit by a thrown enemy still takes injury; furniture and
+  turrets do not inherit the wall favor. All three require a separate purchase
+  and the casting faction's sated idol on the target map. Satiety uses
+  the existing three-day hunger grace. Conditions are checked during the cast:
+  loss of favor can engage originally captured friendlies; no new targets are
+  enrolled. Favor returning ends their direct acceleration, preserving existing
+  momentum. Buying one grants neither
+  the other purchases nor unconditional protection. Tooltips/shop show status.
+- Acceleration ranks add 10% of base force, plus 10% every fifth rank. Their
+  benefit is real acceleration and the resulting collision velocity. At 5,000
+  devotion, separate area and distance purchases become available. Each rank
+  adds `4*D/(D+5000)` radius cells or `8*D/(D+5000)` cast cells. Purchases raise
+  the eventual limits rather than just approaching a fixed limit sooner.
+  Actual reach cannot exceed the map diagonal; purchases stop when the current
+  line covers this map. Area snapshots and large outlines avoid radial tables.
+  See `BALANCE.md` for all prices, benchmarks, assumptions and examples.
+- Gold and some resource stacks have no engine HP. Riptide tracks their
+  collision wear against declared durability for the cast, so they can break.
+  Captured stacks cannot absorb or merge into other stacks until the cast ends;
+  fresh loot therefore cannot inherit a captured object's motion or damage.
+  Save data prunes destroyed references, preserves the IDs of captured objects
+  against vanilla map compression, and restores velocity and subcell position.
+- Riptide, Ink Veil and Grasp explicitly accept mechs/entities without psychic
+  sensitivity. Tentacle combat and CC use hostile-body rules independently of
+  the food rules. Known VPE/RimWorld of Magic stone, metal and non-flesh golem
+  definitions are recognized even where legacy flesh metadata says organic.
+- An eighth cultivation entry, "Buds shoot non-organics", is a one-time unlock
+  costing 250 base gold with the usual devotion discount (8 gold at D=8,000).
+  It applies to all existing/future player Buds on every map. Non-organic
+  ghostfire impacts use Blunt through the normal shield/armor pipeline;
+  organic impacts retain Burn. Direct targeting and piercing use the unlock.
+  Its enum value is appended, preserving the seven existing saved rank slots.
+- Consume, idol offerings and tentacle corpse meals still require edible
+  flesh. Non-organic enemies can contribute combat growth without becoming
+  food. Leviathan movement cultivation stays excluded; a chaotic Riptide can
+  catch the player's summons, including the Leviathan.
+
+Build, pure-math/material checks and XML checks are automated. Engine behavior
+and the live save/load cases are listed in `Tests/Progression/README.md`.
+
+### Consume and the permanent hoard
+
+Implemented after the Riptide momentum and real game save/load checks passed.
+Consume's raw heat includes remaining part health, pawn and gear market value,
+combat power, melee damage factor, and installed Isekai levels. Devotion gives
+a divisor `1+(D/800)²`; purchased burn reduction supplies a separate divisor.
+The complete victim roster and heat bill are frozen before any offering raises
+Devotion. Overflow devours the caster after the offerings. The radius is zero
+until purchased; each rank adds exactly one tile, starting at 2,000 Devotion.
+The area strain multiplier `1+radius²/25` rewards deliberate purchase choices.
+All nearby edible pawns except the caster are offerings, including allies.
+Non-organics remain inedible. Five-tile and ten-tile casts have no blanket
+safety guarantee; boss power can overwhelm ordinary late-game protection.
+
+The silver buyback curve is preserved through 2,000 Devotion, then its quote
+continues falling with a divisor `D/2000`. Hunger still worsens the bargain.
+Four permanent gold lines have their own hoard window: deeper bargains,
+salvage from corpse offerings, repair on recovery, and corpse-taint cleansing.
+Salvage and cleansing are one-time unlocks; bargaining and repair repeat.
+Deep Hoard's existing passive still preserves gear from living Consume victims.
+Repairs occur after payment; taint removal does not remove biocoding or raise
+quality. Items cost at least one silver each. See `BALANCE.md` for calibration.
+
+## Progression pass — 2026-09-11
 
 This section supersedes the historical implementation notes below.
 

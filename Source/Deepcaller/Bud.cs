@@ -120,12 +120,18 @@ namespace Deepcaller
                 shotClock *= interval / lastInterval;
             lastInterval = interval;
             if (!CultivationMath.AdvanceClock(ref shotClock, interval)) return;
-            if (!currentTarget.IsValid || currentTarget.Thing == null || currentTarget.Thing.Destroyed
-                || !currentTarget.Thing.Spawned || !currentTarget.Thing.HostileTo(parent)
-                || currentTarget.Thing is Pawn targetPawn && (targetPawn.Dead || targetPawn.Downed)
+            if (!currentTarget.IsValid || !DeepTargetUtility.BudCanAttack(parent, currentTarget.Thing)
                 || !AttackVerb.CanHitTarget(currentTarget))
                 currentTarget = (Thing)AttackTargetFinder.BestShootTargetFromCurrentPosition(this,
-                    TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable);
+                    TargetScanFlags.NeedThreat | TargetScanFlags.NeedAutoTargetable,
+                    target => DeepTargetUtility.BudCanAttack(parent, target));
+            // Some construct mods report an idle golem as a disabled threat.
+            // Once unlocked, a hostile physical body is still a valid target.
+            if (!currentTarget.IsValid && Cultivation.Rank(parent, BudUpgradeKind.NonOrganicTargets) > 0)
+                currentTarget = parent.Map.mapPawns.AllPawnsSpawned
+                    .Where(target => DeepTargetUtility.IsNonOrganic(target)
+                        && DeepTargetUtility.BudCanAttack(parent, target) && AttackVerb.CanHitTarget(target))
+                    .OrderBy(target => target.Position.DistanceToSquared(parent.Position)).FirstOrDefault();
             if (!currentTarget.IsValid) { shotClock = 10; return; }
             curRotation = (currentTarget.Cell.ToVector3Shifted() - parent.DrawPos).AngleFlat() + Props.angleOffset;
             if (!AttackVerb.TryStartCastOn(currentTarget, surpriseAttack: false,
@@ -142,7 +148,9 @@ namespace Deepcaller
                 cooldown.ToString("0.##")) + "\n" + "Deepcaller_BudPayload".Translate(
                     BudScalingUtility.RateOverflow(parent).ToString("0.##"),
                     Cultivation.Rank(parent, BudUpgradeKind.FireRate) >= 5 ? 2 : 1)
-                + "\n" + "Deepcaller_BudSpeedPayload".Translate(BudScalingUtility.ProfileFor(parent).speedOverflow.ToString("0.##"));
+                + "\n" + "Deepcaller_BudSpeedPayload".Translate(BudScalingUtility.ProfileFor(parent).speedOverflow.ToString("0.##"))
+                + "\n" + (Cultivation.Rank(parent, BudUpgradeKind.NonOrganicTargets) > 0
+                    ? "Deepcaller_BudTargetsAll" : "Deepcaller_BudTargetsOrganic").Translate();
         }
     }
 
@@ -247,12 +255,12 @@ namespace Deepcaller
             foreach (var victim in nearby)
             {
                 if (left == 0) break;
-                if (victim == hitThing || victim.Dead || !victim.HostileTo(attacker)) continue;
+                if (victim == hitThing || !DeepTargetUtility.BudCanAttack(attacker, victim)) continue;
                 var delta = (victim.Position.ToVector3Shifted() - hitCell.ToVector3Shifted()).Yto0();
                 float along = Vector3.Dot(delta, forward);
                 if (along <= 0 || along > 3 || (delta - forward * along).magnitude > 0.8f
                     || !GenSight.LineOfSight(hitCell, victim.Position, map)) continue;
-                victim.TakeDamage(new DamageInfo(DamageDefOf.Burn,
+                victim.TakeDamage(new DamageInfo(DefDatabase<DamageDef>.GetNamed("Deepcaller_Ghostfire"),
                     Mathf.Min(1000000000, dynamicDamage * (0.2f + 0.05f * pierceTier)), ArmorPenetration,
                     -1, attacker));
                 left--;
@@ -273,8 +281,12 @@ namespace Deepcaller
 
     public class Verb_BudGhostfire : Verb_Shoot
     {
+        public override bool CanHitTarget(LocalTargetInfo target) =>
+            DeepTargetUtility.BudCanAttack(CasterPawn, target.Thing) && base.CanHitTarget(target);
+
         protected override bool TryCastShot()
         {
+            if (!DeepTargetUtility.BudCanAttack(CasterPawn, currentTarget.Thing)) return false;
             var fired = base.TryCastShot();
             if (fired)
             {

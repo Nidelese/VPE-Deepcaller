@@ -8,6 +8,7 @@
 - Full Steam BBCode: `description.bbcode`
 - Initial change note: `change_note_1.0.0.txt`
 - Progression update change note: `change_note_1.1.0.txt`
+- Calamity/Consume/hoard update change note: `change_note_1.2.0.txt`
 - Primary preview: `../About/Preview.png` (640×360, below 1 MB)
 - Large hero and optional description banners: `Assets/`
 
@@ -16,7 +17,9 @@ Nidelese, thanks Oskar Potocki and the Vanilla Expanded team for the
 Vanilla Psycasts Expanded foundation, preserves Nidelese's published credits
 for Codex, Claude and other AI collaborators, and includes an optional-support
 section. The 1.1.0 copy preserves edits made directly on Steam and adds the
-new progression details; compare the live description before future updates.
+new progression details. The 1.2.0 copy adds physical calamity, non-organic combat,
+worth-based Consume and permanent hoard upgrades;
+compare the live description before publishing future updates.
 
 ## Required Workshop items
 

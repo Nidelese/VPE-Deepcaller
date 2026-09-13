@@ -5,8 +5,8 @@ using Verse;
 
 namespace Deepcaller
 {
-    // Values 0..2 preserve the original Bud purchase lines.
-    public enum BudUpgradeKind { Damage, FireRate, BoltSpeed, Feeding, Regeneration, MaturePower, MoveSpeed }
+    // Append new values: indices are persisted in saves (0..6 are the 1.1 lines).
+    public enum BudUpgradeKind { Damage, FireRate, BoltSpeed, Feeding, Regeneration, MaturePower, MoveSpeed, NonOrganicTargets, RiptideRestraint, RiptideDiscernment, RiptideAcceleration, RiptidePossessions, RiptideArea, RiptideReach, HoardBargaining, HoardSalvage, HoardRestoration, HoardCleansing, ConsumeBurn, ConsumeArea }
 
     public class CultivationProgress : IExposable
     {
@@ -25,6 +25,7 @@ namespace Deepcaller
         public void Purchase(BudUpgradeKind kind)
         {
             Import(kind, checked(Rank(kind) + 1));
+            if (pinned == (int)kind && Rank(kind) >= Cultivation.RankLimit(kind)) pinned = -1;
             lastOfferingReceipt = null;
         }
         public void ExposeData()
@@ -42,6 +43,16 @@ namespace Deepcaller
 
     public static class Cultivation
     {
+        public static int RankLimit(BudUpgradeKind kind) =>
+            kind == BudUpgradeKind.NonOrganicTargets || kind == BudUpgradeKind.RiptideRestraint
+                || kind == BudUpgradeKind.RiptideDiscernment || kind == BudUpgradeKind.RiptidePossessions
+                || kind == BudUpgradeKind.HoardSalvage || kind == BudUpgradeKind.HoardCleansing ? 1 : int.MaxValue;
+        public static bool IsHoard(BudUpgradeKind kind) => kind >= BudUpgradeKind.HoardBargaining && kind <= BudUpgradeKind.HoardCleansing;
+        public static bool IsRiptideFavor(BudUpgradeKind kind) => kind == BudUpgradeKind.RiptideRestraint
+            || kind == BudUpgradeKind.RiptideDiscernment || kind == BudUpgradeKind.RiptidePossessions;
+        public static double UnlockDevotion(BudUpgradeKind kind) =>
+            kind == BudUpgradeKind.RiptideArea || kind == BudUpgradeKind.RiptideReach ? 5000
+                : kind == BudUpgradeKind.ConsumeArea ? 2000 : 0;
         public static CultivationProgress For(Faction faction) => faction == Faction.OfPlayer
             ? DeepcallerGameComponent.Instance?.cultivation : null;
         public static int Rank(Thing thing, BudUpgradeKind kind) => For(thing?.Faction)?.Rank(kind) ?? 0;

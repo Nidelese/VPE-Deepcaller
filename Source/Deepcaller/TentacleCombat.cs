@@ -121,10 +121,14 @@ namespace Deepcaller
             }
             if (Stage == 0 || now < nextSpecialTick || !Pawn.IsHashIntervalTick(15)) return;
             var target = Pawn.mindState.enemyTarget as Pawn;
-            if (target == null || !target.Spawned || target.Dead || !target.HostileTo(Pawn)
-                || !GenSight.LineOfSight(Pawn.Position, target.Position, Pawn.Map)) return;
             float range = Stage == 1 ? 5 : Stage == 2 ? 1.9f : 3;
-            if (!target.Position.InHorDistOf(Pawn.Position, range)) return;
+            bool InReach(Pawn enemy) => DeepTargetUtility.IsCombatTarget(enemy, Pawn)
+                && enemy.Position.InHorDistOf(Pawn.Position, range)
+                && GenSight.LineOfSight(Pawn.Position, enemy.Position, Pawn.Map);
+            if (!InReach(target))
+                target = Pawn.Map.mapPawns.AllPawnsSpawned.Where(InReach)
+                    .OrderBy(enemy => enemy.Position.DistanceToSquared(Pawn.Position)).FirstOrDefault();
+            if (target == null) return;
             nextSpecialTick = now + 480;
             if (Stage == 1)
             {
@@ -152,7 +156,7 @@ namespace Deepcaller
             var nearby = GenRadial.RadialCellsAround(center, radius, true)
                 .Where(c => c.InBounds(Pawn.Map)).SelectMany(c => c.GetThingList(Pawn.Map).OfType<Pawn>()).ToArray();
             foreach (var victim in nearby)
-                if (!victim.Dead && victim.HostileTo(Pawn) && victim.Position.InHorDistOf(center, radius)
+                if (DeepTargetUtility.IsCombatTarget(victim, Pawn) && victim.Position.InHorDistOf(center, radius)
                     && GenSight.LineOfSight(center, victim.Position, Pawn.Map))
                     DeepcallerGameComponent.QueueDamage(victim, Mathf.Min(1000000000, damage * factor), Pawn);
             Thing_AbilityVisual.SpawnShieldBreak(Pawn.Map, center, radius);
@@ -165,7 +169,7 @@ namespace Deepcaller
             && pawn.def.defName == "Deepcaller_Tentacle";
         public override void TransformValue(StatRequest req, ref float val)
         {
-            if (Applies(req)) val *= Cultivation.Factor(req.Thing, BudUpgradeKind.MoveSpeed, 0.1f);
+            if (Applies(req)) val = Mathf.Min(60, val * Cultivation.Factor(req.Thing, BudUpgradeKind.MoveSpeed, 0.1f));
         }
         public override string ExplanationPart(StatRequest req) => Applies(req)
             ? "Deepcaller_MoveSpeedExplanation".Translate(Cultivation.Factor(req.Thing, BudUpgradeKind.MoveSpeed, 0.1f).ToString("0.##"))

@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
+  <ThingDef ParentName="EtherealThingBase">
+    <defName>Deepcaller_RiptideSurge</defName>
+    <label>riptide surge</label>
+    <description>A deep current dragging the objects caught at its birth.</description>
+    <thingClass>Deepcaller.Thing_RiptideSurge</thingClass>
+    <category>Ethereal</category>
+    <useHitPoints>false</useHitPoints>
+    <tickerType>Normal</tickerType>
+    <drawerType>None</drawerType>
+    <selectable>false</selectable>
+    <rotatable>false</rotatable>
+  </ThingDef>
 
   <!-- Saved visual actor shared by Riptide, Grasp, Ink Veil and Tideguard.
        It is ethereal and non-selectable: all gameplay remains on the

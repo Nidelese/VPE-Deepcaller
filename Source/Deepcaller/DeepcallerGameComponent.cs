@@ -18,6 +18,8 @@ namespace Deepcaller
             public Thing target;
             public float amount;
             public Pawn instigator;
+            public Hediff_Riptiden riptide;
+            public bool riptidePawnHit;
         }
 
         private static readonly List<PendingHit> pending = new List<PendingHit>();
@@ -97,6 +99,20 @@ namespace Deepcaller
                 pending.Add(new PendingHit { target = target, amount = amount, instigator = instigator });
         }
 
+        public static void QueueRiptideDamage(Pawn target, float amount, Pawn instigator)
+        {
+            if (amount > 0 && target != null && !target.Dead)
+                pending.Add(new PendingHit { target = target, amount = amount, instigator = instigator, riptidePawnHit = true });
+        }
+
+        public static bool QueueRiptideImpact(Thing obstacle, float amount, Pawn instigator, Hediff_Riptiden drag)
+        {
+            if (drag == null || amount <= 0 || float.IsNaN(amount)
+                || !RiptideImpactUtility.CanDamage(RiptideImpactUtility.Resolve(drag.pawn, obstacle, instigator))) return false;
+            pending.Add(new PendingHit { target = obstacle, amount = amount, instigator = instigator, riptide = drag });
+            return true;
+        }
+
         public override void GameComponentTick()
         {
             if (pending.Count == 0)
@@ -105,7 +121,11 @@ namespace Deepcaller
             {
                 var hit = pending[i];
                 if (!hit.target.Destroyed && hit.target.SpawnedOrAnyParentSpawned)
-                    hit.target.TakeDamage(new DamageInfo(DamageDefOf.Blunt, hit.amount, 0f, -1f, hit.instigator));
+                {
+                    if (hit.riptide != null) hit.riptide.ResolveObstacleImpact(hit.target, hit.amount);
+                    else
+                        hit.target.TakeDamage(new DamageInfo(DamageDefOf.Blunt, hit.amount, 0f, -1f, hit.instigator));
+                }
             }
             pending.Clear();
         }

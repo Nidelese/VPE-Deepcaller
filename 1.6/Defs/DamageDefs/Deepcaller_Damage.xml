@@ -45,4 +45,11 @@
     </additionalHediffs>
     <applyAdditionalHediffsIfHuntingForFood>false</applyAdditionalHediffsIfHuntingForFood>
   </DamageDef>
+
+  <!-- Routed to ordinary Burn or Blunt before damage is applied. -->
+  <DamageDef ParentName="Flame">
+    <defName>Deepcaller_Ghostfire</defName>
+    <label>ghostfire</label>
+    <workerClass>DamageWorker_AddInjury</workerClass>
+  </DamageDef>
 </Defs>

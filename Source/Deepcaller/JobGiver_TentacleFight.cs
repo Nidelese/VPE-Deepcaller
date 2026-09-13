@@ -1,3 +1,4 @@
+using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -53,6 +54,23 @@ namespace Deepcaller
                     job.checkOverrideOnExpire = true;
                 }
                 return job;
+            }
+
+            // An inedible/idle construct can still be fought. This is outside
+            // the Leviathan branches, so it never changes formation behavior.
+            var construct = pawn.Map.mapPawns.AllPawnsSpawned
+                .Where(target => DeepTargetUtility.IsNonOrganic(target) && !target.Downed
+                    && DeepTargetUtility.IsCombatTarget(target, pawn)
+                    && target.Position.InHorDistOf(pawn.Position, targetAcquireRadius)
+                    && pawn.CanReach(target, PathEndMode.Touch, Danger.Deadly))
+                .OrderBy(target => target.Position.DistanceToSquared(pawn.Position)).FirstOrDefault();
+            if (construct != null)
+            {
+                pawn.mindState.enemyTarget = construct;
+                var attack = JobMaker.MakeJob(JobDefOf.AttackMelee, construct);
+                attack.expiryInterval = 300;
+                attack.checkOverrideOnExpire = true;
+                return attack;
             }
 
             var downed = FindDownedHostile(pawn, targetAcquireRadius);

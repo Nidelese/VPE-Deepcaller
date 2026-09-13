@@ -4,3 +4,4 @@ Source/Deepcaller/obj/
 Source/Deepcaller/bin/
 Tests/**/obj/
 Tests/**/bin/
+Tests/**/Assemblies/

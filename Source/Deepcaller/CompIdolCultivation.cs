@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -37,17 +38,44 @@ namespace Deepcaller
             CultivationMath.LogPrice(BudUpgradeBaseGold(kind), Props.budUpgradeCostMultiplier,
                 Progress?.Rank(kind) ?? 0, atDevotion ?? devotion, Props.budUpgradeDevotionPerDiscount);
 
-        public bool TryUpgradePrice(BudUpgradeKind kind, out int cost) =>
-            CultivationMath.TryPrice(LogUpgradePrice(kind), out cost);
+        public bool TryUpgradePrice(BudUpgradeKind kind, out int cost)
+        {
+            cost = 0;
+            return (Progress?.Rank(kind) ?? 0) < Cultivation.RankLimit(kind)
+                && CultivationMath.TryPrice(LogUpgradePrice(kind), out cost);
+        }
+
+        public bool RangeCoversMap(BudUpgradeKind kind)
+        {
+            if (parent.MapHeld == null) return false;
+            if (kind == BudUpgradeKind.ConsumeArea) return (Progress?.Rank(kind) ?? 0) >= parent.MapHeld.Size.LengthHorizontal;
+            if (kind != BudUpgradeKind.RiptideArea && kind != BudUpgradeKind.RiptideReach) return false;
+            var ability = DefDatabase<VEF.Abilities.AbilityDef>.GetNamed("Deepcaller_Riptide");
+            var ext = ability.GetModExtension<AbilityExtension_Riptide>();
+            double bonus = Math.Min(Math.Floor(TotalDevotion / Math.Max(1, ext.devotionPerBonusCell)), ext.maxBonusCells);
+            bool area = kind == BudUpgradeKind.RiptideArea;
+            double baseline = ability.range + bonus;
+            if (area)
+            {
+                var curve = ext.radiusByDevotion;
+                var last = curve.Points.Last();
+                baseline = RiptideMath.ExtendedRadius(TotalDevotion, curve.Evaluate(Devotion), last.x, last.y);
+            }
+            return baseline + RiptideMath.ReachExtension(TotalDevotion, Progress?.Rank(kind) ?? 0, area)
+                >= parent.MapHeld.Size.LengthHorizontal;
+        }
 
         public double RequiredDevotion(BudUpgradeKind kind, long availableGold) =>
-            CultivationMath.DevotionNeeded(BudUpgradeBaseGold(kind), Props.budUpgradeCostMultiplier,
-                Progress?.Rank(kind) ?? 0, Math.Min(int.MaxValue, availableGold), Props.budUpgradeDevotionPerDiscount);
+            Math.Max(Cultivation.UnlockDevotion(kind),
+                CultivationMath.DevotionNeeded(BudUpgradeBaseGold(kind), Props.budUpgradeCostMultiplier,
+                    Progress?.Rank(kind) ?? 0, Math.Min(int.MaxValue, availableGold), Props.budUpgradeDevotionPerDiscount));
 
         public bool PurchaseUpgrade(BudUpgradeKind kind)
         {
             if (!parent.Spawned || parent.Faction != RimWorld.Faction.OfPlayer || Progress == null
-                || !Enum.IsDefined(typeof(BudUpgradeKind), kind) || Progress.Rank(kind) == int.MaxValue
+                || !Enum.IsDefined(typeof(BudUpgradeKind), kind) || Progress.Rank(kind) >= Cultivation.RankLimit(kind)
+                || TotalDevotion < Cultivation.UnlockDevotion(kind)
+                || UpgradeSaturated(kind)
                 || !TryUpgradePrice(kind, out int cost) || GoldInShadow() < cost) return false;
             ConsumeGold(cost);
             Progress.Purchase(kind);
@@ -56,7 +84,11 @@ namespace Deepcaller
                 foreach (var map in Find.Maps)
                     foreach (var pawn in map.mapPawns.SpawnedPawnsInFaction(parent.Faction))
                         if (pawn.def.defName == "Deepcaller_Tentacle") StatDefOf.MoveSpeed.Worker.ClearCacheForThing(pawn);
-            if (Progress.Rank(kind) % 5 == 0)
+            if (kind == BudUpgradeKind.NonOrganicTargets)
+                Celebrate("Deepcaller_NonOrganicUnlocked".Translate());
+            else if (Cultivation.IsRiptideFavor(kind))
+                Celebrate(("Deepcaller_" + kind + "Unlocked").Translate());
+            else if (Progress.Rank(kind) % 5 == 0)
             {
                 Celebrate("Deepcaller_CultivationMilestone".Translate(Cultivation.Label(kind), Progress.Rank(kind)));
             }
