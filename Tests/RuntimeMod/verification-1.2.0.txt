@@ -1,0 +1,181 @@
+Deepcaller 1.2.0 engine verification
+Release DLL SHA-256: ed2e089f6cdd6729d482e1da6f0fdfa85363a8a24a640e790c6e5ddbd0e66b73
+Standalone assertions: 7836
+XML files parsed: 20
+Build: 0 warnings, 0 errors
+
+/tmp/deepcaller-runtime.wxP3Kc/Player.log
+DEEPCALLER_RUNTIME: harness loaded
+DEEPCALLER_RUNTIME PASS: people favor 0/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 0/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 0/False
+DEEPCALLER_RUNTIME PASS: wall favor 0/False
+DEEPCALLER_RUNTIME PASS: people favor 0/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 0/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 0/True
+DEEPCALLER_RUNTIME PASS: wall favor 0/True
+DEEPCALLER_RUNTIME PASS: people favor 1/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 1/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 1/False
+DEEPCALLER_RUNTIME PASS: wall favor 1/False
+DEEPCALLER_RUNTIME PASS: people favor 1/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 1/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 1/True
+DEEPCALLER_RUNTIME PASS: wall favor 1/True
+DEEPCALLER_RUNTIME PASS: people favor 2/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 2/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 2/False
+DEEPCALLER_RUNTIME PASS: wall favor 2/False
+DEEPCALLER_RUNTIME PASS: people favor 2/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 2/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 2/True
+DEEPCALLER_RUNTIME PASS: wall favor 2/True
+DEEPCALLER_RUNTIME PASS: people favor 3/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 3/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 3/False
+DEEPCALLER_RUNTIME PASS: wall favor 3/False
+DEEPCALLER_RUNTIME PASS: people favor 3/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 3/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 3/True
+DEEPCALLER_RUNTIME PASS: wall favor 3/True
+DEEPCALLER_RUNTIME PASS: people favor 4/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 4/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 4/False
+DEEPCALLER_RUNTIME PASS: wall favor 4/False
+DEEPCALLER_RUNTIME PASS: people favor 4/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 4/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 4/True
+DEEPCALLER_RUNTIME PASS: wall favor 4/True
+DEEPCALLER_RUNTIME PASS: people favor 5/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 5/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 5/False
+DEEPCALLER_RUNTIME PASS: wall favor 5/False
+DEEPCALLER_RUNTIME PASS: people favor 5/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 5/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 5/True
+DEEPCALLER_RUNTIME PASS: wall favor 5/True
+DEEPCALLER_RUNTIME PASS: people favor 6/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 6/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 6/False
+DEEPCALLER_RUNTIME PASS: wall favor 6/False
+DEEPCALLER_RUNTIME PASS: people favor 6/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 6/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 6/True
+DEEPCALLER_RUNTIME PASS: wall favor 6/True
+DEEPCALLER_RUNTIME PASS: people favor 7/False
+DEEPCALLER_RUNTIME PASS: stored gold favor 7/False
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 7/False
+DEEPCALLER_RUNTIME PASS: wall favor 7/False
+DEEPCALLER_RUNTIME PASS: people favor 7/True
+DEEPCALLER_RUNTIME PASS: stored gold favor 7/True
+DEEPCALLER_RUNTIME PASS: unclaimed chunk flies 7/True
+DEEPCALLER_RUNTIME PASS: wall favor 7/True
+DEEPCALLER_RUNTIME PASS: empty mountain is untouched
+DEEPCALLER_RUNTIME PASS: exact center turns without throwing or injuring
+DEEPCALLER_RUNTIME PASS: a spared colonist is hurt by an unclaimed chunk
+DEEPCALLER_RUNTIME PASS: the chunk also takes recoil
+DEEPCALLER_RUNTIME PASS: newly dropped loot is neither pulled nor hit
+DEEPCALLER_RUNTIME PASS: a surviving projectile mines rock and coasts beyond the center
+DEEPCALLER_RUNTIME PASS: new gold cannot merge into a captured stack
+DEEPCALLER_RUNTIME PASS: stacking resumes after the cast
+DEEPCALLER_RUNTIME PASS: intact rock blocks a powered projectile without phasing
+DEEPCALLER_RUNTIME PASS: before center the god replenishes collision losses and keeps accelerating
+DEEPCALLER_RUNTIME PASS: crossing the center ends acceleration without erasing speed
+DEEPCALLER_RUNTIME PASS: a post-center wall collision removes much more momentum than air
+DEEPCALLER_RUNTIME PASS: a light collateral object receives momentum without halting its heavier projectile
+DEEPCALLER_RUNTIME PASS: people favor still permits a collision to shove a colonist without divine pickup
+DEEPCALLER_RUNTIME PASS: actual casts collide with anchored objects even when a mod gives them no hit points
+DEEPCALLER_RUNTIME PASS: shop quote RiptideRestraint
+DEEPCALLER_RUNTIME PASS: shop quote RiptideDiscernment
+DEEPCALLER_RUNTIME PASS: shop quote RiptidePossessions
+DEEPCALLER_RUNTIME PASS: shop quote RiptideArea
+DEEPCALLER_RUNTIME PASS: shop quote RiptideReach
+DEEPCALLER_RUNTIME PASS: shop quote RiptideAcceleration
+DEEPCALLER_RUNTIME PASS: area purchase refuses 4,999 devotion without spending gold
+DEEPCALLER_RUNTIME PASS: area purchase spends the quoted gold and retains devotion
+DEEPCALLER_RUNTIME PASS: area and cast distance purchases are independent
+DEEPCALLER_RUNTIME PASS: second area rank compounds to 160 gold
+DEEPCALLER_RUNTIME PASS: no charge for extending a footprint that already covers the map
+DEEPCALLER_RUNTIME PASS: saturated ordinary movement cannot consume more gold
+DEEPCALLER_RUNTIME PASS: Consume area rejects a purchase below 2,000 devotion
+DEEPCALLER_RUNTIME PASS: 40 gold buys exactly the first Consume tile without spending devotion
+DEEPCALLER_RUNTIME PASS: the second Consume tile compounds independently to 64 gold
+DEEPCALLER_RUNTIME PASS: even affordable extreme acceleration ranks refuse payment when current-area movement is saturated
+DEEPCALLER_RUNTIME PASS: old 2,000-devotion ransom price is preserved
+DEEPCALLER_RUNTIME PASS: ransom keeps improving above the old final devotion tier
+DEEPCALLER_RUNTIME PASS: permanent bargaining costs 9 gold at 5,000 and improves actual ransom
+DEEPCALLER_RUNTIME PASS: hunger still worsens an upgraded hoard bargain
+DEEPCALLER_RUNTIME PASS: the four hoard upgrades buy independently
+DEEPCALLER_RUNTIME PASS: one-time salvage cannot charge twice
+DEEPCALLER_RUNTIME PASS: idol corpse feeding salvages apparel into its hoard
+DEEPCALLER_RUNTIME PASS: salvaged corpse apparel retains its taint until recovery
+DEEPCALLER_RUNTIME PASS: actual recovery repairs purchased gear and removes its corpse taint
+DEEPCALLER_RUNTIME PASS: an actual novice cannot safely disappear a healthy equipped human
+DEEPCALLER_RUNTIME PASS: overpriced Consume actually devours both the offering and its novice caster
+DEEPCALLER_RUNTIME PASS: five area purchases give exactly five tiles and Consume still rejects mechs
+DEEPCALLER_RUNTIME PASS: late Consume devours nearby organic allies but spares outside targets and non-organics
+DEEPCALLER_RUNTIME PASS: the entire Consume bill is paid before victims grant devotion
+DEEPCALLER_RUNTIME PASS: the maw can deliberately be widened to ten tiles
+DEEPCALLER_RUNTIME PASS: physical combat and edible-flesh policies differ for Mech_Scyther
+DEEPCALLER_RUNTIME PASS: paid brood targeting admits Mech_Scyther
+DEEPCALLER_RUNTIME PASS: Grasp targeting accepts Mech_Scyther
+DEEPCALLER_RUNTIME PASS: Grasp actually holds Mech_Scyther
+DEEPCALLER_RUNTIME PASS: Ink actually coats Mech_Scyther
+DEEPCALLER_RUNTIME PASS: physical combat and edible-flesh policies differ for VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: paid brood targeting admits VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Grasp targeting accepts VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Grasp actually holds VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Ink actually coats VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Vehicle Framework mass is used instead of the ordinary pawn stat
+DEEPCALLER_RUNTIME PASS: vehicle collisions use its full 3 by 5 footprint
+DEEPCALLER_RUNTIME PASS: people favor does not protect a vehicle
+DEEPCALLER_RUNTIME PASS: possessions favor keeps an owned vehicle grounded
+DEEPCALLER_RUNTIME PASS: vehicle coasts beyond the center through its own teleport integration
+DEEPCALLER_RUNTIME PASS: turning preserves vehicle footprint
+DEEPCALLER_RUNTIME PASS: off-center vehicle footprint collision applies damage to both vehicle and wall before armor
+DEEPCALLER_RUNTIME BENCHMARK: 900 chunks, 60 surge ticks: 936 ms
+DEEPCALLER_RUNTIME PASS: dense chunk field stays within map bounds
+DEEPCALLER_RUNTIME PASS: isolated game save is written
+DEEPCALLER_RUNTIME RELOAD: state restored=True
+DEEPCALLER_RUNTIME PASS: game reload preserves subcell position, velocity and center crossing
+DEEPCALLER_RUNTIME PASS: game reload restores the frozen collision roster
+DEEPCALLER_RUNTIME PASS: game reload retains new hoard and Consume ranks and the pinned goal
+DEEPCALLER_RUNTIME PASS: reloaded projectile resumes coasting
+DEEPCALLER_RUNTIME SUCCESS: 133 engine assertions including game reload
+
+/tmp/deepcaller-runtime.vZKYpA/Player.log
+DEEPCALLER_RUNTIME: harness loaded
+DEEPCALLER_RUNTIME: testing the player's active mod list in an isolated profile
+DEEPCALLER_RUNTIME PASS: physical combat and edible-flesh policies differ for Mech_Scyther
+DEEPCALLER_RUNTIME PASS: paid brood targeting admits Mech_Scyther
+DEEPCALLER_RUNTIME PASS: Grasp targeting accepts Mech_Scyther
+DEEPCALLER_RUNTIME PASS: Grasp actually holds Mech_Scyther
+DEEPCALLER_RUNTIME PASS: Ink actually coats Mech_Scyther
+DEEPCALLER_RUNTIME PASS: physical combat and edible-flesh policies differ for TM_StoneGolemK
+DEEPCALLER_RUNTIME PASS: paid brood targeting admits TM_StoneGolemK
+DEEPCALLER_RUNTIME PASS: Grasp targeting accepts TM_StoneGolemK
+DEEPCALLER_RUNTIME PASS: Grasp actually holds TM_StoneGolemK
+DEEPCALLER_RUNTIME PASS: Ink actually coats TM_StoneGolemK
+DEEPCALLER_RUNTIME PASS: physical combat and edible-flesh policies differ for VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: paid brood targeting admits VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Grasp targeting accepts VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Grasp actually holds VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: Ink actually coats VPE_RockConstruct
+DEEPCALLER_RUNTIME PASS: installed Isekai component is available for boss-worth integration
+DEEPCALLER_RUNTIME PASS: Consume reads the installed Isekai level directly
+DEEPCALLER_RUNTIME PASS: an installed level-1,600 Isekai pawn remains a lethal offering at 5,000 devotion
+DEEPCALLER_RUNTIME PASS: Vehicle Framework mass is used instead of the ordinary pawn stat
+DEEPCALLER_RUNTIME PASS: vehicle collisions use its full 3 by 5 footprint
+DEEPCALLER_RUNTIME PASS: people favor does not protect a vehicle
+DEEPCALLER_RUNTIME PASS: possessions favor keeps an owned vehicle grounded
+DEEPCALLER_RUNTIME PASS: vehicle coasts beyond the center through its own teleport integration
+DEEPCALLER_RUNTIME PASS: turning preserves vehicle footprint
+DEEPCALLER_RUNTIME PASS: off-center vehicle footprint collision applies damage to both vehicle and wall before armor
+DEEPCALLER_RUNTIME PASS: isolated game save is written
+DEEPCALLER_RUNTIME RELOAD: state restored=True
+DEEPCALLER_RUNTIME PASS: game reload preserves subcell position, velocity and center crossing
+DEEPCALLER_RUNTIME PASS: game reload restores the frozen collision roster
+DEEPCALLER_RUNTIME PASS: game reload retains new hoard and Consume ranks and the pinned goal
+DEEPCALLER_RUNTIME PASS: reloaded projectile resumes coasting
+DEEPCALLER_RUNTIME SUCCESS: 30 engine assertions including game reload
+

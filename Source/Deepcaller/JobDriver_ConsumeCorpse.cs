@@ -23,11 +23,17 @@ namespace Deepcaller
             var devour = Toils_General.Wait(DevourTicks, TargetIndex.A);
             devour.WithProgressBarToilDelay(TargetIndex.A);
             devour.FailOnDespawnedOrNull(TargetIndex.A);
+            devour.FailOn(() => !DeepTargetUtility.IsEdible(Corpse.InnerPawn)
+                || CompIdolDevotion.ClaimsCorpse(Corpse, pawn.Faction)
+                || pawn.TryGetComp<CompTentacleGrowth>()?.CanBenefitFromMeal != true);
             yield return devour;
 
             yield return Toils_General.Do(() =>
             {
                 var corpse = Corpse;
+                if (!DeepTargetUtility.IsEdible(corpse.InnerPawn)
+                    || CompIdolDevotion.ClaimsCorpse(corpse, pawn.Faction)
+                    || pawn.TryGetComp<CompTentacleGrowth>()?.CanBenefitFromMeal != true) return;
                 var meal = corpse.InnerPawn.BodySize;
                 FilthMaker.TryMakeFilth(corpse.Position, pawn.Map, ThingDefOf.Filth_Blood, 3);
                 corpse.Destroy();
@@ -35,8 +41,7 @@ namespace Deepcaller
                 var growth = pawn.TryGetComp<CompTentacleGrowth>();
                 if (growth != null)
                 {
-                    growth.Feed(meal * growth.Props.corpseFeedFactor);
-                    growth.Heal(meal * growth.Props.healPerBodySizeConsumed);
+                    growth.EatMeal(meal);
                 }
             });
         }

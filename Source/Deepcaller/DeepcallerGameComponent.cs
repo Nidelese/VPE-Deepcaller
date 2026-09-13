@@ -18,6 +18,8 @@ namespace Deepcaller
             public Thing target;
             public float amount;
             public Pawn instigator;
+            public Hediff_Riptiden riptide;
+            public bool riptidePawnHit;
         }
 
         private static readonly List<PendingHit> pending = new List<PendingHit>();
@@ -31,8 +33,12 @@ namespace Deepcaller
         // is abandoned, Building_DeepIdol stashes its state here instead of
         // letting the map discard it. The next Raise Idol restores it.
         // withdrawnDevotion < 0 means nothing is stashed.
-        public float withdrawnDevotion = -1f;
+        public double withdrawnDevotion = -1;
+        public CultivationProgress cultivation = new CultivationProgress();
         public int withdrawnTicksSinceConsume;
+        public int withdrawnBudDamageLevel;
+        public int withdrawnBudFireRateLevel;
+        public int withdrawnBudBoltSpeedLevel;
         private ThingOwner<Thing> withdrawnHoard;
 
         public bool HasWithdrawnGod => withdrawnDevotion >= 0f;
@@ -60,6 +66,9 @@ namespace Deepcaller
         {
             withdrawnDevotion = -1f;
             withdrawnTicksSinceConsume = 0;
+            withdrawnBudDamageLevel = 0;
+            withdrawnBudFireRateLevel = 0;
+            withdrawnBudBoltSpeedLevel = 0;
             withdrawnHoard.ClearAndDestroyContents();
         }
 
@@ -67,17 +76,41 @@ namespace Deepcaller
         {
             base.ExposeData();
             Scribe_Values.Look(ref tentaclesEatCorpses, "tentaclesEatCorpses", true);
-            Scribe_Values.Look(ref withdrawnDevotion, "withdrawnDevotion", -1f);
+            Scribe_Deep.Look(ref cultivation, "cultivation");
+            Scribe_Values.Look(ref withdrawnDevotion, "withdrawnDevotion", -1.0);
             Scribe_Values.Look(ref withdrawnTicksSinceConsume, "withdrawnTicksSinceConsume");
+            Scribe_Values.Look(ref withdrawnBudDamageLevel, "withdrawnBudDamageLevel");
+            Scribe_Values.Look(ref withdrawnBudFireRateLevel, "withdrawnBudFireRateLevel");
+            Scribe_Values.Look(ref withdrawnBudBoltSpeedLevel, "withdrawnBudBoltSpeedLevel");
             Scribe_Deep.Look(ref withdrawnHoard, "withdrawnHoard", this);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
                 withdrawnHoard ??= new ThingOwner<Thing>(this);
+                cultivation ??= new CultivationProgress();
+                cultivation.Import(BudUpgradeKind.Damage, withdrawnBudDamageLevel);
+                cultivation.Import(BudUpgradeKind.FireRate, withdrawnBudFireRateLevel);
+                cultivation.Import(BudUpgradeKind.BoltSpeed, withdrawnBudBoltSpeedLevel);
+            }
         }
 
         public static void QueueDamage(Thing target, float amount, Pawn instigator)
         {
             if (target != null && amount > 0f)
                 pending.Add(new PendingHit { target = target, amount = amount, instigator = instigator });
+        }
+
+        public static void QueueRiptideDamage(Pawn target, float amount, Pawn instigator)
+        {
+            if (amount > 0 && target != null && !target.Dead)
+                pending.Add(new PendingHit { target = target, amount = amount, instigator = instigator, riptidePawnHit = true });
+        }
+
+        public static bool QueueRiptideImpact(Thing obstacle, float amount, Pawn instigator, Hediff_Riptiden drag)
+        {
+            if (drag == null || amount <= 0 || float.IsNaN(amount)
+                || !RiptideImpactUtility.CanDamage(RiptideImpactUtility.Resolve(drag.pawn, obstacle, instigator))) return false;
+            pending.Add(new PendingHit { target = obstacle, amount = amount, instigator = instigator, riptide = drag });
+            return true;
         }
 
         public override void GameComponentTick()
@@ -88,13 +121,23 @@ namespace Deepcaller
             {
                 var hit = pending[i];
                 if (!hit.target.Destroyed && hit.target.SpawnedOrAnyParentSpawned)
-                    hit.target.TakeDamage(new DamageInfo(DamageDefOf.Blunt, hit.amount, 0f, -1f, hit.instigator));
+                {
+                    if (hit.riptide != null) hit.riptide.ResolveObstacleImpact(hit.target, hit.amount);
+                    else
+                        hit.target.TakeDamage(new DamageInfo(DamageDefOf.Blunt, hit.amount, 0f, -1f, hit.instigator));
+                }
             }
             pending.Clear();
         }
 
         public override void StartedNewGame() => pending.Clear();
 
-        public override void LoadedGame() => pending.Clear();
+        public override void LoadedGame()
+        {
+            pending.Clear();
+            foreach (var map in Find.Maps)
+                foreach (var thing in map.listerThings.ThingsOfDef(Deepcaller_DefOf.Deepcaller_Idol))
+                    thing.TryGetComp<CompIdolDevotion>()?.ImportLegacyCultivation();
+        }
     }
 }

@@ -1,0 +1,18 @@
+Deepcaller 1.2.0 — Calamity, consumption and the hoard
+
+- Riptide is now calamity: creatures, vehicles, corpses and loose possessions present at casting become spontaneous projectiles. Allies, neutrals and the caster are eligible by default. Newly dropped loot and wreckage are excluded.
+- Impacts build with actual run-up, mass and relative speed. Slow nudges and objects moving together are gentle; opposing motion is dangerous. Both objects take collision damage through their normal armor rules, including recoil when a projectile breaks an obstacle.
+- Acceleration stops at center; speed does not. Projectiles coast onward with gentle air drag. Before center the god replenishes collision losses, while HP and surviving obstacles decide passage. After center, impacts transfer momentum and remove speed. Protected people can still be injured and shoved.
+- Mining requires a projectile collision. A sufficiently heavy, fast truck, animal or even gold bar can break rock and ore. The projectile must survive to continue. Mining yields and roof collapses use normal game handling.
+- Three separate permanent gold favors: spare our walls, spare our people from being thrown, and spare our possessions from being thrown. Each requires a sated idol on the same map. Protected people and possessions still take collision damage; unclaimed chunks remain projectiles.
+- Initial pull is strongest at the edge, zero at the exact center (which turns the target around). Buy acceleration, or separately extend AoE and cast distance starting at 5,000 devotion. Each range rank raises its eventual limit instead of merely reaching the same limit sooner.
+- Rebalanced the safety favors around independent gold budgets. Existing compounding prices and uncapped devotion discounts remain. Fresh drops cannot merge into captured stacks; gold and other items without normal HP can be broken by collision wear.
+- Added optional Vehicle Framework support for vehicle mass, cargo, footprints and forced movement. Grasp remains the clean tactical hold.
+- Riptide, Ink Veil and Grasp accept mechs, golems and other non-organic pawns without requiring psychic sensitivity.
+- Added "Buds shoot non-organics": a permanent, brood-wide gold purchase with the existing devotion discount. Unlocked ghostfire hits machines and constructs with physical force.
+- Tentacle grips, pulls, cleaves and slams select hostile bodies independently of diet. Added compatibility for legacy construct flesh definitions; stone and metal remain inedible.
+- Existing cultivation ranks are preserved. Leviathan movement and formation remain unchanged.
+- Consume heat now includes health, pawn and gear worth, combat power and Isekai levels. The full AoE bill is fixed before offerings increase devotion. Exceeding the caster's remaining heat capacity devours the caster too.
+- Buy permanent burn reduction and widen Consume exactly one radius tile per purchase, starting at 2,000 devotion. Five-tile feasts demand much greater power; one boss can still turn them fatal. Nearby organic allies are also offerings. Ten tiles and beyond remain deliberate, dangerous purchases.
+- The hoard has four permanent gold upgrades: cheaper ransom, salvaging gear from corpse offerings, restoring recovered durability, and cleansing corpse-worn taint. Silver buyback discounts continue improving above 2,000 devotion. Quality and biocoding remain intact.
+- Save/reload preserves Riptide's frozen roster, subcell positions and velocities, including ordinarily compressed chunks. Shop limits stop charging for map-wide reach and saturated effects.

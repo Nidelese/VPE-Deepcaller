@@ -17,6 +17,14 @@ namespace Deepcaller
         private bool Active =>
             ((Pawn)parent).health.hediffSet.HasHediff(Deepcaller_DefOf.Deepcaller_TideguardShield);
 
+        public bool CanBenefitFromMeal => Active && ShieldState == ShieldState.Active
+            && energy + 0.01f < parent.GetStatValue(StatDefOf.EnergyShieldEnergyMax);
+        public void FeedShield(float amount)
+        {
+            if (CanBenefitFromMeal)
+                energy = UnityEngine.Mathf.Min(energy + amount, parent.GetStatValue(StatDefOf.EnergyShieldEnergyMax));
+        }
+
         public override void CompTick()
         {
             if (!Active)

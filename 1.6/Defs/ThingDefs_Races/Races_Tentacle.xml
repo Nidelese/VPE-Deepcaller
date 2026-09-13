@@ -42,10 +42,13 @@
         <compClass>Deepcaller.CompShield_Deep</compClass>
       </li>
       <li Class="Deepcaller.CompProperties_TentacleGrowth">
+        <!-- A tentacle has time to earn each form in a real fight.  Idol
+             devotion is deliberately not included here: every summon gets
+             its own Sprout-to-Colossus story. -->
         <stageThresholds>
-          <li>1.5</li>
-          <li>4</li>
-          <li>8</li>
+          <li>2</li>
+          <li>6</li>
+          <li>15</li>
         </stageThresholds>
         <killFeedFactor>1</killFeedFactor>
         <corpseFeedFactor>1.5</corpseFeedFactor>

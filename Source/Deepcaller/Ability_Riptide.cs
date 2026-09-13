@@ -21,14 +21,13 @@ namespace Deepcaller
         public float collisionDamageBase = 3f;
         public float collisionDamagePerDevotion = 0.4f;
 
-        // AoE radius comes entirely from this curve when present (def.radius
-        // is ignored): diminishing returns, always growing, per Evelyn's
-        // spec. Below the first point it clamps to the first point's value.
+        // The curve covers the early/mid game. Beyond its last point, each
+        // doubling of devotion adds two cells (bounded for map performance).
         public SimpleCurve radiusByDevotion;
 
-        // Walls take their own scaling, separate from pawn collision damage:
-        // ~1 damage per devotion means 200 devotion breaks a 200 hp wooden
-        // wall in one slam. Set both to 0 to spare masonry entirely.
+        // Body impacts mine natural rock and smash constructed obstacles.
+        // Keep the old field names for XML/save compatibility. Sparing our
+        // structures requires purchased restraint and a sated local idol.
         public float wallDamageBase = 0f;
         public float wallDamagePerDevotion = 1f;
 
@@ -37,10 +36,8 @@ namespace Deepcaller
         public int visualDurationTicks = 120;
     }
 
-    /// The deep's current: every hostile in the radius is dragged cell by
-    /// cell toward the target point (Hediff_Riptiden does the dragging),
-    /// slamming into walls and each other, then stunned. Requires a fed
-    /// idol; range, radius and collision damage scale with devotion.
+    /// The deep's calamity: capture loose bodies at cast time, then drag
+    /// them toward the center. Momentum and mass turn them into impacts.
     public class Ability_Riptide : VEF.Abilities.Ability
     {
         private static readonly AbilityExtension_Riptide DefaultExt = new AbilityExtension_Riptide();
@@ -48,19 +45,50 @@ namespace Deepcaller
         private AbilityExtension_Riptide Ext =>
             def.GetModExtension<AbilityExtension_Riptide>() ?? DefaultExt;
 
-        private float Devotion => CompIdolDevotion.HighestDevotion(pawn.MapHeld, pawn.Faction);
+        private double Devotion => RiptideMath.Devotion(CompIdolDevotion.BestIdol(pawn.MapHeld, pawn.Faction)?.TotalDevotion ?? 0);
 
         private float BonusCells =>
-            Mathf.Min(Mathf.Floor(Devotion / Ext.devotionPerBonusCell), Ext.maxBonusCells);
+            (float)System.Math.Min(System.Math.Floor(Devotion / System.Math.Max(1, Ext.devotionPerBonusCell)), Ext.maxBonusCells);
 
-        public override float GetRangeForPawn() => base.GetRangeForPawn() + BonusCells;
+        private double MapExtent => pawn.MapHeld?.Size.LengthHorizontal ?? 1000;
+
+        public override float GetRangeForPawn() => RiptideMath.MapBoundedReach(base.GetRangeForPawn() + BonusCells,
+            RiptideMath.ReachExtension(Devotion, Cultivation.Rank(pawn, BudUpgradeKind.RiptideReach), false), MapExtent);
 
         public override float GetRadiusForPawn()
         {
             var curve = Ext.radiusByDevotion;
-            if (curve != null)
-                return curve.Evaluate(Devotion);
-            return base.GetRadiusForPawn() + BonusCells;
+            float baseline;
+            if (curve != null && curve.Points.Any())
+            {
+                var last = curve.Points.Last();
+                baseline = RiptideMath.ExtendedRadius(Devotion, curve.Evaluate((float)System.Math.Min(Devotion, float.MaxValue)), last.x, last.y);
+            }
+            else baseline = Mathf.Min(RiptideMath.MaximumRadius, base.GetRadiusForPawn() + BonusCells);
+            return RiptideMath.MapBoundedReach(baseline,
+                RiptideMath.ReachExtension(Devotion, Cultivation.Rank(pawn, BudUpgradeKind.RiptideArea), true), MapExtent);
+        }
+
+        public override string GetDescriptionForPawn() => base.GetDescriptionForPawn() + "\n\n"
+            + "Deepcaller_RiptideForce".Translate(Cultivation.Number(Devotion),
+                PreviewImpact(0, true), PreviewImpact(3, true), PreviewImpact(7, true), PreviewImpact(3, false),
+                GetRadiusForPawn().ToString("0.#")) + "\n"
+            + (RiptideImpactUtility.ProtectsStructures(pawn)
+                ? "Deepcaller_RiptideRestraintActive" : "Deepcaller_RiptideRestraintInactive").Translate() + "\n"
+            + (RiptideImpactUtility.TargetsHostilesOnly(pawn)
+                ? "Deepcaller_RiptideDiscernmentActive" : "Deepcaller_RiptideDiscernmentInactive").Translate() + "\n"
+            + (RiptideImpactUtility.ProtectsPossessions(pawn)
+                ? "Deepcaller_RiptidePossessionsActive" : "Deepcaller_RiptidePossessionsInactive").Translate();
+
+        private string PreviewImpact(double distance, bool structure)
+        {
+            float pressure = RiptideMath.Pressure(Devotion,
+                structure ? Ext.wallDamageBase : Ext.collisionDamageBase,
+                structure ? Ext.wallDamagePerDevotion : Ext.collisionDamagePerDevotion);
+            double force = Cultivation.Factor(pawn, BudUpgradeKind.RiptideAcceleration, 0.1f);
+            double acceleration = RiptideKinetics.Acceleration(Devotion, 70, force, Ext.ticksPerCell);
+            double speed = System.Math.Min(RiptideKinetics.MaximumSpeed, System.Math.Sqrt(2 * acceleration * distance));
+            return Cultivation.Number(RiptideKinetics.Damage(pressure, 70, speed));
         }
 
         public override bool IsEnabledForPawn(out string reason)
@@ -75,53 +103,42 @@ namespace Deepcaller
             return base.IsEnabledForPawn(out reason);
         }
 
+        public override void DrawHighlight(LocalTargetInfo target)
+        {
+            base.DrawHighlight(target);
+            // VEF omits rings larger than the game's precomputed radial grid.
+            // These bounded-segment outlines do not index that grid.
+            if (GetRangeForPawn() >= GenRadial.MaxRadialPatternRadius)
+                GenDraw.DrawCircleOutline(pawn.Position.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays),
+                    GetRangeForPawn(), SimpleColor.White);
+            if (target.IsValid && GetRadiusForPawn() >= GenRadial.MaxRadialPatternRadius)
+                GenDraw.DrawCircleOutline(target.Cell.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays),
+                    GetRadiusForPawn(), SimpleColor.Cyan);
+        }
+
         public override void Cast(params GlobalTargetInfo[] targets)
         {
-            base.Cast(targets);
             var ext = Ext;
             var map = pawn.Map;
             var devotion = Devotion;
             var radius = GetRadiusForPawn();
-            var collisionDamage = ext.collisionDamageBase + ext.collisionDamagePerDevotion * devotion;
-            var wallDamage = ext.wallDamageBase + ext.wallDamagePerDevotion * devotion;
-
-            foreach (var target in targets)
+            var collisionSnapshot = map.listerThings.AllThings.Where(t =>
+                RiptideImpactUtility.IsMovable(t) || t is Building
+                    || t is Plant && t.def.fillPercent > 0.2f).ToList();
+            // Snapshot before casting or applying any effects. Dead bodies,
+            // gear and vehicle wreckage created afterward never enter a roster.
+            var snapshots = targets.Where(t => t.Cell.InBounds(map)).Select(t => new
             {
-                var center = target.Cell;
+                center = t.Cell,
+                bodies = map.listerThings.AllThings.Where(thing => RiptideImpactUtility.IsMovable(thing)
+                    && thing.Position.InHorDistOf(t.Cell, radius)).ToList()
+            }).ToList();
+            base.Cast(targets);
+            foreach (var snapshot in snapshots)
+            {
                 Thing_AbilityVisual.SpawnRiptide(
-                    map, center, radius, ext.visualDurationTicks);
-
-                foreach (var victim in map.mapPawns.AllPawnsSpawned
-                             .Where(p => p.HostileTo(pawn) && p.Position.InHorDistOf(center, radius))
-                             .ToList())
-                {
-                    // Already in the ring: caught by the surge, no drag needed.
-                    if (victim.Position.InHorDistOf(center, ext.ringWidth))
-                    {
-                        victim.stances?.stunner?.StunFor(ext.stunTicks, pawn, addBattleLog: false);
-                        continue;
-                    }
-
-                    // Re-cast on someone mid-drag just redirects the current.
-                    if (victim.health.hediffSet.GetFirstHediffOfDef(Deepcaller_DefOf.Deepcaller_Riptiden)
-                        is Hediff_Riptiden existing)
-                    {
-                        existing.anchor = center;
-                        existing.collisionDamage = collisionDamage;
-                        existing.wallDamage = wallDamage;
-                        continue;
-                    }
-
-                    var drag = (Hediff_Riptiden)HediffMaker.MakeHediff(Deepcaller_DefOf.Deepcaller_Riptiden, victim);
-                    drag.anchor = center;
-                    drag.caster = pawn;
-                    drag.ticksPerCell = ext.ticksPerCell;
-                    drag.ringWidth = ext.ringWidth;
-                    drag.stunTicks = ext.stunTicks;
-                    drag.collisionDamage = collisionDamage;
-                    drag.wallDamage = wallDamage;
-                    victim.health.AddHediff(drag);
-                }
+                    map, snapshot.center, radius, ext.visualDurationTicks);
+                Thing_RiptideSurge.Spawn(map, snapshot.center, pawn, devotion, ext, radius, snapshot.bodies, collisionSnapshot);
             }
         }
     }

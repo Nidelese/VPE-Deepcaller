@@ -7,7 +7,7 @@
   <ThingDef ParentName="VPE_UndeadBase">
     <defName>Deepcaller_Bud</defName>
     <label>bud of the deep</label>
-    <description>A rooted flower of abyssal flesh. It watches from the square where it was called, opening its luminous core to spit slow ghost-fire at anything hostile. Feeding an Idol of the Deep strengthens every living bud.</description>
+    <description>A rooted flower of abyssal flesh. It watches from the square where it was called, opening its luminous core to spit slow ghost-fire at anything hostile. Feeding an Idol of the Deep strengthens every living bud; gold offered in its shadow cultivates their ghost-fire further.</description>
     <statBases>
       <ComfyTemperatureMin>-100</ComfyTemperatureMin>
       <ComfyTemperatureMax>250</ComfyTemperatureMax>
@@ -135,8 +135,9 @@
       <li>
         <verbClass>Deepcaller.Verb_BudGhostfire</verbClass>
         <defaultProjectile>Deepcaller_BudGhostfire</defaultProjectile>
-        <!-- Autopistol-like reach. Range upgrades belong to the idol's later
-             purchase menu rather than passive devotion scaling. -->
+        <!-- Autopistol-like reach. Cultivation currently improves damage,
+             cadence and bolt speed; range is intentionally fixed until its
+             targeting behavior has a dedicated upgrade implementation. -->
         <range>24.9</range>
         <!-- Pawn-mounted CompTurretGun requires zero warmup to fire reliably. -->
         <defaultCooldownTime>3.2</defaultCooldownTime>
@@ -156,7 +157,7 @@
       <drawSize>0.7</drawSize>
     </graphicData>
     <projectile>
-      <damageDef>Burn</damageDef>
+      <damageDef>Deepcaller_Ghostfire</damageDef>
       <damageAmountBase>8</damageAmountBase>
       <!-- Slow and readable at zero devotion; the projectile captures the
            idol-derived speed multiplier when it launches. -->

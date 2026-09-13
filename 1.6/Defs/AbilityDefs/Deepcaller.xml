@@ -6,7 +6,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Lash</defName>
     <label>lash</label>
-    <description>Call a tentacle up from beneath the ground at the target location. It lashes at hostiles within reach until its strength is spent.</description>
+    <description>Call a tentacle up from beneath the ground. It begins as a Sprout, earning growth through damage dealt and corpse meals. Graspers drag and constrict prey, Crushers cleave nearby hostiles, and Colossi mark the ground before a crushing slam. Mature tentacles still eat to mend wounds, replenish active shields and extend their stay.\n\nGold cultivation at the idol improves feeding, regeneration, special attacks and movement across every ordinary tentacle you summon.</description>
     <iconPath>UI_Deepcaller/Abilities/Lash</iconPath>
     <abilityClass>Deepcaller.Ability_SummonTentacle</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -38,7 +38,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Grasp</defName>
     <label>grasp</label>
-    <description>A tentacle erupts from the ground beneath the target and leashes it to that spot. The victim is slowed, and if it strays it is dragged back to the eruption point. The grip holds for a short time, or until enough damage — from any source, including your own tentacles — tears the victim free.\n\nThe deep holds harder when well fed: an Idol's devotion extends the grip's duration and makes it harder to tear free.</description>
+    <description>A tentacle erupts from the ground beneath the target and leashes it to that spot. The victim is slowed, and if it strays it is dragged back to the eruption point. This is a physical grip: mechs, golems and other non-organic enemies can be held even if they are psychically deaf or inedible.\n\nThe deep holds harder when well fed: an Idol's devotion extends the grip's duration and makes it harder to tear free. Damage from any source, including your own tentacles, can tear the victim free early.</description>
     <iconPath>UI_Deepcaller/Abilities/Grasp</iconPath>
     <abilityClass>Deepcaller.Ability_Grasp</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -52,6 +52,8 @@
       <canTargetBuildings>false</canTargetBuildings>
       <canTargetAnimals>true</canTargetAnimals>
       <canTargetMechs>true</canTargetMechs>
+      <canTargetEntities>true</canTargetEntities>
+      <onlyTargetPsychicSensitive>false</onlyTargetPsychicSensitive>
     </targetingParameters>
     <castSound>VPE_Enthrall_Cast</castSound>
     <modExtensions>
@@ -60,6 +62,7 @@
         <level>1</level>
         <order>2</order>
         <psyfocusCost>0.05</psyfocusCost>
+        <psychic>false</psychic>
         <entropyGain>12</entropyGain>
       </li>
       <li Class="VEF.Abilities.AbilityExtension_Hediff">
@@ -75,7 +78,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Riptide</defName>
     <label>riptide</label>
-    <description>The deep surges beneath the target point. Every hostile creature in the area is dragged toward the center, slammed into whatever stands in the way — walls, or each other — and stunned as the current releases it.\n\nThe surge answers only a fed god: casting requires an idol with sufficient devotion, and higher devotion extends the reach of the current and the force of its collisions.</description>
+    <description>The deep makes projectiles of everything loose in the area: enemies, allies, animals, vehicles, corpses and scattered possessions. The pull starts strongest at the outer edge, weakest near the center. At the exact center, it only turns you around. Objects accelerate inward and build momentum along their actual path. At the center, acceleration ends but speed remains: projectiles coast onward. Air and impacts only slow them after crossing. Before then, the god replenishes momentum losses while collisions consume HP; intact obstacles still block passage. Newly dropped loot stays outside that cast.\n\nCollisions hurt both objects. A heavy, fast projectile can excavate a mountain or smash your base; it takes recoil and may destroy itself. Slow impacts can glance off armor. Weight resists a weak current, but a well-fed god turns that mass into destructive force. Nothing is mined without a projectile hitting it. Unsupported roofs can collapse.\n\nThree independent gold favors: spare our walls, spare our people from being thrown, and spare our possessions from being thrown. Each requires its own purchase and a sated idol on this map. Spared creatures and possessions still take collision damage. Walls do not protect your baubles; people do not protect your walls. Unclaimed chunks remain dangerous projectiles.\n\nGold can increase acceleration. At 5,000 devotion, separate purchases extend the pull area and cast distance. Grasp is the precise hold. Riptide is calamity.</description>
     <iconPath>UI_Deepcaller/Abilities/Riptide</iconPath>
     <abilityClass>Deepcaller.Ability_Riptide</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -93,9 +96,14 @@
     <targetMode>Location</targetMode>
     <targetingParameters>
       <canTargetLocations>true</canTargetLocations>
-      <canTargetSelf>false</canTargetSelf>
-      <canTargetPawns>false</canTargetPawns>
-      <canTargetBuildings>false</canTargetBuildings>
+      <canTargetSelf>true</canTargetSelf>
+      <canTargetPawns>true</canTargetPawns>
+      <canTargetAnimals>true</canTargetAnimals>
+      <canTargetMechs>true</canTargetMechs>
+      <canTargetEntities>true</canTargetEntities>
+      <onlyTargetPsychicSensitive>false</onlyTargetPsychicSensitive>
+      <canTargetBuildings>true</canTargetBuildings>
+      <mapObjectTargetsMustBeAutoAttackable>false</mapObjectTargetsMustBeAutoAttackable>
     </targetingParameters>
     <castSound>VPE_Enthrall_Cast</castSound>
     <modExtensions>
@@ -105,6 +113,7 @@
         <order>2</order>
         <psyfocusCost>0.15</psyfocusCost>
         <entropyGain>20</entropyGain>
+        <psychic>false</psychic>
         <!-- Riptide is unusable below 10 idol devotion, so it must sit
              behind Raise Idol in the tree — otherwise the point is a trap
              for anyone without an idol. NOTE: VPE prerequisites are OR
@@ -114,14 +123,16 @@
         </prerequisites>
       </li>
       <li Class="Deepcaller.AbilityExtension_Riptide">
-        <!-- Pull speed: 1 cell per 5 ticks = 12 cells/s -->
+        <!-- Baseline pull: 5 ticks/cell, accelerated by devotion and resisted
+             by actual mass. Vehicle Framework mass includes its cargo. -->
         <ticksPerCell>5</ticksPerCell>
         <stunTicks>120</stunTicks>
         <ringWidth>1.4</ringWidth>
         <!-- Devotion economy: casting requires minDevotion. Cast range gets
              +1 cell per 5 devotion (capped +8). AoE radius follows the
-             curve below — diminishing returns, never stops growing;
-             interpolated between points, clamped outside them. -->
+             curve below, then +2 cells per devotion doubling above 2160.
+             Free radius is bounded at 32. Purchased radius and cast-distance
+             extensions raise their limits independently, up to the map size. -->
         <minDevotion>10</minDevotion>
         <devotionPerBonusCell>5</devotionPerBonusCell>
         <maxBonusCells>8</maxBonusCells>
@@ -133,9 +144,10 @@
             <li>(2160, 16)</li>
           </points>
         </radiusByDevotion>
-        <!-- Pawn collision: 3 + 0.4/devotion (7 at the gate, 15 at 30).
-             Walls scale separately at 1/devotion: 200 devotion breaks a
-             200 hp wooden wall in one slam. Zero both to spare masonry. -->
+        <!-- Base pressures: flesh/debris 3 + 0.4D; rock/structures D. Actual
+             impact scales with run-up, mass and relative speed. No radial
+             falloff or automatic area mining. Structure protection is a
+             purchased favor that requires a sated local idol. -->
         <collisionDamageBase>3</collisionDamageBase>
         <collisionDamagePerDevotion>0.4</collisionDamagePerDevotion>
         <wallDamageBase>0</wallDamageBase>
@@ -148,7 +160,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_RaiseIdol</defName>
     <label>raise idol</label>
-    <description>Raise an Idol of the Deep from the crust. Corpses left within its shadow are drawn under as offerings, building devotion. New tentacles are summoned at the deep's current devotion stage.\n\nIf an idol already stands, it sinks beneath the crust and rises anew at the target — devotion, hunger and hoard intact. There is only ever one god.</description>
+    <description>Raise an Idol of the Deep from the crust. Corpses left within its shadow are drawn under as offerings, building devotion. A fed god deepens its gifts: its powers reach farther and the leviathan rises stronger. Every tentacle still begins as a sprout and earns its own growth through battle.\n\nIf an idol already stands, it sinks beneath the crust and rises anew at the target — devotion, hunger and hoard intact. There is only ever one god.</description>
     <iconPath>UI_Deepcaller/Abilities/RaiseIdol</iconPath>
     <abilityClass>Deepcaller.Ability_RaiseIdol</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -184,7 +196,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_InkVeil</defName>
     <label>ink veil</label>
-    <description>The deep exhales a rolling cloud of abyssal ink over the target area. Gunfire through the murk goes wild and turrets cannot find their mark. The veil disperses on the wind, as all things return to the deep.\n\nCast it over your tentacles and let them fight in the dark they were born to.</description>
+    <description>The deep exhales a rolling cloud of abyssal ink over the target area. Gunfire through the murk goes wild and turrets cannot find their mark. Ink coats hostile eyes and sensors alike: mechs, golems and psychically deaf enemies are not exempt. The veil disperses on the wind, as all things return to the deep.\n\nCast it over your tentacles and let them fight in the dark they were born to.</description>
     <iconPath>UI_Deepcaller/Abilities/InkVeil</iconPath>
     <abilityClass>Deepcaller.Ability_InkVeil</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -197,7 +209,11 @@
     <targetingParameters>
       <canTargetLocations>true</canTargetLocations>
       <canTargetSelf>false</canTargetSelf>
-      <canTargetPawns>false</canTargetPawns>
+      <canTargetPawns>true</canTargetPawns>
+      <canTargetAnimals>true</canTargetAnimals>
+      <canTargetMechs>true</canTargetMechs>
+      <canTargetEntities>true</canTargetEntities>
+      <onlyTargetPsychicSensitive>false</onlyTargetPsychicSensitive>
       <canTargetBuildings>false</canTargetBuildings>
     </targetingParameters>
     <castSound>VPE_Enthrall_Cast</castSound>
@@ -208,6 +224,7 @@
         <order>3</order>
         <psyfocusCost>0.1</psyfocusCost>
         <entropyGain>15</entropyGain>
+        <psychic>false</psychic>
         <prerequisites>
           <li>Deepcaller_Lash</li>
         </prerequisites>
@@ -231,7 +248,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Consume</defName>
     <label>consume</label>
-    <description>The deep swallows a living creature whole. Instant death; no corpse — the flesh becomes devotion, fed to the idol from anywhere on the map.\n\nThe victim's vitality passes through the caster as neural heat on its way down. Devour something beyond your capacity, and the idol eats you too.\n\nAny living creature is a valid offering. The deep does not judge.</description>
+    <description>The deep swallows living flesh whole. Instant death; no corpse — the flesh becomes devotion. Health, wealth and combat strength pass through the caster as neural heat. Early arrogance is fatal: exceed your remaining heat capacity and the deep eats you too.\n\nDevotion and purchased burn reduction make greater offerings survivable. Each purchased radius tile permanently widens Consume, swallowing nearby organic creatures regardless of allegiance and increasing the strain. The caster is excluded from the offering, but never from the consequences.\n\nOne powerful boss can turn an ordinary feast into a fatal cast. Wound your prey, judge its worth, and leave room for the unknown.</description>
     <iconPath>UI_Deepcaller/Abilities/Consume</iconPath>
     <abilityClass>Deepcaller.Ability_Consume</abilityClass>
     <showUndrafted>true</showUndrafted>
@@ -252,7 +269,7 @@
         <path>Deepcaller_Path</path>
         <level>3</level>
         <order>1</order>
-        <!-- Heat is the real cost, scaling with the victim's HP -->
+        <!-- Worth-based heat is charged by Ability_Consume. -->
         <psyfocusCost>0.05</psyfocusCost>
         <entropyGain>0</entropyGain>
         <prerequisites>
@@ -260,8 +277,7 @@
         </prerequisites>
       </li>
       <li Class="Deepcaller.AbilityExtension_Consume">
-        <!-- Healthy human ~40-60 heat; wound them first for a discount -->
-        <heatPerHitPoint>0.2</heatPerHitPoint>
+        <heatPerHitPoint>0.4</heatPerHitPoint>
         <liveOfferingFactor>1.5</liveOfferingFactor>
       </li>
     </modExtensions>
@@ -270,7 +286,7 @@
   <VEF.Abilities.AbilityDef ParentName="VPE_PsycastBase">
     <defName>Deepcaller_Bud</defName>
     <label>bud</label>
-    <description>Plant a rooted bud of the deep on the target square. It cannot move, but watches a pistol's distance around itself and spits slow ghost-fire at hostiles for twice as long as a Sprout remains.\n\nEvery offering fed to an Idol of the Deep strengthens all living buds: their bolts strike harder, fly faster, and bloom more frequently.</description>
+    <description>Plant a rooted bud of the deep on the target square. It cannot move, but watches a pistol's distance around itself and spits ghost-fire at hostiles for twice as long as a Sprout normally remains.\n\nA fed idol on the map strengthens its bolts. Gold cultivation permanently improves every Bud across all maps: damage, fire rate and bolt speed, with piercing fire, paired volleys and spectral trails at rank milestones. Excess cadence and speed become stronger impacts.</description>
     <iconPath>UI_Deepcaller/Abilities/Bud</iconPath>
     <abilityClass>Deepcaller.Ability_SummonTentacle</abilityClass>
     <showUndrafted>true</showUndrafted>

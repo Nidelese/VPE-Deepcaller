@@ -7,6 +7,7 @@
     <!-- Custom class: withdraws the god's state into the game component
          when its map is discarded (nomadic campaigns / Odyssey) -->
     <thingClass>Deepcaller.Building_DeepIdol</thingClass>
+    <drawerType>MapMeshAndRealTime</drawerType>
     <graphicData>
       <texPath>Things/Deepcaller_Idol</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -45,6 +46,14 @@
         </devotionThresholds>
         <consumeIntervalTicks>2500</consumeIntervalTicks>
         <devotionPerBodySize>1</devotionPerBodySize>
+        <!-- Gold price = base x 1.6^rank / (1 + devotion / 250). The
+             denominator is intentionally uncapped: immense devotion keeps
+             making the next Bud cultivation affordable. -->
+        <budDamageBaseGold>20</budDamageBaseGold>
+        <budFireRateBaseGold>25</budFireRateBaseGold>
+        <budBoltSpeedBaseGold>15</budBoltSpeedBaseGold>
+        <budUpgradeCostMultiplier>1.6</budUpgradeCostMultiplier>
+        <budUpgradeDevotionPerDiscount>250</budUpgradeDevotionPerDiscount>
         <!-- Ransom pricing: abusive when the deep is weak, fair market at
              1000 devotion, favorable toward 2000. Plus a hunger surcharge:
              +0.25 per day unfed beyond 3 days. -->

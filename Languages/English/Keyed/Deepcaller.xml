@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <Deepcaller_GrowthText>the deep stirs</Deepcaller_GrowthText>
+  <Deepcaller_GrowthProgress>Growth: {0} / {1}</Deepcaller_GrowthProgress>
+  <Deepcaller_GrowthMature>Colossus — {0} growth earned. Meals restore wounds, shields and remaining life.</Deepcaller_GrowthMature>
   <Deepcaller_GraspReleased>torn free</Deepcaller_GraspReleased>
   <Deepcaller_RiptideNeedsDevotion>the deep slumbers: requires idol devotion {0} (currently {1})</Deepcaller_RiptideNeedsDevotion>
   <Deepcaller_ConsumeNoIdol>the deep has no mouth here: raise an idol first</Deepcaller_ConsumeNoIdol>
@@ -11,7 +13,7 @@
   <Deepcaller_ConsumeInvalidTarget>The deep only accepts living flesh.</Deepcaller_ConsumeInvalidTarget>
   <Deepcaller_CasterConsumed>{CASTER_labelShort} reached too deep. The deep reached back.</Deepcaller_CasterConsumed>
   <Deepcaller_BargainLabel>Bargain with the deep</Deepcaller_BargainLabel>
-  <Deepcaller_BargainDesc>The deep's hoard holds what Consume has swallowed. Ransom items back for silver laid within the idol's shadow. The deep sets its own prices.</Deepcaller_BargainDesc>
+  <Deepcaller_BargainDesc>Ransom swallowed or salvaged goods back for silver within the idol's shadow. Devotion and hoard cultivation improve the quote; hunger worsens it.</Deepcaller_BargainDesc>
   <Deepcaller_BargainEmpty>The hoard is empty. The deep has nothing to sell you.</Deepcaller_BargainEmpty>
   <Deepcaller_BargainNoNegotiator>No colonist is available to bargain with the deep.</Deepcaller_BargainNoNegotiator>
   <Deepcaller_TraderName>The God of the Deep</Deepcaller_TraderName>
@@ -26,7 +28,7 @@
   <Deepcaller_MoodHungry>hungry</Deepcaller_MoodHungry>
   <Deepcaller_MoodSated>sated</Deepcaller_MoodSated>
   <Deepcaller_EatCorpsesLabel>Tentacles eat corpses</Deepcaller_EatCorpsesLabel>
-  <Deepcaller_EatCorpsesDesc>When enabled, tentacles that are not fully grown will devour nearby enemy corpses to feed their growth and heal. Corpses within an idol's shadow are always reserved as offerings — the idol wins. This toggle is shared by all tentacles.</Deepcaller_EatCorpsesDesc>
+  <Deepcaller_EatCorpsesDesc>Tentacles eat nearby foreign flesh to grow, heal, restore active shields and extend their stay. Mature tentacles eat only when they can benefit. Lifetime extensions total at most one extra original lifespan. Corpses within an idol's shadow are reserved as offerings. This toggle is shared by all tentacles.</Deepcaller_EatCorpsesDesc>
   <Deepcaller_OfferingTaken>offering taken (+{0})</Deepcaller_OfferingTaken>
   <Deepcaller_DevotionInspect>Devotion: {0} — level {1}</Deepcaller_DevotionInspect>
   <Deepcaller_DevotionNext>next level at {0}</Deepcaller_DevotionNext>
@@ -38,7 +40,132 @@
   <Deepcaller_SymbioteOdds>Rejection chance ({0} grafts borne): {1}</Deepcaller_SymbioteOdds>
   <Deepcaller_SymbioteCap>Manipulation per graft at current devotion: +{0} (each graft starts at {1} and adapts upward)</Deepcaller_SymbioteCap>
   <Deepcaller_HungryGodAlert>The God of the Deep hungers</Deepcaller_HungryGodAlert>
-  <Deepcaller_HungryGodAlertDesc>The idol has not fed in {0} days. While it hungers, bargain prices carry a growing surcharge — currently {1} of market value. Offer it a corpse, or a living sacrifice via Consume.</Deepcaller_HungryGodAlertDesc>
+  <Deepcaller_HungryGodAlertDesc>The idol has not fed in {0} days. While it hungers, bargain prices carry a growing surcharge — currently {1} of market value. Purchased Riptide favors are also inactive: allies and player structures are at risk. Offer it a corpse, or a living sacrifice via Consume.</Deepcaller_HungryGodAlertDesc>
   <Deepcaller_ReturnsToDeep>Returns to the deep in: {0}</Deepcaller_ReturnsToDeep>
   <Deepcaller_BudStats>Ghost-fire: {0} damage • {1} cells/s • {2}s between shots</Deepcaller_BudStats>
+  <Deepcaller_BudUpgradesInspect>Bud cultivation — damage {0}, fire rate {1}, bolt speed {2}</Deepcaller_BudUpgradesInspect>
+  <Deepcaller_BudCultivationLabel>Cultivate the deep</Deepcaller_BudCultivationLabel>
+  <Deepcaller_BudCultivationDesc>Spend gold within the idol's shadow on permanent brood, Riptide and Consume upgrades across all maps. Each line compounds in price while Devotion continually discounts it. Hoard upgrades have their own window. Leviathan formation parts do not receive movement upgrades.</Deepcaller_BudCultivationDesc>
+  <Deepcaller_BudUpgradeOption>{0} {1} — {2} gold (have {3}; devotion price ÷{4})</Deepcaller_BudUpgradeOption>
+  <Deepcaller_BudUpgradeNoGold>The deep requires {0} gold within the idol's shadow.</Deepcaller_BudUpgradeNoGold>
+  <Deepcaller_BudUpgradeBought>The deep cultivates {0}.</Deepcaller_BudUpgradeBought>
+  <Deepcaller_BudDamage>ghost-fire damage</Deepcaller_BudDamage>
+  <Deepcaller_BudFireRate>ghost-fire fire rate</Deepcaller_BudFireRate>
+  <Deepcaller_BudBoltSpeed>ghost-fire bolt speed</Deepcaller_BudBoltSpeed>
+  <Deepcaller_CultivationTitle>Cultivate the deep</Deepcaller_CultivationTitle>
+  <Deepcaller_HoardUpgrades>Cultivate the hoard</Deepcaller_HoardUpgrades>
+  <Deepcaller_UpgradeSaturated>At effective limit</Deepcaller_UpgradeSaturated>
+  <Deepcaller_CultivationConsumeBurn>Consume: temper the burn</Deepcaller_CultivationConsumeBurn>
+  <Deepcaller_CultivationConsumeArea>Consume: widen the maw</Deepcaller_CultivationConsumeArea>
+  <Deepcaller_PreviewConsumeBurn>Divide Consume heat by {0} → {1}, on top of Devotion's protection. No immunity from an excessive offering.</Deepcaller_PreviewConsumeBurn>
+  <Deepcaller_MilestoneConsumeBurn>another +10% of baseline heat relief</Deepcaller_MilestoneConsumeBurn>
+  <Deepcaller_PreviewConsumeArea>Consume radius: {0} → {1} tiles. This permanently widens every cast and increases its heat strain. Nearby allies are also offerings.</Deepcaller_PreviewConsumeArea>
+  <Deepcaller_ConsumeAreaDetails>Requires 2,000 Devotion. Each purchase adds exactly one tile. A five-tile feast needs far greater power; bosses can still kill the caster.</Deepcaller_ConsumeAreaDetails>
+  <Deepcaller_ConsumeCostInfo>Purchased radius: {0} tiles\nDevotion: {1}; purchased heat divisor: ×{2}\nHeat is summed over every victim, with extra strain for wider casts. Gear, combat power and Isekai levels contribute to worth. Heat protection scales strongly with Devotion; it never guarantees a safe feast.</Deepcaller_ConsumeCostInfo>
+  <Deepcaller_HoardUpgradesDesc>Permanent gold purchases improve ransom prices, salvage corpse offerings and restore recovered equipment. Devotion is retained.</Deepcaller_HoardUpgradesDesc>
+  <Deepcaller_HoardPriceInspect>Hoard ransom: {0}% of market value (minimum 1 silver per item).</Deepcaller_HoardPriceInspect>
+  <Deepcaller_HoardUpgradeDetails>Current ransom: {0}% of market value. Recovery costs silver; these upgrades cost gold.</Deepcaller_HoardUpgradeDetails>
+  <Deepcaller_CultivationHoardBargaining>Hoard: deeper bargains</Deepcaller_CultivationHoardBargaining>
+  <Deepcaller_CultivationHoardSalvage>Hoard: salvage offerings</Deepcaller_CultivationHoardSalvage>
+  <Deepcaller_CultivationHoardRestoration>Hoard: restore relics</Deepcaller_CultivationHoardRestoration>
+  <Deepcaller_CultivationHoardCleansing>Hoard: wash away death</Deepcaller_CultivationHoardCleansing>
+  <Deepcaller_PreviewHoardBargaining>Ransom multiplier: {0}% → {1}% of the god's quote. Devotion above 2,000 also keeps dividing prices.</Deepcaller_PreviewHoardBargaining>
+  <Deepcaller_PreviewHoardSalvage>Preserve equipment, apparel and inventory from corpses eaten by the idol. Recover the salvaged goods through silver buyback.</Deepcaller_PreviewHoardSalvage>
+  <Deepcaller_PreviewHoardRestoration>Recovered equipment regains {2}% → {3}% of its missing durability, after its ransom is paid.</Deepcaller_PreviewHoardRestoration>
+  <Deepcaller_PreviewHoardCleansing>Recovered apparel loses its corpse-worn taint. This does not remove biocoding or change quality.</Deepcaller_PreviewHoardCleansing>
+  <Deepcaller_CultivationHeader>Gold in the idol's shadow: {0} • Devotion: {1}\nCultivation prices divided by {2}. Gold buys ranks; devotion is retained.</Deepcaller_CultivationHeader>
+  <Deepcaller_CultivationRank>{0} — rank {1}</Deepcaller_CultivationRank>
+  <Deepcaller_CultivationDamage>Bud: ghost-fire damage</Deepcaller_CultivationDamage>
+  <Deepcaller_CultivationFireRate>Bud: fire rate</Deepcaller_CultivationFireRate>
+  <Deepcaller_CultivationBoltSpeed>Bud: bolt speed</Deepcaller_CultivationBoltSpeed>
+  <Deepcaller_CultivationFeeding>Tentacle: feeding efficiency</Deepcaller_CultivationFeeding>
+  <Deepcaller_CultivationRegeneration>Tentacle: regeneration</Deepcaller_CultivationRegeneration>
+  <Deepcaller_CultivationMaturePower>Tentacle: mature attacks</Deepcaller_CultivationMaturePower>
+  <Deepcaller_CultivationMoveSpeed>Tentacle: movement speed</Deepcaller_CultivationMoveSpeed>
+  <Deepcaller_CultivationNonOrganicTargets>Buds shoot non-organics</Deepcaller_CultivationNonOrganicTargets>
+  <Deepcaller_CultivationUnlocked>Unlocked</Deepcaller_CultivationUnlocked>
+  <Deepcaller_PreviewNonOrganicLocked>Unlock attacks on mechs, golems and hostile machines. Ghostfire strikes them with physical force.</Deepcaller_PreviewNonOrganicLocked>
+  <Deepcaller_PreviewNonOrganicUnlocked>All existing and future Buds can attack non-organic enemies with physical ghostfire.</Deepcaller_PreviewNonOrganicUnlocked>
+  <Deepcaller_NonOrganicUnlockDetails>One permanent purchase for the whole brood. Does not make these targets edible.</Deepcaller_NonOrganicUnlockDetails>
+  <Deepcaller_NonOrganicUnlocked>The brood learns to break iron and stone. Buds can now shoot non-organic enemies.</Deepcaller_NonOrganicUnlocked>
+  <Deepcaller_BudTargetsOrganic>Targets organic enemies. Cultivation can unlock non-organic targets.</Deepcaller_BudTargetsOrganic>
+  <Deepcaller_BudTargetsAll>Targets flesh, mechs, golems and hostile machines.</Deepcaller_BudTargetsAll>
+  <Deepcaller_RiptideForce>Devotion: {0}\n70 kg projectile starting at the outer edge, against stationary rock: {1} without a run-up; {2} after 3 cells; {3} after 7 cells\nRecoil after 3 cells: {4}, before armor\nPull radius: {5} cells. Initial pull is strongest at the edge and zero at the exact center. Actual impacts depend on mass, run-up and relative speed.</Deepcaller_RiptideForce>
+  <Deepcaller_CultivationRiptideRestraint>Riptide: spare our walls</Deepcaller_CultivationRiptideRestraint>
+  <Deepcaller_PreviewRiptideRestraint>Protect player walls and doors from impacts while the local idol is sated. No protection for people or possessions.</Deepcaller_PreviewRiptideRestraint>
+  <Deepcaller_RiptideRestraintDetails>Permanent purchase. Feed the local idol within {0} days to keep its favor.</Deepcaller_RiptideRestraintDetails>
+  <Deepcaller_RiptideRestraintUnlocked>The deep learns restraint. Keep it fed if you value your walls.</Deepcaller_RiptideRestraintUnlocked>
+  <Deepcaller_RiptideRestraintActive>Wall favor active: player walls and doors stop projectiles without taking damage.</Deepcaller_RiptideRestraintActive>
+  <Deepcaller_RiptideRestraintInactive>Wall favor inactive: player walls and doors can be smashed.</Deepcaller_RiptideRestraintInactive>
+  <Deepcaller_RiptideRestraintHungry>Purchased, but inactive: the hungry god can break your walls and doors.</Deepcaller_RiptideRestraintHungry>
+  <Deepcaller_CultivationRiptideDiscernment>Riptide: spare our people</Deepcaller_CultivationRiptideDiscernment>
+  <Deepcaller_PreviewRiptideDiscernment>Pull only hostile creatures while the local idol is sated. Spared creatures can still be hit by projectiles.</Deepcaller_PreviewRiptideDiscernment>
+  <Deepcaller_RiptideDiscernmentDetails>Permanent purchase. Feed the local idol within {0} days to keep its favor.</Deepcaller_RiptideDiscernmentDetails>
+  <Deepcaller_RiptideDiscernmentUnlocked>The deep learns whom you call enemy. Keep it fed if you want it to remember.</Deepcaller_RiptideDiscernmentUnlocked>
+  <Deepcaller_RiptideDiscernmentActive>People favor active: only hostile creatures are pulled. Collisions still hurt allies and the caster.</Deepcaller_RiptideDiscernmentActive>
+  <Deepcaller_RiptideDiscernmentInactive>Discernment inactive: allies, neutrals and the caster can be caught.</Deepcaller_RiptideDiscernmentInactive>
+  <Deepcaller_RiptideDiscernmentHungry>Purchased, but inactive: the hungry god can catch allies, neutrals and the caster.</Deepcaller_RiptideDiscernmentHungry>
+  <Deepcaller_CultivationRiptidePossessions>Riptide: spare our possessions</Deepcaller_CultivationRiptidePossessions>
+  <Deepcaller_PreviewRiptidePossessions>Keep owned vehicles and stored items grounded while the idol is sated. Impacts can still damage them.</Deepcaller_PreviewRiptidePossessions>
+  <Deepcaller_RiptidePossessionsDetails>Feed within {0} days. Unclaimed debris still flies; a home-area mark does not claim it.</Deepcaller_RiptidePossessionsDetails>
+  <Deepcaller_RiptidePossessionsUnlocked>The deep agrees to leave your baubles where you put them. Keep it fed.</Deepcaller_RiptidePossessionsUnlocked>
+  <Deepcaller_RiptidePossessionsActive>Possessions favor active: owned vehicles and stored items stay grounded. Chunks still fly; impacts still hurt.</Deepcaller_RiptidePossessionsActive>
+  <Deepcaller_RiptidePossessionsInactive>Possessions favor inactive: vehicles, corpses and loose items can be thrown.</Deepcaller_RiptidePossessionsInactive>
+  <Deepcaller_RiptidePossessionsHungry>Purchased, but inactive: the hungry god can throw your possessions.</Deepcaller_RiptidePossessionsHungry>
+  <Deepcaller_CultivationRiptideAcceleration>Riptide: acceleration</Deepcaller_CultivationRiptideAcceleration>
+  <Deepcaller_PreviewRiptideAcceleration>Pull and impact force: ×{0} → ×{1}. Starting distance still determines the strength of the pull.</Deepcaller_PreviewRiptideAcceleration>
+  <Deepcaller_MilestoneRiptideAcceleration>another +10% of base acceleration</Deepcaller_MilestoneRiptideAcceleration>
+  <Deepcaller_CultivationRiptideArea>Riptide: wider calamity</Deepcaller_CultivationRiptideArea>
+  <Deepcaller_CultivationRiptideReach>Riptide: distant calamity</Deepcaller_CultivationRiptideReach>
+  <Deepcaller_PreviewRiptideArea>Extra pull radius: {0} → {1} cells now. Each rank raises its eventual limit by {2} cells; cast distance stays the same.</Deepcaller_PreviewRiptideArea>
+  <Deepcaller_PreviewRiptideReach>Extra cast distance: {0} → {1} cells now. Each rank raises its eventual limit by {2} cells; pull radius stays the same.</Deepcaller_PreviewRiptideReach>
+  <Deepcaller_RiptideReachDetails>Requires {0} devotion to buy. Growth ends at the map boundary; acceleration can keep growing.</Deepcaller_RiptideReachDetails>
+  <Deepcaller_CultivationNeedsDevotion>Needs {0} devotion</Deepcaller_CultivationNeedsDevotion>
+  <Deepcaller_RiptideCoversMap>Covers this map</Deepcaller_RiptideCoversMap>
+  <Deepcaller_CultivationHelp>Choose a goal to track the devotion needed to afford its next rank with your current gold. Benefits apply to existing and future summons on every map. Devotion's passive Bud bonuses require an idol on the Bud's map.</Deepcaller_CultivationHelp>
+  <Deepcaller_PreviewDamage>Primary bolt damage: {0}. Includes current payload bonuses.</Deepcaller_PreviewDamage>
+  <Deepcaller_PreviewFireRate>Volley interval: {0}s; primary damage: {1}. Echo bolt: {2}% of primary.</Deepcaller_PreviewFireRate>
+  <Deepcaller_PreviewBoltSpeed>Speed: {0} cells/s; damage: {1}. Excess speed strengthens impacts.</Deepcaller_PreviewBoltSpeed>
+  <Deepcaller_PreviewFeeding>Growth and meal lifetime gains: ×{0}. Combat damage and corpse meals both feed growth.</Deepcaller_PreviewFeeding>
+  <Deepcaller_PreviewRegeneration>Healing and shield energy per meal: ×{0}. Rank 5 also regrows one missing part per meal.</Deepcaller_PreviewRegeneration>
+  <Deepcaller_PreviewMaturePower>Cleave and slam damage: ×{0}. Grasper drag damage also scales.</Deepcaller_PreviewMaturePower>
+  <Deepcaller_PreviewMoveSpeed>Movement: ×{0}. Healthy Sprout: {1} cells/s. Ordinary tentacles only; stops at the 60 cells/s movement limit.</Deepcaller_PreviewMoveSpeed>
+  <Deepcaller_NextCultivationMilestone>Rank {0}: {1}</Deepcaller_NextCultivationMilestone>
+  <Deepcaller_MilestoneDamage>piercing ghost-fire; later milestones strengthen penetration hits.</Deepcaller_MilestoneDamage>
+  <Deepcaller_MilestoneFireRate>paired volleys; later milestones strengthen the echo bolt.</Deepcaller_MilestoneFireRate>
+  <Deepcaller_MilestoneBoltSpeed>spectral trails and deeper armor penetration.</Deepcaller_MilestoneBoltSpeed>
+  <Deepcaller_MilestoneFeeding>another +10% of base feeding efficiency.</Deepcaller_MilestoneFeeding>
+  <Deepcaller_MilestoneRegeneration>regrow lost flesh; later milestones further improve healing.</Deepcaller_MilestoneRegeneration>
+  <Deepcaller_MilestoneMaturePower>another +10% of base special attack damage.</Deepcaller_MilestoneMaturePower>
+  <Deepcaller_MilestoneMoveSpeed>another +10% of base movement speed.</Deepcaller_MilestoneMoveSpeed>
+  <Deepcaller_CultivationMilestone>The deep remembers: {0} reaches rank {1}. A new brood milestone awakens.</Deepcaller_CultivationMilestone>
+  <Deepcaller_BuyGold>Buy — {0} gold</Deepcaller_BuyGold>
+  <Deepcaller_PriceTooHigh>Feed the deep further</Deepcaller_PriceTooHigh>
+  <Deepcaller_BeyondMeasure>beyond measure</Deepcaller_BeyondMeasure>
+  <Deepcaller_Pin>Track this goal</Deepcaller_Pin>
+  <Deepcaller_Unpin>Unpin goal</Deepcaller_Unpin>
+  <Deepcaller_PinnedNeedsGold>Place gold in the idol's shadow to calculate your goal. Every purchase requires at least one gold.</Deepcaller_PinnedNeedsGold>
+  <Deepcaller_PinnedGoal>Goal: {0}. With {1} gold, another {2} devotion makes the next rank affordable.</Deepcaller_PinnedGoal>
+  <Deepcaller_OfferingReceipt>Latest offerings: +{0} devotion. {1}: {2} → {3} gold; underlying price reduced by {4}%.</Deepcaller_OfferingReceipt>
+  <Deepcaller_IdolProgress>Devotion: {0} — {1}\nNext awakening at {2}</Deepcaller_IdolProgress>
+  <Deepcaller_IdolAwakens>The deep awakens: {0}. Its hunger grows.</Deepcaller_IdolAwakens>
+  <Deepcaller_IdolTier0>Slumbering</Deepcaller_IdolTier0>
+  <Deepcaller_IdolTier1>Stirring</Deepcaller_IdolTier1>
+  <Deepcaller_IdolTier2>Hungry</Deepcaller_IdolTier2>
+  <Deepcaller_IdolTier3>Reaching</Deepcaller_IdolTier3>
+  <Deepcaller_IdolTier4>Coiling</Deepcaller_IdolTier4>
+  <Deepcaller_IdolTier5>Tidebound</Deepcaller_IdolTier5>
+  <Deepcaller_IdolTier6>Abyssal</Deepcaller_IdolTier6>
+  <Deepcaller_IdolTier7>Leviathan</Deepcaller_IdolTier7>
+  <Deepcaller_Depth>Depth {0}</Deepcaller_Depth>
+  <Deepcaller_Digestion>Digests up to {0} corpses every {1} hours</Deepcaller_Digestion>
+  <Deepcaller_BudPayload>Payload from excess cadence: ×{0} • {1} bolt(s) per volley</Deepcaller_BudPayload>
+  <Deepcaller_BudSpeedPayload>Payload from excess speed: ×{0}</Deepcaller_BudSpeedPayload>
+  <Deepcaller_MealRestored>flesh renewed</Deepcaller_MealRestored>
+  <Deepcaller_SlamWarning>the ground swells...</Deepcaller_SlamWarning>
+  <Deepcaller_TentacleCombat0>Sprout: lashes enemies. Battle and meals earn the next form.</Deepcaller_TentacleCombat0>
+  <Deepcaller_TentacleCombat1>Grasper: drags and constricts nearby prey every 8 seconds.</Deepcaller_TentacleCombat1>
+  <Deepcaller_TentacleCombat2>Crusher: cleaves nearby hostiles every 8 seconds.</Deepcaller_TentacleCombat2>
+  <Deepcaller_TentacleCombat3>Colossus: marks the ground, then slams hostiles after a short warning.</Deepcaller_TentacleCombat3>
+  <Deepcaller_MoveSpeedExplanation>Brood cultivation (ordinary tentacles): ×{0}</Deepcaller_MoveSpeedExplanation>
 </LanguageData>

@@ -198,19 +198,8 @@ namespace Deepcaller
         }
     }
 
-    /// Kills feed the killer's growth comp, scaled by victim body size.
-    [HarmonyPatch(typeof(Pawn), nameof(Pawn.Kill))]
-    public static class Pawn_Kill_FeedTentacle
-    {
-        public static void Postfix(Pawn __instance, DamageInfo? dinfo)
-        {
-            if (dinfo?.Instigator is Pawn killer && killer != __instance)
-            {
-                var growth = killer.TryGetComp<CompTentacleGrowth>();
-                growth?.Feed(__instance.BodySize * growth.Props.killFeedFactor);
-            }
-        }
-    }
+    // Combat feeding is awarded for actual damage in TentacleCombat.cs, with
+    // a lifetime prey budget shared by all attackers. No last-hit double award.
 
     /// Taunt: AttackTargetFinder multiplies target scores by this factor, so
     /// boosting it makes enemies engage tentacles instead of ignoring them.

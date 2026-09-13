@@ -28,7 +28,7 @@ namespace Deepcaller
         {
             if (!(TradeSession.trader is CompIdolDevotion idol) || __instance.IsCurrency)
                 return true;
-            __result = __instance.BaseMarketValue * idol.PriceFactor;
+            __result = System.Math.Max(1, __instance.BaseMarketValue * idol.PriceFactor);
             return false;
         }
     }

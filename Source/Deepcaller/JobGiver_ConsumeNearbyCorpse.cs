@@ -11,7 +11,7 @@ namespace Deepcaller
         protected override Job TryGiveJob(Pawn pawn)
         {
             var growth = pawn.TryGetComp<CompTentacleGrowth>();
-            if (growth == null || growth.FullyGrown)
+            if (growth == null || !growth.CanBenefitFromMeal)
                 return null;
             if (!DeepcallerGameComponent.TentaclesEatCorpses)
                 return null;
@@ -33,6 +33,7 @@ namespace Deepcaller
         private static bool IsValidMeal(Pawn pawn, Corpse corpse)
         {
             return corpse.InnerPawn.Faction != pawn.Faction
+                && DeepTargetUtility.IsEdible(corpse.InnerPawn)
                 && corpse.GetRotStage() != RotStage.Dessicated
                 && !CompIdolDevotion.ClaimsCorpse(corpse, pawn.Faction)
                 && pawn.CanReserve(corpse);

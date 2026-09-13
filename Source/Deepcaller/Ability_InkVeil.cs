@@ -58,7 +58,7 @@ namespace Deepcaller
                     map, center, radius, ext.visualDurationTicks);
 
                 foreach (var victim in map.mapPawns.AllPawnsSpawned
-                             .Where(p => p.HostileTo(pawn) && p.Position.InHorDistOf(center, radius))
+                             .Where(p => DeepTargetUtility.IsCombatTarget(p, pawn) && p.Position.InHorDistOf(center, radius))
                              .ToList())
                 {
                     var inked = victim.health.hediffSet.GetFirstHediffOfDef(Deepcaller_DefOf.Deepcaller_Inked);

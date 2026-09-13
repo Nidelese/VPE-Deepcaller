@@ -1,0 +1,12 @@
+Deepcaller 1.1.0 — Cultivate the brood
+
+- Added an idol cultivation shop: spend gold on seven permanent Bud and melee upgrade lines, with compounding prices and uncapped devotion discounts. Purchases retain devotion.
+- Added upgrade previews, pinned savings goals, offering receipts and rank milestones.
+- Bud milestones unlock piercing hits, paired volleys and spectral trails. Upgrades beyond visual fire-rate and projectile-speed limits improve impact damage.
+- Every ordinary tentacle now starts as a Sprout and earns its growth through combat contributions and corpse meals. Graspers pull, Crushers cleave and Colossi telegraph a crushing slam.
+- Mature meals restore injuries and active shields, extend limited summon lifetime, and can regrow missing parts with regeneration cultivation.
+- Added ordinary melee movement cultivation. Leviathan heads, arms and flowers keep their synchronized movement.
+- Added idol awakenings with new titles, living rings, sound and improved digestion, plus further Depth milestones at very high devotion.
+- Preserved earned forms and purchased ranks across save loading and idol relocation. Fixed feeding-tracker metadata and visual-renderer initialization warnings.
+
+Thanks to S_Serp for the feedback that prompted this progression pass.
