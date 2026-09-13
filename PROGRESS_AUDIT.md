@@ -20,7 +20,7 @@ of completing the gaps found in the previous audit.
 | Worth-based Consume heat, purchased burn reduction and one-tile AoE ranks | Implemented after Riptide momentum/save tests passed. Actual casts test novice death, late survival, allied offerings and non-organic exclusion. Installed Isekai level integration is tested. |
 | New permanent upgrades specifically for the older hoard shop | Implemented: bargaining, corpse-gear salvage, restoration on recovery and corpse-taint cleansing. Actual transactions tested. Devotion discounts continue above the old final tier. |
 | Game save/reload and compatibility checks | Mid-flight momentum, compressed-object references, new ranks and pinned goals tested. A disposable run with the user's active mod list passed 30 compatibility assertions. |
-| Commit, push, publish and verify Workshop | Release in progress; final publication evidence will be recorded in Workshop/release_verification_1.2.0.json. |
+| Commit, push, publish and verify Workshop | Committed and pushed as 768feb6. Steam accepted the public update; all 123 downloaded files match the release by SHA-256 with no missing, changed or extra files. Evidence: Workshop/release_verification_1.2.0.json. |
 
 ## Evidence and limits
 
