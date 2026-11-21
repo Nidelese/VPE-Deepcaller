@@ -45,9 +45,12 @@ active.insert(len(active) - 2, item)
 tree.write(sys.argv[1], encoding='utf-8', xml_declaration=True)
 PY
 fi
+# Remove the harness link again on exit so it never sits in the player's
+# Mods list (where it could be mistaken for Deepcaller and uploaded).
+trap '[[ -L "$test_link" ]] && rm -f "$test_link"' EXIT
 echo "Isolated runtime log: $test_root/Player.log"
 # 1.6 (Unity) ships RimWorldLinux; 1.7 (Waylith) ships a .NET apphost named RimWorld.
 game_bin="$rimworld_root/RimWorldLinux"
 [[ -x "$game_bin" ]] || game_bin="$rimworld_root/RimWorld"
-exec "$game_bin" -batchmode -screen-fullscreen 0 -screen-width 1024 -screen-height 768 \
+"$game_bin" -batchmode -screen-fullscreen 0 -screen-width 1024 -screen-height 768 \
     "-savedatafolder=$test_root" -logFile "$test_root/Player.log" -deepcaller-tests "$@"
