@@ -4,6 +4,22 @@ Area-defense summoner path for Vanilla Psycasts Expanded (RimWorld 1.6).
 Fantasy: Illaoi / Nagakabouros — call tentacles from the deep, keep the Idol fed,
 control the ground around your home.
 
+## Earned abyssal meditation — 2026-09-13, released in 1.3.0 (2026-11-21, with RimWorld 1.7 support)
+
+Automatic access defaults off, including when upgrading an existing colony.
+Pawns learn abyssal meditation with one VPE psycast point through the Psycasts
+tab, or by accepting an epiphany. Attached grafts give independent 5% sleep
+chances, summoned tentacles give their caller 1% per tentacle per fight, and
+being within 10 tiles of a tentacle's corpse meal gives 1% unless ideology
+objects. Eldritch cult/Esotericism give 0.5% during sleep and completed
+reflection/rituals. Ocean affinities grant nothing. Learned pawns leave all
+epiphany processing. Learning the Deepcaller path does not also grant the focus.
+Purchased focus unlocks survive settings changes and normal game saves.
+The Deepcaller mod setting can explicitly restore universal access; toggling
+it takes effect immediately. This supersedes the original everyone-can-kneel
+policy below. See `MEDITATION_ACCESS.md` for the verified affinity candidates
+and the boundary between this change and future Ideology work.
+
 ## Physical force and non-organic combat — 2026-09-12
 
 Version 1.2.0. This section supersedes older Riptide
@@ -232,7 +248,7 @@ labels are free to change). Path defName: `Deepcaller_Path`.
 - [x] PsycasterPathDef + placeholder tree background texture (PIL script in scratchpad; bg 950x1515, icons 128x128)
 - [x] Tentacle race ThingDef/PawnKindDef (Sprout stage; inherits `VPE_UndeadBase`; fights via `CompProperties_InitialMentalState`→`VPE_Manhunter`, expires via `CompProperties_DieAfterPeriod`, `CompProperties_DoesntFlee`)
 - [x] Lash ability XML + C# `Ability_SummonTentacle` (VEF `Ability_Spawn` can't spawn pawns — uses `ThingMaker`; VEF `CompSummonOnSpawn` is hostile-only. Own class mirrors VPE `Ability_SpawnSkeleton`, pawnkind configurable via `AbilityExtension_SummonPawn`)
-- [x] Build DLL: dotnet-sdk installed; `dotnet build Source/Deepcaller` → `1.6/Assemblies/Deepcaller.dll`
+- [x] Build DLL: dotnet-sdk installed; `dotnet build Source/Deepcaller` → `1.6/Assemblies/Deepcaller.dll` (net48) + `1.7/Assemblies/Deepcaller.dll` (net10.0); shared Defs/Patches in `Common/`
 - [x] First in-game smoke test passed (tree renders, Lash summons, territorial targeting works)
 - [x] Grip-on-hit: Deepcaller_Crush damage + Deepcaller_Gripped slow hediff
 - [x] Custom think tree (organic turret: JobGiver_AIFightEnemies-based; manhunter

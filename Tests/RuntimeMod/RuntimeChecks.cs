@@ -75,6 +75,38 @@ namespace DeepcallerRuntimeChecks
             {
                 Find.TickManager.CurTimeSpeed = TimeSpeed.Paused;
                 map = Find.CurrentMap;
+                if (Environment.GetCommandLineArgs().Contains("--epiphanies"))
+                {
+                    if (loading)
+                    {
+                        EpiphanyChecks.VerifyReload(map, Check);
+                        Log.Message("DEEPCALLER_RUNTIME SUCCESS: " + checks + " epiphany assertions including game reload");
+                        Application.Quit(0);
+                        return;
+                    }
+                    EpiphanyChecks.Run(map, Check);
+                    GameDataSaveLoader.SaveGame("DeepcallerRuntimeEpiphanies");
+                    loading = true;
+                    ran = false;
+                    GameDataSaveLoader.LoadGame("DeepcallerRuntimeEpiphanies");
+                    return;
+                }
+                if (Environment.GetCommandLineArgs().Contains("--meditation"))
+                {
+                    if (loading)
+                    {
+                        MeditationChecks.VerifyReload(map, Check);
+                        Log.Message("DEEPCALLER_RUNTIME SUCCESS: " + checks + " meditation assertions including game reload");
+                        Application.Quit(0);
+                        return;
+                    }
+                    MeditationChecks.Run(map, Check);
+                    GameDataSaveLoader.SaveGame("DeepcallerRuntimeMeditation");
+                    loading = true;
+                    ran = false;
+                    GameDataSaveLoader.LoadGame("DeepcallerRuntimeMeditation");
+                    return;
+                }
                 if (loading)
                 {
                     var loaded = map.listerThings.AllThings.OfType<Thing_RiptideSurge>().Single();
@@ -109,6 +141,13 @@ namespace DeepcallerRuntimeChecks
                 GenSpawn.Spawn(idolThing, new IntVec3(48, 0, 46), map);
                 idol = idolThing.TryGetComp<CompIdolDevotion>();
                 AccessTools.Field(typeof(CompIdolDevotion), "devotion").SetValue(idol, 8000.0);
+                if (Environment.GetCommandLineArgs().Contains("--colliders"))
+                {
+                    ColliderCoverage();
+                    Log.Message("DEEPCALLER_RUNTIME SUCCESS: " + checks + " collider assertions");
+                    Application.Quit(0);
+                    return;
+                }
                 if (Environment.GetCommandLineArgs().Contains("--normal-mods"))
                 {
                     Compatibility();
@@ -541,6 +580,52 @@ namespace DeepcallerRuntimeChecks
             Check(ability.HeatFor(victim, 5000, 5, 5) > 1000,
                 "an installed level-1,600 Isekai pawn remains a lethal offering at 5,000 devotion");
             Vehicles();
+        }
+
+        private static void ColliderCoverage()
+        {
+            caster.ChangePsylinkLevel(1, false);
+            var results = new List<bool>();
+            foreach (string targetName in new[] { "ChunkGranite", "AncientExostriderRemains", "VVE_Bulldog" })
+            {
+                Reset();
+                Thing target;
+                bool vehicle = targetName == "VVE_Bulldog";
+                if (vehicle)
+                {
+                    var generate = AccessTools.Method(AccessTools.TypeByName("Vehicles.VehicleSpawner"), "GenerateVehicle", new[] {
+                        AccessTools.TypeByName("Vehicles.VehicleDef"), typeof(Faction) });
+                    target = (Thing)generate.Invoke(null, new object[] { DefDatabase<ThingDef>.GetNamed(targetName), Faction.OfPlayer });
+                    GenSpawn.Spawn(target, Center, map);
+                    fixtures.Add(target);
+                    idol.Progress.Import(BudUpgradeKind.RiptidePossessions, 1);
+                }
+                else target = Item(targetName, 60);
+                var center = vehicle ? new IntVec3(60, 0, 62) : Center;
+                var victim = PawnGenerator.GeneratePawn(new PawnGenerationRequest(PawnKindDefOf.Colonist,
+                    Faction.OfAncientsHostile, forceGenerateNewPawn: true, canGeneratePawnRelations: false));
+                GenSpawn.Spawn(victim, new IntVec3(70, 0, center.z), map);
+                victim.Kill(null);
+                var corpse = victim.Corpse;
+                fixtures.Add(corpse);
+                int hp = target.HitPoints;
+                var ability = new Ability_Riptide { pawn = caster, holder = caster,
+                    def = DefDatabase<VEF.Abilities.AbilityDef>.GetNamed("Deepcaller_Riptide") };
+                ability.Init();
+                ability.Cast(new RimWorld.Planet.GlobalTargetInfo(center, map));
+                var surge = map.listerThings.AllThings.OfType<Thing_RiptideSurge>().Single();
+                Check(surge.Captured(target) && surge.Captured(corpse), "actual cast captures corpse and " + targetName);
+                int gridCells = RiptideVehicleBridge.ProjectedCells(target, target.Position)
+                    .Count(c => c.GetThingList(map).Contains(target));
+                hitThings.Clear();
+                Advance(surge, 100);
+                bool hit = hitThings.Contains(target);
+                Log.Message("DEEPCALLER_COLLIDER: " + targetName + " hit=" + hit + " initialHP=" + hp
+                    + " finalHP=" + target.HitPoints + " destroyed=" + target.Destroyed + " targetCells=" + gridCells
+                    + " corpseDestroyed=" + corpse.Destroyed + " corpsePosition=" + corpse.Position);
+                results.Add(hit);
+            }
+            Check(results.All(v => v), "corpse impacts reach stationary chunks, ancient wrecks and vehicle edges");
         }
 
         private static void Vehicles()

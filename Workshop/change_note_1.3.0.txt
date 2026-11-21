@@ -1,0 +1,9 @@
+Deepcaller 1.3.0 — RimWorld 1.7 and earned abyssal meditation
+
+HEADS UP FOR EXISTING COLONIES: abyssal (idol) meditation is no longer free for everyone, and that includes saves you are already playing. Pawns who meditated at the idol before this update will lose that focus until they learn it. If you want the old behavior back, Options → Mod settings → Deepcaller → "Automatic abyssal meditation access" restores it instantly.
+
+- RimWorld 1.7 support. The same Workshop item now serves both 1.6 and 1.7 (Waylith); the game picks the right build automatically. Nothing to do on your side, and 1.6 saves keep working.
+- Learn abyssal meditation by spending one psycast point on the abyssal focus icon in the Psycasts tab. Learning the Deepcaller path alone does not grant it.
+- Or answer an epiphany. Rare invitations reach pawns who have not learned the focus: sleeping with Symbiote grafts (5% per graft per night), a summoned tentacle fighting for its caller (1% per tentacle per fight), being within 10 tiles of a tentacle finishing a corpse meal (1%, unless the pawn's ideology objects), and for Eldritch cult or Esotericism followers, 0.5% per night, prayer, meditation, grave visit or attended ritual.
+- An epiphany letter lets you accept, postpone, or refuse further invitations for that pawn. Accepting grants the focus only — no psylink, points or path. Refusing still leaves the psycast-point purchase available.
+- Purchased and accepted meditation survives settings changes and saves. Turning automatic access back off never removes a focus a pawn earned.

@@ -5,3 +5,6 @@ Source/Deepcaller/bin/
 Tests/**/obj/
 Tests/**/bin/
 Tests/**/Assemblies/
+
+# Workshop staging copies belong beside the repo, never inside it
+VPE-Deepcaller-WorkshopUpload*/

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- Earned with a VPE psycast point by default. The Deepcaller mod setting
+       can explicitly restore automatic access without changing saved unlocks. -->
+  <MeditationFocusDef>
+    <defName>Deepcaller_Deep</defName>
+    <label>abyssal</label>
+    <description>Meditation before an idol of the deep, the mind sinking beyond the boundary of this world. The greater the god's devotion, the more it has to give back.\n\nLearn abyssal meditation by spending one psycast point on its icon in the Psycasts tab, or by accepting a rare epiphany from contact with the deep. Automatic access is off by default and can be enabled in Deepcaller mod settings.</description>
+    <modExtensions>
+      <!-- VPE reads this for the focus-type icon in its Psycasts UI and
+           warns loudly ("Please ask Nidelese to add one") if absent -->
+      <li Class="VanillaPsycastsExpanded.MeditationFocusExtension">
+        <icon>UI_Deepcaller/Foci/Abyssal</icon>
+        <pointsOnly>true</pointsOnly>
+        <canBeUnlocked>true</canBeUnlocked>
+      </li>
+    </modExtensions>
+  </MeditationFocusDef>
+</Defs>

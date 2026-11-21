@@ -1,0 +1,32 @@
+DEEPCALLER_RUNTIME: harness loaded
+DEEPCALLER_RUNTIME PASS: new locked colonists enroll for epiphanies
+DEEPCALLER_RUNTIME PASS: nearby summoned tentacles do not grant graft sleep rolls
+DEEPCALLER_RUNTIME PASS: two attached grafts give 9.75 percent per sleep cycle
+DEEPCALLER_RUNTIME PASS: repeated sleep checks cannot reroll the same night
+DEEPCALLER_RUNTIME PASS: installed cult and esoteric memes give one 0.5 percent sleep roll
+DEEPCALLER_RUNTIME PASS: completed meditation uses the live job cleanup hook
+DEEPCALLER_RUNTIME PASS: interrupted reflection grants no roll
+DEEPCALLER_RUNTIME PASS: Pain is virtue alone is not an affinity
+DEEPCALLER_RUNTIME PASS: a tentacle rolls once per fight and incoming damage keeps the fight active
+DEEPCALLER_RUNTIME PASS: a quiet game hour permits a new fight roll
+DEEPCALLER_RUNTIME PASS: real tentacle damage against a mech triggers its caller's combat roll
+DEEPCALLER_RUNTIME PASS: corpse epiphanies include exactly ten tiles and exclude eleven
+DEEPCALLER_RUNTIME PASS: actual anti-cannibal precept blocks a human offering
+DEEPCALLER_RUNTIME PASS: a successful chance roll still respects ideological disgust
+DEEPCALLER_RUNTIME PASS: pending invitation gives no power and suspends further processing
+DEEPCALLER_RUNTIME PASS: invitation explains its cause and offers accept, refusal and postponement
+DEEPCALLER_RUNTIME PASS: acceptance grants only the focus, without a psylink
+DEEPCALLER_RUNTIME PASS: unlocked pawns get neither event rolls nor repeated focus eligibility queries
+DEEPCALLER_RUNTIME PASS: later psylink creation retains the free revelation without spending points
+DEEPCALLER_RUNTIME PASS: refusal prevents further offers without granting access
+DEEPCALLER_RUNTIME PASS: refusal does not block the ordinary point purchase
+DEEPCALLER_RUNTIME PASS: VPE point unlock immediately removes a pawn from epiphany processing
+DEEPCALLER_RUNTIME PASS: candidate rebuild excludes learned, refused and pending pawns
+DEEPCALLER_RUNTIME PASS: revelation and processing exclusion survive real game reload
+DEEPCALLER_RUNTIME PASS: refusal survives game reload
+DEEPCALLER_RUNTIME PASS: pending choice letter survives reload without duplicate enrollment
+DEEPCALLER_RUNTIME PASS: loading during a sleep cycle cannot reroll its graft chance
+DEEPCALLER_RUNTIME PASS: the following sleep cycle still gets its chance after reload
+DEEPCALLER_RUNTIME PASS: loading during combat cannot repeat a tentacle's fight roll
+DEEPCALLER_RUNTIME PASS: summoner binding and the next fight survive reload
+DEEPCALLER_RUNTIME SUCCESS: 30 epiphany assertions including game reload

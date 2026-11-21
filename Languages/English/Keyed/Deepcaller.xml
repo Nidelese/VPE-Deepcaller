@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
+  <Deepcaller_AutomaticMeditation>Automatic abyssal meditation access (default: off)</Deepcaller_AutomaticMeditation>
+  <Deepcaller_AutomaticMeditationHelp>Give every pawn access to abyssal meditation for free. Changes take effect immediately. Turning this off preserves meditation types already purchased with psycast points.</Deepcaller_AutomaticMeditationHelp>
+  <Deepcaller_MeditationLearningHelp>Spend one psycast point on the abyssal meditation icon in the Psycasts tab, or accept a rare epiphany from contact with the deep. Learning the Deepcaller path alone does not grant this focus.\n\nGrafted tentacles grant a 5% chance each during a sleep cycle. A summoned tentacle grants its caller a 1% chance per fight. Within 10 tiles of a tentacle eating a corpse, each pawn has a 1% chance if their ideology does not object to the offering. Eldritch cult and Esotericism followers also have a 0.5% chance during sleep, completed prayer, meditation, grave visits and rituals.\n\nEpiphanies offer a choice. Existing colonies can also restore free access with the setting above.</Deepcaller_MeditationLearningHelp>
+  <Deepcaller_MeditationEnabledBySetting>Automatic abyssal meditation access enabled in Deepcaller settings.</Deepcaller_MeditationEnabledBySetting>
+  <Deepcaller_MeditationEnabledByEpiphany>Answered the deep's invitation.</Deepcaller_MeditationEnabledByEpiphany>
+  <Deepcaller_EpiphanyTitle>Something has noticed you</Deepcaller_EpiphanyTitle>
+  <Deepcaller_EpiphanyText>{PAWN_labelShort} glimpsed something beyond this world's skin. {REASON}\n\nAn intelligence waits on the other side. It offers a way to still the mind before its idol, and listen.\n\nAnswering the call permanently grants abyssal meditation to this pawn for free. It grants no psylink or psycast points. Refusing closes these invitations for this pawn; learning the focus with a psycast point remains possible.</Deepcaller_EpiphanyText>
+  <Deepcaller_EpiphanyDream>The grafted limbs moved in a dream, pointing toward a place without distance.</Deepcaller_EpiphanyDream>
+  <Deepcaller_EpiphanyCombat>Through a fighting tentacle, a presence briefly looked back at its caller.</Deepcaller_EpiphanyCombat>
+  <Deepcaller_EpiphanyOffering>As a tentacle swallowed an offering nearby, the opening seemed to lead somewhere much further away.</Deepcaller_EpiphanyOffering>
+  <Deepcaller_EpiphanyReflection>In a moment of reflection, familiar beliefs opened onto something vast and unfamiliar.</Deepcaller_EpiphanyReflection>
+  <Deepcaller_EpiphanyAccept>Answer the call — learn abyssal meditation</Deepcaller_EpiphanyAccept>
+  <Deepcaller_EpiphanyRefuse>Refuse further invitations for this pawn</Deepcaller_EpiphanyRefuse>
   <Deepcaller_GrowthText>the deep stirs</Deepcaller_GrowthText>
   <Deepcaller_GrowthProgress>Growth: {0} / {1}</Deepcaller_GrowthProgress>
   <Deepcaller_GrowthMature>Colossus — {0} growth earned. Meals restore wounds, shields and remaining life.</Deepcaller_GrowthMature>

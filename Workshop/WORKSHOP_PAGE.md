@@ -2,9 +2,9 @@
 
 ## Prepared identity
 
-- Title: `[1.6] Vanilla Psycasts Expanded — Deepcaller`
+- Title: `[1.6][1.7] Vanilla Psycasts Expanded — Deepcaller`
 - Short description: see `short_description.txt`
-- Tags: `Mod`, `1.6`
+- Tags: `Mod`, `1.6`, `1.7`
 - Full Steam BBCode: `description.bbcode`
 - Initial change note: `change_note_1.0.0.txt`
 - Progression update change note: `change_note_1.1.0.txt`
@@ -64,7 +64,7 @@ need, so do not upload the development tree directly.
 8. On the Workshop item page:
 
    - paste `description.bbcode`;
-   - set tags to `Mod` and `1.6`;
+   - set tags to `Mod`, `1.6` and `1.7`;
    - add the three required items above;
    - paste `change_note_1.0.0.txt` as the first change note;
    - set visibility to **Public** after reviewing the page.

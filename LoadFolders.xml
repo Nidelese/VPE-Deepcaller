@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Steam ships the whole folder; the game picks the block for its own
+     version. Common/ holds the shared Defs and Patches; 1.6/ and 1.7/ hold
+     ONLY that version's Assemblies (1.6 = net48, 1.7 = net10.0 / Waylith). -->
+<loadFolders>
+  <v1.6>
+    <li>/</li>
+    <li>Common</li>
+    <li>1.6</li>
+  </v1.6>
+  <v1.7>
+    <li>/</li>
+    <li>Common</li>
+    <li>1.7</li>
+  </v1.7>
+</loadFolders>

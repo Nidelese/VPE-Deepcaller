@@ -16,6 +16,25 @@ earned-stage preservation, bounded growth/lifetime feeding, mining pressure,
 body-size resistance, extreme devotion values, construct compatibility,
 Bud unlock policy, ability target-picker flags and internal def references.
 
+## Earned meditation follow-up (unreleased)
+
+Build `Tests/RuntimeMod/RuntimeChecks.csproj`, then run
+`bash Tests/RuntimeMod/run.sh --meditation` for the isolated engine checks.
+
+For a UI playtest, restart with the staged build and select a psycaster with
+one spare point. Abyssal meditation should be locked by default. Buy it through
+its icon in the Psycasts tab and assign the pawn an idol meditation spot.
+Toggle automatic access in Deepcaller mod settings: an untrained pawn gains
+and loses access immediately; the trained pawn keeps access. Save and reload
+with automatic access off to check that the purchase persists.
+
+For epiphanies, run `bash Tests/RuntimeMod/run.sh --epiphanies`. This uses the
+installed Memes and Structures mod in the disposable test profile. Playtest
+with Symbiote grafts while sleeping, tentacle combat, nearby corpse offerings,
+and a cult/esoteric pawn completing prayer or a ritual. Successful rolls
+offer a choice letter; postponement and accepted/refused choices survive saves.
+Confirm a pawn that has learned the focus receives no further invitations.
+
 ## 1.2.0 physical combat playtest
 
 Restart RimWorld after installing the new local build. Use a separate test

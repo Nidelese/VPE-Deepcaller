@@ -41,6 +41,7 @@ namespace Deepcaller
                         ? target.Cell
                         : CellFinder.StandableCellNear(target.Cell, pawn.Map, 2f);
                     GenSpawn.Spawn(summon, cell, pawn.Map);
+                    EpiphanyGameComponent.Instance?.BindSummon(summon, pawn);
                     // Devotion strengthens the deep's powers and its lasting
                     // brood-wide rewards, but never skips this summon past
                     // its own feeding arc.  A new tentacle always begins as

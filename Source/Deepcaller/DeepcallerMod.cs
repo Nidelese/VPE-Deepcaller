@@ -1,14 +1,46 @@
 using HarmonyLib;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace Deepcaller
 {
     public class DeepcallerMod : Mod
     {
+        public static DeepcallerSettings Settings { get; private set; }
+
         public DeepcallerMod(ModContentPack content) : base(content)
         {
+            Settings = GetSettings<DeepcallerSettings>();
             new Harmony("Nidelese.VPE.Deepcaller").PatchAll();
+        }
+
+        public override string SettingsCategory() => "Deepcaller";
+
+        public override void DoSettingsWindowContents(Rect inRect)
+        {
+            var listing = new Listing_Standard();
+            listing.Begin(inRect);
+            bool automaticBefore = Settings.automaticAbyssalMeditation;
+            listing.CheckboxLabeled("Deepcaller_AutomaticMeditation".Translate(),
+                ref Settings.automaticAbyssalMeditation,
+                "Deepcaller_AutomaticMeditationHelp".Translate());
+            if (automaticBefore != Settings.automaticAbyssalMeditation)
+                EpiphanyGameComponent.Instance?.RebuildCandidates();
+            listing.Gap();
+            listing.Label("Deepcaller_MeditationLearningHelp".Translate());
+            listing.End();
+        }
+    }
+
+    public class DeepcallerSettings : ModSettings
+    {
+        public bool automaticAbyssalMeditation;
+
+        public override void ExposeData()
+        {
+            base.ExposeData();
+            Scribe_Values.Look(ref automaticAbyssalMeditation, "automaticAbyssalMeditation", false);
         }
     }
 

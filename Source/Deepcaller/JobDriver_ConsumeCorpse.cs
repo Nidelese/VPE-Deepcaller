@@ -36,6 +36,7 @@ namespace Deepcaller
                     || pawn.TryGetComp<CompTentacleGrowth>()?.CanBenefitFromMeal != true) return;
                 var meal = corpse.InnerPawn.BodySize;
                 FilthMaker.TryMakeFilth(corpse.Position, pawn.Map, ThingDefOf.Filth_Blood, 3);
+                EpiphanyGameComponent.Instance?.NotifyCorpseEaten(pawn, corpse);
                 corpse.Destroy();
 
                 var growth = pawn.TryGetComp<CompTentacleGrowth>();

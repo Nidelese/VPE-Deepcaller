@@ -252,15 +252,15 @@ foreach (var sample in new (bool organic, bool mechCorpse, string flesh, string 
 
 // The data path must expose the physical targets to RimWorld's target picker.
 DirectoryInfo? root = new DirectoryInfo(AppContext.BaseDirectory);
-while (root != null && !Directory.Exists(Path.Combine(root.FullName, "1.6/Defs"))) root = root.Parent;
+while (root != null && !Directory.Exists(Path.Combine(root.FullName, "Common/Defs"))) root = root.Parent;
 Check(root != null, "Find repository data for ability targeting checks");
-var runtimeDefs = Directory.GetFiles(Path.Combine(root!.FullName, "1.6/Defs"), "*.xml", SearchOption.AllDirectories)
+var runtimeDefs = Directory.GetFiles(Path.Combine(root!.FullName, "Common/Defs"), "*.xml", SearchOption.AllDirectories)
     .SelectMany(path => System.Xml.Linq.XDocument.Load(path).Root!.Elements()).ToArray();
 var defNames = runtimeDefs.Select(x => (string?)x.Element("defName")).OfType<string>().ToHashSet();
 foreach (var reference in runtimeDefs.SelectMany(x => x.Descendants()).Where(x => !x.HasElements
              && x.Value.Trim().StartsWith("Deepcaller_", StringComparison.Ordinal)))
     Check(defNames.Contains(reference.Value.Trim()), "Internal definition reference resolves: " + reference.Value.Trim());
-var abilities = System.Xml.Linq.XDocument.Load(Path.Combine(root!.FullName, "1.6/Defs/AbilityDefs/Deepcaller.xml"));
+var abilities = System.Xml.Linq.XDocument.Load(Path.Combine(root!.FullName, "Common/Defs/AbilityDefs/Deepcaller.xml"));
 foreach (string name in new[] { "Deepcaller_Riptide", "Deepcaller_InkVeil", "Deepcaller_Grasp" })
 {
     var ability = abilities.Root!.Elements().Single(x => (string?)x.Element("defName") == name);

@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- One `dotnet build` produces both game versions:
+         net48    -> 1.6/Assemblies  (RimWorld 1.6, Unity/Mono)
+         net10.0  -> 1.7/Assemblies  (RimWorld 1.7, Waylith/.NET 10)
+       Shared Defs/Patches live in Common/; LoadFolders.xml maps each version.
+       net48 (not 472) for 1.6: VanillaPsycastsExpanded.dll is built against
+       4.8 and MSBuild refuses to reference upward. -->
   <PropertyGroup>
-    <!-- net48 (not 472): VanillaPsycastsExpanded.dll is built against 4.8
-         and MSBuild refuses to reference upward. The game's runtime runs
-         4.8-compiled mods fine (VPE itself is one). -->
-    <TargetFramework>net48</TargetFramework>
+    <TargetFrameworks>net48;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Deepcaller</RootNamespace>
     <AssemblyName>Deepcaller</AssemblyName>
-    <Version>1.2.0</Version>
-    <OutputPath>..\..\1.6\Assemblies\</OutputPath>
+    <Version>1.3.0</Version>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DebugType>none</DebugType>
     <GenerateDependencyFile>false</GenerateDependencyFile>
@@ -18,16 +20,32 @@
     <WorkshopDir>$(HOME)/.local/share/Steam/steamapps/workshop/content/294100</WorkshopDir>
   </PropertyGroup>
 
-  <ItemGroup>
-    <!-- RimWorld reference assemblies (no game code shipped, compile-only) -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <GameVersion>1.6</GameVersion>
+    <OutputPath>..\..\1.6\Assemblies\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <GameVersion>1.7</GameVersion>
+    <OutputPath>..\..\1.7\Assemblies\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <!-- 1.7 is still Steam's unstable beta; float to the newest unstable ref. -->
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.7.*-*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- RimWorld reference assemblies above are compile-only (no game code shipped) -->
     <PackageReference Include="Lib.Harmony" Version="2.*" ExcludeAssets="runtime" />
     <Reference Include="VEF">
-      <HintPath>$(WorkshopDir)/2023507013/1.6/Assemblies/VEF.dll</HintPath>
+      <HintPath>$(WorkshopDir)/2023507013/$(GameVersion)/Assemblies/VEF.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="VanillaPsycastsExpanded">
-      <HintPath>$(WorkshopDir)/2842502659/1.6/Assemblies/VanillaPsycastsExpanded.dll</HintPath>
+      <HintPath>$(WorkshopDir)/2842502659/$(GameVersion)/Assemblies/VanillaPsycastsExpanded.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

@@ -1,18 +1,38 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <!-- Mirrors Deepcaller.csproj: net48 -> 1.6/Assemblies, net10.0 -> 1.7/Assemblies,
+       so the harness tests the exact DLL each game version loads. -->
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFrameworks>net48;net10.0</TargetFrameworks>
     <LangVersion>latest</LangVersion>
-    <OutputPath>Assemblies/</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DebugType>none</DebugType>
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <WorkshopDir>$(HOME)/.local/share/Steam/steamapps/workshop/content/294100</WorkshopDir>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <GameVersion>1.6</GameVersion>
+    <OutputPath>1.6/Assemblies/</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <GameVersion>1.7</GameVersion>
+    <OutputPath>1.7/Assemblies/</OutputPath>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.7.*-*" />
+  </ItemGroup>
   <ItemGroup>
-    <Reference Include="VEF">
-      <HintPath>$(HOME)/.local/share/Steam/steamapps/workshop/content/294100/2023507013/1.6/Assemblies/VEF.dll</HintPath>
+    <Reference Include="VanillaPsycastsExpanded">
+      <HintPath>$(WorkshopDir)/2842502659/$(GameVersion)/Assemblies/VanillaPsycastsExpanded.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <PackageReference Include="Krafs.Rimworld.Ref" Version="1.6.*" />
+    <Reference Include="VEF">
+      <HintPath>$(WorkshopDir)/2023507013/$(GameVersion)/Assemblies/VEF.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <PackageReference Include="Lib.Harmony" Version="2.*" ExcludeAssets="runtime" />
     <ProjectReference Include="../../Source/Deepcaller/Deepcaller.csproj" Private="false" />
   </ItemGroup>

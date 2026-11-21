@@ -1,0 +1,18 @@
+DEEPCALLER_RUNTIME: harness loaded
+DEEPCALLER_RUNTIME PASS: fresh settings default automatic abyssal meditation off
+DEEPCALLER_RUNTIME PASS: ordinary tribal cannot use abyssal meditation for free
+DEEPCALLER_RUNTIME PASS: idol meditation eligibility rejects an uninitiated pawn
+DEEPCALLER_RUNTIME PASS: opting in grants existing pawns access immediately
+DEEPCALLER_RUNTIME PASS: automatic access does not change other meditation types
+DEEPCALLER_RUNTIME PASS: free-access explanation names the enabled setting
+DEEPCALLER_RUNTIME PASS: opting out immediately removes unearned access without a cache reset
+DEEPCALLER_RUNTIME PASS: a psylink and the Deepcaller path do not grant free abyssal meditation
+DEEPCALLER_RUNTIME PASS: abyssal meditation remains available to learn through VPE
+DEEPCALLER_RUNTIME PASS: spending one psycast point unlocks actual idol meditation
+DEEPCALLER_RUNTIME PASS: paid meditation survives turning automatic access off
+DEEPCALLER_RUNTIME PASS: one pawn's purchase does not unlock another pawn
+DEEPCALLER_RUNTIME PASS: mod settings round-trip with automatic access False
+DEEPCALLER_RUNTIME PASS: mod settings round-trip with automatic access True
+DEEPCALLER_RUNTIME PASS: game reload preserves paid abyssal meditation and the spent point
+DEEPCALLER_RUNTIME PASS: game reload does not grant unearned abyssal meditation
+DEEPCALLER_RUNTIME SUCCESS: 16 meditation assertions including game reload
